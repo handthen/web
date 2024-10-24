@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题目壳</title>
+    <script src="https://cdn.iquizoo.com/static/js/jquery/jquery-1.8.3.min.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        user-select: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .jbetween {
+        justify-content: space-between;
+    }
+
+    .jcenter {
+        justify-content: center;
+    }
+
+    .acenter {
+        align-items: center;
+    }
+
+    .jaround {
+        justify-content: space-around;
+    }
+
+    .jend {
+        justify-content: end;
+    }
+
+    .flex1 {
+        flex: 1;
+    }
+
+    .felx-wrap {
+        flex-wrap: wrap;
+    }
+
+    .pr {
+        position: relative;
+    }
+
+    .my-modal {
+        background-color: #0000004f;
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+
+    .modal-content {
+        position: absolute;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        border-radius: 16px;
+        padding: 30px 30px;
+        box-sizing: border-box;
+        width: 290px;
+    }
+
+
+    .modal-footer {
+        display: flex;
+        justify-content: end;
+    }
+
+    .finish-title {
+        font-size: 70px;
+        font-weight: 700;
+        margin-bottom: 40px;
+    }
+
+    .finish {
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(90deg, #85b2fe, #39d5e5);
+        text-align: center;
+        color: #fff;
+    }
+
+    .finish-item {
+        display: flex;
+        align-items: center;
+        font-size: 30px;
+        margin-bottom: 16px;
+    }
+
+    .finish-item-name {
+        margin-right: 30px;
+    }
+
+    .finish-score {
+        color: #ffc80b;
+        font-weight: 700;
+    }
+
+    .finish-btn {
+        background-color: #4be46f;
+        width: 220px;
+        height: 60px;
+        font-size: 30px;
+        line-height: 60px;
+        text-align: center;
+        border-radius: 28px;
+        margin-top: 50px;
+    }
+</style>
+<style>
+    .questions {
+        background-color: #fff;
+        width: 100%;
+        height: 100%;
+    }
+
+    .question-body-item-empty .option-error-nopage {
+        display: flex;
+        background-color: #FFE9E9;
+        height: 40px;
+        padding: 4px 8px;
+        box-sizing: border-box;
+        margin-top: 16px;
+    }
+
+    .option-error-nopage-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    .option-error-nopage-text {
+        color: #333;
+        font-size: 16px;
+        margin-left: 14px;
+        font-weight: 500;
+    }
+</style>
+<script>
+
+    const pcStyle = ` 
+    .cover-remark {
+        background-color: transparent;
+        width: 58%;
+        height: 360px;
+        border-radius: 12px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-48%, -40%);
+        box-sizing: border-box;
+        padding: 10px 30px;
+        color: #333333;
+        line-height: 1.5;
+        text-align: justify;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        font-size: 20px;
+    }
+    
+    .cover {
+        width: 100%;
+        height: 100vh;
+        background-image: url("./activity/cover_bg.png") no-repeat;
+        background-size: 100% 100vh;
+        position: relative;
+    }
+
+
+    .questions-header {
+        height: 115px;
+        background: url("./activity/question_header.png") no-repeat;
+        background-size: 100% 115px;
+        font-size: 20px;
+        color: #333;
+        padding: 0 12%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
+
+    .questions-header-text:nth-child(2) {
+        margin-bottom: 20px;
+    }
+
+    .questions-body {
+        padding: 0 calc(12% - 20px);
+        overflow: auto;
+    }
+
+    .question-body-item {
+        margin: 20px 0;
+        margin-bottom: 50px;
+        box-sizing: border-box;
+        padding: 12px 10px;
+        border: 2px dotted transparent;
+    }
+
+
+
+    .questions-body-title {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 30px;
+        font-weight: 600;
+    }
+
+    .questions-body-option {
+        color: #000;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .questions-body-option label {
+        margin-left: 8px;
+    }
+
+    .questions-body-option .radio {
+        width: 25px;
+        height: 25px;
+        border: 1px solid #999999;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+
+    .questions-body-option .active {
+        border: 6px solid #489EFF;
+    }
+
+    .questions-footer {
+        position: relative;
+        bottom: 80px;
+        width: 100%;
+        margin-top: 200px;
+    }
+
+    .questions-confirm {
+        background-color: #489EFF;
+        width: 120px;
+        height: 42px;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 22px;
+        line-height: 42px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .question_menu {
+        position: absolute;
+        right: 115px;
+        width: 50px;
+        height: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+    .question_menu-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .questions-body-options-nopage {
+        width: 100%;
+    }
+
+    .nopage-option-head {
+        font-size: 24px;
+        color: #333333;
+        margin-bottom: 32px;
+    }
+
+    .option-line-nopage {
+        background-color: #489EFF;
+        height: 4px;
+        width: 100%;
+    }
+
+    .options-nopage {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .option-item-nopage {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        border: 2px solid #489EFF;
+        background-color: #fff;
+        color: #489EFF;
+        line-height: 28px;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .option-item-nopage .option-tip-box {
+        display: none;
+        background: url("./activity/tip_box.png") no-repeat;
+        background-size: 100%;
+        width: 100px;
+        height: 40px;
+        font-size: 16px;
+        line-height: 36px;
+        position: absolute;
+        color: #fff;
+        left: 50%;
+        top: 32px;
+        transform: translateX(-50%);
+    }
+
+    .option-item-nopage:hover .option-tip-box {
+        display: block;
+    }
+
+    .show-tip .option-tip-box {
+        display: block;
+    }
+
+
+
+
+    .option-item-nopage-active {
+        background-color: #489EFF;
+        color: #fff;
+    }
+
+    .option-error-nopage {
+        display: none;
+    }
+
+    .question-body-item-empty .option-error-nopage {
+        display: flex;
+        background-color: #FFE9E9;
+        height: 40px;
+        padding: 4px 8px;
+        box-sizing: border-box;
+        margin-top: 16px;
+    }
+    .question-body-item-empty {
+            border: 2px dotted #FF3333;
+            border-radius: 4px;
+        }
+    .option-error-nopage-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    .option-error-nopage-text {
+        color: #333;
+        font-size: 16px;
+        margin-left: 14px;
+        font-weight: 500;
+    }
+
+    .exam-time {
+        position: absolute;
+        color: #489EFF;
+        font-size: 16px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .exam-time img {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+    }
+     .modal-content{
+
+     }
+    .modal-p {
+        color: #333333;
+        font-size: 24px;
+        margin-bottom: 14px;
+    }
+
+    .modal-p span {
+        color: #489EFF;
+    }
+    .modal-footer{
+        display:flex;
+        justify-content:center;
+        padding-bottom:20px;
+     }
+
+    .modal-btn {
+        height: 30px;
+        padding: 0 10px;
+        background: #489EFF;
+        border-radius:18px;
+        color: #fff;
+        line-height: 30px;
+        text-align: center;
+        font-size: 20px;
+        padding: 8px 14px;
+        cursor: pointer;
+    }
+     .modal-btn-sub{
+         height: 30px;
+         background: #489EFF;
+         border-radius:4px;
+         font-size: 16px;
+         padding: 4px 22px;
+     }
+    .cover-title {
+        font-size: 48px;
+        font-weight: bold;
+        background-image: linear-gradient(90deg, #00111D, #1A86EB, #1A41BB);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 74px;
+        width: 100%;
+        text-align: center;
+        transform: translateY(14vh);
+    }
+
+    .start-answer {
+        color: #fff;
+        font-size: 32px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 9vh;
+        padding: 20px 50px;
+        border-radius: 20px;
+    }`
+
+    const phoneStyle = `
+    .cover-remark {
+        background-color: transparent;
+        width: 82%;
+        height: 19vh;
+        border-radius: 12px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -76%);
+        box-sizing: border-box;
+        color: #333333;
+        padding: 6px 10px;
+        line-height: 1.5;
+        text-align: justify;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        font-size: 12px;
+    }
+     .cover {
+            width: 100%;
+            height: 100vh;
+            background-image: url("./activity/cover_bg.png") no-repeat;
+            background-size: 100% 100vh;
+            position: relative;
+        }
+
+        .cover-title {
+            font-size: 48px;
+            font-weight: bold;
+            background-image: linear-gradient(90deg, #00111D, #1A86EB, #1A41BB);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 36px;
+            width: 100%;
+            text-align: center;
+            transform: translateY(20vh);
+        }
+
+        .start-answer-move {
+            color: #fff;
+            font-size: 20px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 16vh;
+            border-radius: 20px;
+        }
+
+        .questions-header {
+            position: relative;
+            height: 109px;
+            background: url("./activity/question_header_move.png") no-repeat;
+            background-size: 100% 109px;
+            font-size: 11px;
+            color: #333;
+            padding: 0 6%;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            font-weight: 500;
+            font-weight: 500;
+        }
+
+        .questions-header-text {
+            margin-bottom: 6px;
+        }
+
+        .questions-body {
+            padding: 0 calc(6% - 10px);
+            overflow: auto;
+            padding-bottom:100px;
+        }
+
+        .questions-header-text:nth-child(2) {
+            margin-bottom: 20px;
+        }
+
+        .exam-time {
+            position: absolute;
+            color: #489EFF;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-65%, 0);
+        }
+
+        .exam-time img {
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+        }
+
+        .question-body-item {
+            margin: 16px 0;
+            margin-bottom: 30px;
+            box-sizing: border-box;
+            padding: 12px 10px;
+            border: 2px dotted transparent;
+        }
+
+        .questions-body-title {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .nopage .questions-body-title {
+            color: #333;
+        }
+
+        .nopage-option-head {
+            font-size: 12px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .option-item-nopage {
+            width: 21px;
+            height: 21px;
+            border-radius: 50%;
+            box-sizing: border-box;
+            border: 1px solid #489EFF;
+            background-color: #fff;
+            color: #489EFF;
+            line-height: 19px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .option-item-nopage .option-tip-box {
+            display: none;
+            background: url("./activity/tip_box.png") no-repeat;
+            background-size: 100%;
+            width: 80px;
+            height: 32px;
+            font-size: 12px;
+            line-height: 30px;
+            position: absolute;
+            color: #fff;
+            left: 50%;
+            top: 22px;
+            transform: translateX(-50%);
+        }
+
+        .option-item-nopage-active {
+            background-color: #489EFF;
+            color: #fff;
+        }
+
+        .option-error-nopage {
+            display: none;
+        }
+
+        .question-body-item-empty .option-error-nopage {
+            display: flex;
+            background-color: #FFE9E9;
+            height: 40px;
+            padding: 4px 8px;
+            box-sizing: border-box;
+            margin-top: 16px;
+        }
+
+        .question-body-item-empty {
+            border: 2px dotted #FF3333;
+            border-radius: 4px;
+        }
+
+        .option-error-nopage-icon {
+            width: 25px;
+            height: 25px;
+        }
+
+        .option-error-nopage-text {
+            color: #333;
+            font-size: 12px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .option-error-nopage-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .modal-p {
+            color: #333333;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .modal-p span {
+            color: #489EFF;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            height: 30px;
+            padding: 6px 16px;
+            background: #489EFF;
+            border-radius: 20px;
+            color: #fff;
+            line-height: 30px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .modal-btn-default {
+            height: 30px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            color: #489EFF;
+            line-height: 30px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+             .questions-body-option {
+        color: #000;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    .questions-body-option label {
+        margin-left: 8px;
+        font-size: 14px;
+    }
+
+    .questions-body-option .radio {
+        width: 18px;
+        height: 18px;
+        border: 1px solid #999999;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+
+    .questions-body-option .active {
+        border: 6px solid #489EFF;
+    }
+            
+    .questions-confirm {
+        background-color: #489EFF;
+        width: 120px;
+        height: 42px;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 22px;
+        line-height: 42px;
+        text-align: center;
+        margin-bottom:20px;
+        cursor: pointer;
+    }
+     .questions-body-options-nopage {
+        width: 100%;
+    }
+    .option-line-nopage {
+        background-color: #489EFF;
+        height: 2px;
+        width: 100%;
+    }
+        .options-nopage {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .option-item-nopage {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        border: 1px solid #489EFF;
+        background-color: #fff;
+        color: #489EFF;
+        line-height: 20px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .show-tip .option-tip-box {
+        display: block;
+    }
+.option-item-nopage-active {
+        background-color: #489EFF;
+        color: #fff;
+    }
+
+    .option-error-nopage {
+        display: none;
+    }
+    `
+
+    function browserRedirect() {
+        var sUserAgent = navigator.userAgent.toLowerCase()
+        var bIsIpad = sUserAgent.match(/ipad/i) == 'ipad'
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == 'iphone os'
+        var bIsMidp = sUserAgent.match(/midp/i) == 'midp'
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == 'rv:1.2.3.4'
+        var bIsUc = sUserAgent.match(/ucweb/i) == 'ucweb'
+        var bIsAndroid = sUserAgent.match(/android/i) == 'android'
+        var bIsCE = sUserAgent.match(/windows ce/i) == 'windows ce'
+        var bIsWM = sUserAgent.match(/windows mobile/i) == 'windows mobile'
+        // document.writeln("您的浏览设备为：");
+        if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+            return 'phone'
+        }
+        return 'pc'
+    }
+
+    const device = browserRedirect();
+    const style = document.createElement('style')
+    if (device == 'pc') {
+        style.innerText = pcStyle
+    } else {
+        style.innerText = phoneStyle
+    }
+    document.head.append(style)
+
+
+</script>
+
+<body>
+    <div id="main">
+    </div>
+    <div class="my-modal">
+        <div class="modal-content">
+            <div class="modal-body"></div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</body>
+<script>
+    // function initRem() {
+    //     const doc = document.documentElement
+    //     let clientWidth = doc.clientWidth > 1280 ? 1280 : doc.clientWidth
+    //     doc.style.fontSize = clientWidth / 100 + 'px'
+    // }
+    // initRem()
+    // window.addEventListener('resize', initRem)
+
+
+    async function getData() {
+        const url = new URLSearchParams(location.search)
+        const questionGroupId = url.get('questionGroupId')
+        const baseUrl = url.get('url') || "https://api.uat.iquizoo.com"
+        if (questionGroupId) {
+            const fm = new FormData()
+            fm.append('questionGroupId', questionGroupId)
+            const res = await fetch(baseUrl + '/anonymous/content/questiongroup/getquestiongroupbyid', {
+                method: 'post',
+                body: fm
+            })
+            const { result, statusCode } = await res.json()
+            window._startTime = +new Date()
+            if (statusCode != 200) {
+                return Promise.reject()
+            }
+            return result
+        }
+        return {
+            "id": 718144065388613,
+            "name": "请对当前学生进行打分",
+            "version": "",
+            "minAge": 1,
+            "maxAge": 12,
+            "abilityTypeId": null,
+            "abilityTypeText": "",
+            "firstAbilityId": null,
+            "firstAbilityText": "",
+            "secondAbilityId": null,
+            "secondAbilityText": "",
+            "orderType": "1",
+            "icon": "/uat/content/game/questiongroup/985f9d44-b2ad-41ca-91d7-85cdc3c9eb44.jpeg",
+            "coverPlanUri": "/uat/content/game/questiongroup/9231c4c8-075f-44b8-8d08-0e9cd72a4983.jpeg",
+            "exerciseCalculateCode": "",
+            "remark": "",
+            "pushQuestionNum": 2,
+            "finishType": 2,
+            "groupModel": 1,
+            "endTime": "14:15:00",
+            "isPerPage": 1,
+            "isShowScore": 1,
+            "isAnswerInOrder": 1,
+            "questionInfoDtos": [
+                {
+                    "id": 639937255800965,
+                    "name": "<p>请对当前学生进行打分</p>",
+                    "attachmentUrl": "",
+                    "questionType": 1,
+                    "version": "1.1.1",
+                    "abilityTypeId": 297680040763461,
+                    "abilityTypeText": "题目能力",
+                    "firstAbilityId": 297680145858629,
+                    "firstAbilityText": "成功归因得分",
+                    "secondAbilityId": 297681346695237,
+                    "secondAbilityText": "学习动机/元认知得分",
+                    "degreeOfDifficulty": 1,
+                    "remark": "",
+                    "analysis": "",
+                    "isPaging": false,
+                    "questionItems": [
+                        {
+                            "id": 639937255800966,
+                            "questionId": 639937255800965,
+                            "itemTitle": "1",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 1,
+                            "displayOrder": 1,
+                            "isRightChoice": true,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937255800967,
+                            "questionId": 639937255800965,
+                            "itemTitle": "2",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 2,
+                            "displayOrder": 2,
+                            "isRightChoice": true,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937255800968,
+                            "questionId": 639937255800965,
+                            "itemTitle": "3",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 3,
+                            "displayOrder": 3,
+                            "isRightChoice": true,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937255800969,
+                            "questionId": 639937255800965,
+                            "itemTitle": "4",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 4,
+                            "displayOrder": 4,
+                            "isRightChoice": true,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937255800970,
+                            "questionId": 639937255800965,
+                            "itemTitle": "5",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 5,
+                            "displayOrder": 5,
+                            "isRightChoice": true,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        }
+                    ]
+                },
+                {
+                    "id": 639937027260549,
+                    "name": "<p>请对当前学生进行评价打分</p>",
+                    "attachmentUrl": "",
+                    "questionType": 1,
+                    "version": "1.0.0",
+                    "abilityTypeId": 297680040763461,
+                    "abilityTypeText": "题目能力",
+                    "firstAbilityId": 297680145858629,
+                    "firstAbilityText": "成功归因得分",
+                    "secondAbilityId": 297681439625285,
+                    "secondAbilityText": "能力-成功",
+                    "degreeOfDifficulty": 1,
+                    "remark": "",
+                    "analysis": "",
+                    "isPaging": false,
+                    "questionItems": [
+                        {
+                            "id": 639937027264645,
+                            "questionId": 639937027260549,
+                            "itemTitle": "1",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 1,
+                            "displayOrder": 1,
+                            "isRightChoice": false,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937027264646,
+                            "questionId": 639937027260549,
+                            "itemTitle": "2",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 2,
+                            "displayOrder": 2,
+                            "isRightChoice": false,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937027264647,
+                            "questionId": 639937027260549,
+                            "itemTitle": "3",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 3,
+                            "displayOrder": 3,
+                            "isRightChoice": false,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937027264648,
+                            "questionId": 639937027260549,
+                            "itemTitle": "4",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 4,
+                            "displayOrder": 4,
+                            "isRightChoice": false,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937027264649,
+                            "questionId": 639937027260549,
+                            "itemTitle": "5",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 5,
+                            "displayOrder": 5,
+                            "isRightChoice": false,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937027264650,
+                            "questionId": 639937027260549,
+                            "itemTitle": "6",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 6,
+                            "displayOrder": 6,
+                            "isRightChoice": false,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        },
+                        {
+                            "id": 639937027264651,
+                            "questionId": 639937027260549,
+                            "itemTitle": "7",
+                            "itemType": 0,
+                            "itemCoutentType": 0,
+                            "itemAttachmentUrl": "",
+                            "score": 7,
+                            "displayOrder": 7,
+                            "isRightChoice": true,
+                            "skipQuestionId": 0,
+                            "skipQuestionNo": 0,
+                            "skipId": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+</script>
+
+<script>
+    const questionTypeTemp = {
+        1: ``,
+        2:``,
+        3:{
+
+         }
+    }
+    function getCover(params = {}) {
+        let bgName = 'cover_bg'
+        if (params.device != 'pc') {
+            bgName += '_move'
+        }
+        if (!params.description) {
+            bgName += '_no'
+        }
+        const format = (description) => description.replace(/\n/g, "<br/>")
+        const bg = `./activity/${bgName}.png`
+        const nodescStyle = "transform: translateY(calc(50vh - 100%))"
+        return `
+         <div class="cover" style='background-image: url(${bg})''>
+            <div class="cover-title" style="${!params.description ? nodescStyle : ''}">${params.name}</div>
+            <div class="cover-remark">${format(params.description)}</div>
+            <div class="start-btn ${params.device != 'pc' ? 'start-answer-move' : 'start-answer'}" >开始答题</div>
+        </div>
+        `
+    }
+    function getAnswerTemp(finishType) {
+        return `
+          <div class="questions">
+            <div class="questions-header">
+                <div class="questions-header-text question-score">
+                    <span>您当前得分：</span>
+                    <span class="my-score">0分</span>
+                </div>
+                <div class="questions-header-text">
+                    <span>您当前进度：</span>
+                    <span class="question-total">0/17</span>
+                </div>
+                ${finishType != 1 ? `<div class="exam-time flex acenter">
+                <img src = "./activity/play.png" />
+                    <span class="time">12:00:00</span>
+                </div>`: ''}
+            </div >
+            <div class="questions-body">
+            </div>
+            <div class="questions-footer flex jcenter pr">
+                <div class="questions-confirm">确认答案</div>
+            </div>
+        </div >
+            `
+    }
+    function getQuestionTemp(data, index) {
+        return `
+            <div class="question-body-item" id = "${data.id}" >
+              <div class="questions-body-title flex">${index}.${data.name}</div>
+                <div class="questions-body-options">
+                    ${data.questionItems.map((v, i) => `
+                       <div class="questions-body-option">
+                           <div class="radio" data-itemId="${v.id}" data-pid=${data.id} data-score="${v.score}"></div>
+                           <label data-itemId="${v.id}" data-pid=${data.id} data-score="${v.score}">${v.itemTitle}</label>
+                       </div>
+                    `).join('')}
+                </div>
+            </div>
+            `
+    }
+    function getQuestionTempByNoPage(data = {}, index) {
+        return `
+            <div class="question-body-item nopage" id = "${data.id}" >
+                    <div class="questions-body-title flex">
+                        ${index}. ${data.name}
+                    </div>
+                    <div class="questions-body-options-nopage">
+                        <div class="flex jbetween nopage-option-head">
+                            <span>${data.questionItems[0].itemTitle}</span>
+                            <span>${data.questionItems[data.questionItems.length - 1].itemTitle}</span>
+                        </div>
+                        <div class="questions-body-option-nopage pr">
+                            <div class="option-line-nopage"></div>
+                            <div class="options-nopage">
+                                ${data.questionItems.map((v, i) => `
+                                   <div class="option-item-nopage pr" data-itemId="${v.id}" data-pid=${data.id} data-score="${v.score}">
+                                     ${i + 1}
+                                     <div class="option-tip-box">${v.itemTitle}</div>    
+                                   </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option-error-nopage flex acenter">
+                         <img class="option-error-nopage-icon" src="./activity/error_close.png" />    
+                        <span class="option-error-nopage-text">请回答此题</span>
+                    </div>
+           </div>
+            `
+    }
+
+    function getFinishTemp(isShowScore) {
+        return `
+        <div class="finish flex-column jcenter acenter">
+            <div class="finish-title">游戏</div>
+            <div class="finish-item">
+                <span class="finish-item-name">题目</span>
+                <span class="finish-item-value">0</span>
+            </div>
+            <div class="finish-item">
+                <span class="finish-item-name">时间</span>
+                <span class="finish-item-value">0</span>
+            </div>
+            ${isShowScore?`<div class="finish-item">
+                <span class="finish-item-name">分数</span>
+                <span class="finish-item-value finish-score">100</span>
+            </div>`:''}
+          
+            <div class="finish-btn ">继续</div>
+        </div>
+        `
+    }
+
+
+
+    function polling(fn, time) {
+        let timeId = null
+        const start = () => {
+            timeId = setTimeout(() => {
+                fn && fn()
+                start()
+            }, time)
+        }
+
+        const end = () => {
+            clearTimeout(timeId)
+            timeId = null
+        }
+
+        const toggTime = () => {
+            timeId ? end() : start()
+        }
+        start()
+        return toggTime
+    }
+
+    function timeTotamp(match) {
+        if (match) {
+            const hours = parseInt((match[0]));
+            const minutes = parseInt((match[1]));
+            const seconds = parseInt((match[2]));
+            // 将小时、分钟和秒转换为毫秒，并相加
+            const totalMilliseconds = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
+            return totalMilliseconds;
+        }
+
+        return null; // 如果字符串不匹配格式，返回 null
+    }
+    function timeToString(timestamp) {
+        const hours = Math.floor(timestamp / (1000 * 60 * 60));
+
+        const minutes = Math.floor((timestamp % (1000 * 60 * 60)) / (1000 * 60));
+
+        const seconds = Math.floor((timestamp % (1000 * 60)) / 1000);
+
+        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function rederModal(props = {}, handler) {
+        $('.my-modal').css('display', "block")
+        const content = $('.modal-content .modal-body')
+        const footer = $('.modal-content .modal-footer')
+        content.append(props.content)
+        $('.modal-content').css(props.style || {})
+        content.css(props.bodyStyle || {})
+        footer.css(props.footerStyle || {})
+        footer.append(props.footer)
+        $('body').css('overflow', "hidden")
+        const cancel = () => {
+            $('body').css('overflow', "initial")
+            $('.my-modal').css('display', "none")
+            content.html('')
+            footer.html('')
+            const c = $('.modal-content').get()[0]
+            c.style = ''
+            content.get()[0].style = ''
+            footer.get()[0].style = ''
+        }
+        document.querySelector('.modal-content .modal-footer .modal-click').addEventListener('click', (e) => {
+            typeof handler === 'function' ? handler(e, cancel) : cancel()
+        }, { once: true })
+        return cancel
+    }
+
+</script>
+
+<script type="module">
+    const pageData = {
+        currentAswer: 0,
+        current: 0,
+        total: 0,
+        score: 0
+    }
+    const resultMap = new Map()
+
+    const { questionInfoDtos = [], isPerPage, isShowScore, endTime, remark: description, finishType, name } = await getData()
+
+    pageData.total = questionInfoDtos.length
+    const getTemplate = isPerPage ? getQuestionTemp : getQuestionTempByNoPage
+    renderCover()
+
+
+    function renderCover() {
+        const params = {
+            description,
+            device,
+            name
+        }
+        const template = getCover(params)
+        $('#main').html(template)
+        $('.start-btn').click(startAnswer)
+    }
+
+
+    function intiRender(questionInfoDtos, isPage) {
+        questionInfoDtos.forEach(v => resultMap.set(v.id, null))
+        if (!isShowScore) {
+            $('.question-score').css({ display: 'none' })
+        } else {
+            $('.my-scord').text(pageData.score)
+        }
+        $('.question-total').text(`${pageData.current + '/' + pageData.total} `)
+        if (isPage == 1 && pageData.total > 0) {
+            $('.question_menu').css('display', 'none')
+            renderQuest(questionInfoDtos[0])
+        } else {
+            renderQuest(questionInfoDtos)
+        }
+        isPage ? $('.questions-confirm').click(comfirAnswer) : $('.questions-confirm').click(submitAnswer)
+        $(".questions-body").click(clickQuestItem)
+        if (finishType != 1) {
+            $('.exam-time img').click(function () {
+                rederModal({
+                    style: {
+                        paddingTop: "60px"
+                    },
+                    footer: `<div class="modal-btn modal-click" style = "margin-top:40px" > 继续答题</div> `,
+                    content: `
+            <p class="modal-p" > 题目进度：<span>${pageData.current + '/' + pageData.total}</span></p>
+                <p class="modal-p">剩余时间：<span>${timeToString(toggTimeFn.get())}</span></p>
+        `
+                }, (_, cancel) => (toggTimeFn(), cancel()))
+                toggTimeFn()
+            })
+        }
+
+    }
+
+    function renderQuest(options) {
+        if (!Array.isArray(options)) {
+            options = [options]
+        }
+        const contentBody = $(".questions-body")
+        const temps = options.map((v, i) => getTemplate(v, isPerPage ? pageData.current + 1 : i + 1))
+        contentBody.html('')
+        contentBody.append(...temps)
+    }
+
+
+    function clickQuestItem(e) {
+        const { itemid, pid, score } = e.target.dataset
+        if (itemid && pid) {
+            e.stopPropagation()
+            if (!isPerPage) {
+                const classList = e.target.classList
+                if (!classList.contains('option-item-nopage-active')) {
+                    $(e.target).siblings().each(function () {
+                        this.classList.remove('option-item-nopage-active', 'show-tip')
+                    })
+                    classList.add('option-item-nopage-active', 'show-tip')
+                    setTimeout(() => classList.remove('show-tip'), 2000)
+                    const prevResult = resultMap.get(+pid)
+                    if (prevResult) {
+                        pageData.score -= (+prevResult.score)
+                    } else {
+                        pageData.current++
+                    }
+                    pageData.score += (+score)
+                    resultMap.set(+pid, {
+                        itemId: +itemid,
+                        score: +score,
+                    })
+                    setTimeout(() => {
+                        const item = resultMap.get(+pid)
+                        item.question = questionInfoDtos.find(v => v.id == pid)
+                        resultMap.set(+pid, item)
+                    })
+                    $("#" + pid).removeClass('question-body-item-empty')
+                    $('.question-total').text(`${pageData.current + '/' + pageData.total} `)
+                    $('.my-score').text(pageData.score + '分')
+                }
+            } else {
+                let target = e.target
+                const classList = target.classList
+                if (!classList.contains('questions-body-option')) {
+                    target = target.parentElement
+                }
+                $(target).siblings().each(function () {
+                    const children = this.children[0]
+                    children.classList.remove('active')
+                })
+                target.children[0]?.classList.add('active')
+                resultMap.set(+pid, {
+                    itemId: +itemid,
+                    score: +score
+                })
+                setTimeout(() => {
+                    const item = resultMap.get(+pid)
+                    item.question = questionInfoDtos.find(v => v.id == pid)
+                    resultMap.set(+pid, item)
+                })
+            }
+
+        }
+    }
+
+
+    function pushQuestItem(itemId) {
+        const target = document.getElementById(itemId);
+        target.scrollIntoView({ behavior: 'smooth' });
+        target.classList.add('question-body-item-empty')
+    }
+
+    //开始答题
+    function startAnswer() {
+        $('#main').html(getAnswerTemp(finishType))
+        window.toggTimeFn = startCountTime()
+        intiRender(questionInfoDtos, isPerPage)
+    }
+
+    function comfirAnswer() {
+        const currentIndex = pageData.current
+        const currentItem = questionInfoDtos[currentIndex]
+        const currentAnswer = resultMap.get(currentItem.id)
+        if (currentAnswer) {
+            if (currentIndex < pageData.total && !window._submit) {
+                pageData.score += currentAnswer.score
+            }
+            if (isShowScore) {
+                $('.my-score').text(pageData.score + '分')
+            }
+            if (pageData.total - 2 == pageData.current) {
+                $('.questions-confirm').text('提交')
+            }
+            if (pageData.current == pageData.total - 1) {
+                $('.question-total').text(`${pageData.current + 1 + '/' + pageData.total} `)
+                submitAnswer()
+            } else {
+                if (pageData.current < pageData.total) {
+                    pageData.current++
+                }
+                $('.question-total').text(`${pageData.current + '/' + pageData.total} `)
+                renderQuest(questionInfoDtos[pageData.current])
+            }
+
+        } else {
+            let style = {}
+            if (device == 'pc') {
+                style.style = {
+                    width: '256px',
+                    height: "132px",
+                    color: "#666",
+                    fontSize: "14px",
+                    paddingBottom: "10px",
+                    paddingTop: "30px",
+                    borderRadius: '8px',
+                }
+                style.bodyStyle = {
+                    paddingBottom: '30px'
+                }
+                style.footerStyle = {
+                    display: 'flex',
+                    justifyContent: 'end'
+                }
+            } else {
+                style.bodyStyle = {
+                    color: "#666",
+                    paddingBottom: '30px',
+                    paddingTop: "10px",
+                    textAlign: "center"
+                }
+                style.style = {
+                    paddingBottom: '10px'
+                }
+            }
+            rederModal({
+                footer: `<div class="${device == 'pc' ? 'modal-btn modal-btn-sub' : 'modal-btn-default'} modal-click"> 确定</div>`,
+                content: '本题需答完，才能进入下一题',
+                ...style
+            })
+        }
+    }
+
+    function submitAnswer() {
+        const orginalData = []
+        for (let [key, value] of resultMap) {
+            if (!value && !isPerPage) {
+                return pushQuestItem(key)
+            }
+            const { question, itemId, score } = value
+            orginalData.push({
+                ACC: 1,
+                CResp: question.questionItems.map(v => v.id).join(","),
+                Device: device,
+                ItemID: question.id,
+                NumAlts: question.questionItems.length,
+                RT: 0, // 每一题耗时
+                Resp: itemId,
+                Score: score,
+                titleLength: question.name.length
+            })
+
+        }
+
+        const gameResultData = {
+            endTime: Date.now(),
+            orginalData: orginalData,
+            resultData: {
+                errorNum: 0,
+                rightNum: resultMap.size,
+                stopSeconds: "0",
+                submitObj: {},
+                totalNum: resultMap.size,
+                totalTime: "",
+                totalTurn: 0,
+                userAgent: navigator.userAgent
+            },
+            startTime: window._startTime,
+            tempScore: 0,
+            timeConsuming: Date.now() - window._startTime,
+        };
+        parent.postMessage(gameResultData, '*')
+        window._submit = true
+    }
+
+
+    function startCountTime() {
+        const timeArr = endTime.split(':')
+        let times = timeTotamp(timeArr)
+
+        $('.exam-time .time').text(endTime)
+        const handler = () => {
+            if (times <= 0) {
+                return submitAnswer()
+            }
+            times = times - 1000
+            const str = timeToString(times)
+            $('.exam-time .time').text(str)
+        }
+        const fn = polling(handler, 1000)
+        fn.get = () => times
+        return fn
+    }
+
+</script>
+
+</html>
