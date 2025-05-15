@@ -2,1533 +2,4084 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>题目壳</title>
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0,user-scalable=yes"> -->
+    <meta name="viewport" content="width=device-width,user-scalable=yes">
     <script src="https://cdn.iquizoo.com/static/js/jquery/jquery-1.8.3.min.js"></script>
+    <script src="https://cdn.iquizoo.com/static/js/echarts.js"></script>
+    <title>训练课程成长报告</title>
 </head>
 <style>
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    @media print {
+        body {
+            -webkit-print-color-adjust: exact;
+        }
+
+        .main {
+            transform: scale(1) !important;
+        }
+
+        .page {
+            margin: 0 !important;
+        }
+    }
+
+    @font-face {
+        font-family: "DIN";
+        src: url("https://storage.iquizoo.com/static/font/DIN-Pro-Regular-2.otf");
+        /*IE9*/
+    }
+
+    @font-face {
+        font-family: "Source-Sans-Pro-Bold-2";
+        src: url("https://storage.iquizoo.com/static/font/Source-Sans-Pro-Bold-2.otf");
+    }
+
+    @font-face {
+        font-family: "YouSheBiaoTiHei-2";
+        src: url("https://storage.iquizoo.com/static/font/YouSheBiaoTiHei-2.ttf");
+    }
+
+    @font-face {
+        font-family: "PingFang";
+        src: url("https://storage.iquizoo.com/static/font/PingFang Medium.otf");
+        /*IE9*/
+    }
+
+    @font-face {
+        font-family: "Bold";
+        src: url("https://storage.iquizoo.com/static/font/PingFang Bold.ttf");
+    }
+
     * {
         margin: 0;
         padding: 0;
-        user-select: none;
+        box-sizing: border-box;
+        font-family: PingFang;
     }
 
-    a {
-        text-decoration: none;
-    }
-
-    .flex {
-        display: flex;
-    }
-
-    .flex-column {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .jbetween {
-        justify-content: space-between;
-    }
-
-    .jcenter {
-        justify-content: center;
-    }
-
-    .acenter {
-        align-items: center;
-    }
-
-    .jaround {
-        justify-content: space-around;
-    }
-
-    .jend {
-        justify-content: end;
-    }
-
-    .flex1 {
-        flex: 1;
-    }
-
-    .felx-wrap {
-        flex-wrap: wrap;
-    }
-
-    .pr {
-        position: relative;
-    }
-
-    .my-modal {
-        background-color: #0000004f;
+    html,
+    body {
         width: 100%;
-        height: 100vh;
-        position: absolute;
-        z-index: 100;
-        top: 0;
-        left: 0;
+        height: 100%;
+        -ms-overflow-style: none;
+    }
+
+    html::-webkit-scrollbar {
         display: none;
     }
 
-    .modal-content {
-        position: absolute;
-        left: 50%;
-        top: 40%;
-        transform: translate(-50%, -50%);
-        background: #fff;
-        border-radius: 16px;
-        padding: 30px 30px;
-        box-sizing: border-box;
-        width: 290px;
+    body::-webkit-scrollbar {
+        display: none;
     }
 
-
-    .modal-footer {
-        display: flex;
-        justify-content: end;
+    .main {
+        transform-origin: left top;
+        scrollbar-width: none;
     }
 
-    .finish-title {
-        font-size: 70px;
-        font-weight: 700;
-        margin-bottom: 40px;
+    ul,
+    ol {
+        list-style: none;
     }
 
-    .finish {
+    .page {
+        width: 1190px;
+        height: 1682px;
+        margin: 0 auto 20px;
+        position: relative;
+        padding: 0 60px 60px 60px;
+        overflow: hidden;
+        /* background-image: url("https://storage.iquizoo.com/static/img/report/trainingcourse/page-content.png");
+        background-size: 100% 100%; */
+    }
+
+    .page-content {
         width: 100%;
-        height: 100vh;
-        background: linear-gradient(90deg, #85b2fe, #39d5e5);
-        text-align: center;
-        color: #fff;
+        height: 100%;
+        border-top: none;
+        border-bottom: none;
+        position: relative;
+        background-image: url("https://storage.iquizoo.com/static/img/report/trainingcourse/page-content.png");
+        background-size: 100% 100%;
+        padding-top: 56px;
+        padding-left: 60px;
+        padding-right: 60px;
+        padding-bottom: 0;
     }
 
-    .finish-item {
-        display: flex;
-        align-items: center;
-        font-size: 30px;
+    .page-number {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        font-weight: bold;
+        line-height: 40px;
+        font-size: 32px;
+        color: #000000;
+        text-align: center;
+        font-family: "DIN";
         margin-bottom: 16px;
     }
 
-    .finish-item-name {
-        margin-right: 30px;
-    }
-
-    .finish-score {
-        color: #ffc80b;
-        font-weight: 700;
-    }
-
-    .finish-btn {
-        background-color: #4be46f;
-        width: 220px;
-        height: 60px;
-        font-size: 30px;
-        line-height: 60px;
-        text-align: center;
-        border-radius: 28px;
-        margin-top: 50px;
+    .courseDetail-item-top-item:first-child .courseDetail-item-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 </style>
 <style>
-    .questions {
-        background-color: #fff;
-        width: 100%;
-        height: 100%;
-    }
-
-    .question-body-item-empty .option-error-nopage {
-        display: flex;
-        background-color: #FFE9E9;
-        height: 40px;
-        padding: 4px 8px;
-        box-sizing: border-box;
-        margin-top: 16px;
-    }
-
-    .option-error-nopage-icon {
-        width: 25px;
-        height: 25px;
-    }
-
-    .option-error-nopage-text {
-        color: #333;
-        font-size: 16px;
-        margin-left: 14px;
+    .content-sub-title {
         font-weight: 500;
-    }
-</style>
-<script>
-
-    const pcStyle = ` 
-    .cover-remark {
-        background-color: transparent;
-        width: 58%;
-        height: 360px;
-        border-radius: 12px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-48%, -40%);
-        box-sizing: border-box;
-        padding: 10px 30px;
-        color: #333333;
-        line-height: 1.5;
-        text-align: justify;
-        justify-content: center;
-        align-items: center;
+        font-size: 32px;
+        position: relative;
+        color: #000000;
+        font-family: Bold;
         display: flex;
-        font-size: 20px;
+        align-items: center;
     }
-    
+
+    .content-sub-title::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 28px;
+        background: #478bff;
+        margin-right: 8px;
+    }
+
+    .content-head {
+        display: flex;
+        gap: 30px;
+    }
+
     .cover {
-        width: 100%;
-        height: 100vh;
-        background-image: url("./activity/cover_bg.png") no-repeat;
-        background-size: 100% 100vh;
+        background: url("https://storage.iquizoo.com/static/img/report/trainingcourse/cover.png") no-repeat;
+        background-size: cover;
         position: relative;
     }
 
-
-    .questions-header {
-        height: 115px;
-        background: url("./activity/question_header.png") no-repeat;
-        background-size: 100% 115px;
-        font-size: 20px;
-        color: #333;
-        padding: 0 12%;
-        position: relative;
+    .cover-card {
+        position: absolute;
+        left: 344px;
+        top: 1336px;
+        font-size: 28px;
+        color: #fff;
+        width: 584px;
+        box-sizing: border-box;
+        padding: 36px 22px 20px 42px;
         display: flex;
         flex-direction: column;
-        justify-content: end;
+        justify-content: center;
+        z-index: 10;
     }
 
-    .questions-header-text:nth-child(2) {
+    .cover-card-bg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+    }
+
+    .cover-card-wrapper {
+        position: relative;
+        z-index: 10;
+    }
+
+    .cover-card div div {
+        margin-bottom: 10px;
+        /* font-family: ; */
+    }
+
+    .overview .page-content {
+        padding-top: 104px;
+    }
+
+    .trend-title,
+    .commont-title {
+        font-size: 64px;
+        color: #333;
+        position: relative;
+        font-family: "YouSheBiaoTiHei-2";
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
         margin-bottom: 20px;
     }
 
-    .questions-body {
-        padding: 0 calc(12% - 20px);
-        overflow: auto;
-    }
-
-    .question-body-item {
-        margin: 20px 0;
-        margin-bottom: 50px;
-        box-sizing: border-box;
-        padding: 12px 10px;
-        border: 2px dotted transparent;
-    }
-
-
-
-    .questions-body-title {
-        color: #333;
-        font-size: 24px;
-        margin-bottom: 30px;
-        font-weight: 600;
-    }
-
-    .questions-body-option {
-        color: #000;
-        font-size: 24px;
-        display: flex;
-        align-items: center;
-        margin-bottom: 12px;
-    }
-
-    .questions-body-option label {
-        margin-left: 8px;
-    }
-
-    .questions-body-option .radio {
-        width: 25px;
-        height: 25px;
-        border: 1px solid #999999;
-        border-radius: 50%;
-        box-sizing: border-box;
-    }
-
-    .questions-body-option .active {
-        border: 6px solid #489EFF;
-    }
-
-    .questions-footer {
-        position: relative;
-        bottom: 80px;
-        width: 100%;
-        margin-top: 200px;
-    }
-
-    .questions-confirm {
-        background-color: #489EFF;
-        width: 120px;
-        height: 42px;
-        color: #fff;
-        font-size: 20px;
-        border-radius: 22px;
-        line-height: 42px;
-        text-align: center;
-        cursor: pointer;
-    }
-
-    .question_menu {
+    .commont-title::before {
+        content: ".......................";
         position: absolute;
-        right: 115px;
-        width: 50px;
-        height: 50px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
-
-    .question_menu-icon {
-        width: 50px;
-        height: 50px;
-    }
-
-    .questions-body-options-nopage {
-        width: 100%;
-    }
-
-    .nopage-option-head {
-        font-size: 24px;
-        color: #333333;
-        margin-bottom: 32px;
-    }
-
-    .option-line-nopage {
-        background-color: #489EFF;
-        height: 4px;
-        width: 100%;
-    }
-
-    .options-nopage {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 0;
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-    }
-
-    .option-item-nopage {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        box-sizing: border-box;
-        border: 2px solid #489EFF;
-        background-color: #fff;
-        color: #489EFF;
-        line-height: 28px;
-        text-align: center;
-        font-size: 20px;
-    }
-
-    .option-item-nopage .option-tip-box {
-        display: none;
-        background: url("./activity/tip_box.png") no-repeat;
-        background-size: 100%;
-        width: 100px;
-        height: 40px;
-        font-size: 16px;
-        line-height: 36px;
-        position: absolute;
-        color: #fff;
+        top: 20px;
+        width: 99%;
+        font-family: Bold;
+        overflow: hidden;
         left: 50%;
-        top: 32px;
         transform: translateX(-50%);
     }
 
-    .option-item-nopage:hover .option-tip-box {
-        display: block;
+    .trend-char {
+        margin-top: 32px;
     }
 
-    .show-tip .option-tip-box {
-        display: block;
-    }
-
-
-
-
-    .option-item-nopage-active {
-        background-color: #489EFF;
-        color: #fff;
-    }
-
-    .option-error-nopage {
-        display: none;
-    }
-
-    .question-body-item-empty .option-error-nopage {
+    .content-head-right {
         display: flex;
-        background-color: #FFE9E9;
-        height: 40px;
-        padding: 4px 8px;
-        box-sizing: border-box;
-        margin-top: 16px;
-    }
-    .question-body-item-empty {
-            border: 2px dotted #FF3333;
-            border-radius: 4px;
-        }
-    .option-error-nopage-icon {
-        width: 25px;
-        height: 25px;
     }
 
-    .option-error-nopage-text {
-        color: #333;
-        font-size: 16px;
-        margin-left: 14px;
-        font-weight: 500;
+    .content-head-right-item {
+        display: flex;
+        align-items: center;
+        margin-right: 24px;
+        margin-top: 8px;
     }
 
-    .exam-time {
+    .content-head-right-crice {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: var(--w, #ffdbcc);
+        position: relative;
+        z-index: 3;
+    }
+
+    .content-head-right-crice::before {
+        content: "";
+        display: inline-block;
         position: absolute;
-        color: #489EFF;
-        font-size: 16px;
-        top: 50%;
+        width: 16px;
+        height: 16px;
+        background-color: #fff;
+        box-sizing: border-box;
+        z-index: -1;
         left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border: 6px solid var(--c, #ff4a00);
+        border-radius: 50%;
+    }
+
+    .content-head-right-text {
+        margin-left: 4px;
+        font-weight: 500;
+        font-size: 22px;
+        color: #666666;
+    }
+
+    .trend-char-content {
+        height: 300px;
+    }
+
+    .contentKey {}
+
+    .contentKey-content {
+        margin-top: 20px;
+    }
+
+    .contentKey-content-item {
+        width: 224px;
+        height: 134px;
+        background: var(--bg);
+        border-radius: 10px 10px 10px 10px;
+        border: 2px solid var(--b);
+        display: flex;
+        align-items: center;
+        /* justify-content: center; */
+        flex-direction: column;
+        padding-top: 16px;
+        padding-left: 20px;
+        padding-right: 20px;
+        box-sizing: border-box;
+    }
+
+    .contentKey-content-item-top {
+        font-weight: 500;
+        font-size: 22px;
+        color: #333333;
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .contentKey-content-item-top img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .contentKey-content-item-score {
+        color: var(--c);
+        font-weight: 600;
+        font-size: 28px;
+        margin-bottom: 2px;
+    }
+
+    .contentKey-content-item-course {
+        font-weight: 400;
+        font-size: 18px;
+        color: var(--c);
+    }
+
+    .contentKey-content-card {
+        margin-bottom: 28px;
+        display: flex;
+        gap: 24px;
+    }
+
+    .contentKey-content-desc {
+        font-weight: 400;
+        font-size: 22px;
+        color: #213044cd;
+        line-height: 1.5;
+        margin-bottom: 30px;
+    }
+
+    .analysis .block {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        background-color: #2c8eff;
+        display: flex;
+        flex-direction: column;
+        margin-right: 4px;
+        font-size: 20px;
+        color: #ffffff;
+        position: relative;
+        text-align: center;
+    }
+
+    .analysis .block .pointer {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -54%);
+        font-size: 50px;
+    }
+
+    .analysis .block .count {
+        margin-top: 2px;
+    }
+
+    .analysis .content-head .content-head-right-text {
+        display: flex;
+        align-items: center;
+    }
+
+    .analysis-content-table {
+        margin-top: 20px;
+        margin-bottom: 24px;
+    }
+
+    .common-desc {
+        font-weight: 400;
+        font-size: 22px;
+        color: #213044cf;
+        text-align: justify;
+        line-height: 1.5;
+    }
+
+    .analysis-content-desc {
+        font-weight: 400;
+        font-size: 22px;
+        color: #213044cf;
+        line-height: 1.5;
+    }
+
+    .analysis-content-table {
+        width: 968px;
+        background: radial-gradient(45% 45% at 27% 76%, #ffffff 0%, #f9fbff 100%),
+            #ffffff;
+        box-shadow: 2px 2px 20px rgba(190, 209, 236, 0.519);
+        border-radius: 16px 16px 16px 16px;
+        padding: 20px 20px;
+        padding-right: 38px;
+        box-sizing: border-box;
+        border: 1px solid #f9fbff;
+    }
+
+    .analysis-table-head {
+        display: flex;
+        margin-left: 126px;
+        align-items: center;
+        gap: 86px;
+        font-weight: 500;
+        font-size: 20px;
+        color: #000000;
+        height: 68px;
+        box-sizing: border-box;
+        padding: 20px 0;
+    }
+
+    .analysis-table-body {
+        display: flex;
+        height: calc(100% - 68px);
+    }
+
+    .analysis-table-left {
+        width: 126px;
+        font-weight: 500;
+        font-size: 20px;
+        color: #000000;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 62px;
+    }
+
+    .analysis-table-left div {
+        font-family: Bold;
+        height: 56px;
+        line-height: 56px;
+    }
+
+    .analysis-table-content {
+        flex: 1;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        gap: 62px;
+    }
+
+    .analysis-table-content-empty {
+        font-weight: 400;
+        font-size: 20px;
+        color: #116eff;
+        width: 306px;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
         transform: translate(-50%, -50%);
     }
 
-    .exam-time img {
-        width: 18px;
-        height: 18px;
+    .analysis-table-content-empty img {
+        width: 182px;
+        height: 130px;
+    }
+
+    .analysis-table-row {
+        display: flex;
+        gap: 70px;
+    }
+
+    .analysis-table-row .block {
+        width: 56px;
+        height: 56px;
+        margin-right: 0;
+    }
+
+    .analysis-table-row .block .count {
+        margin-top: 0;
+    }
+
+    .analysis-table-row .block .pointer {
+        margin-top: 4px;
+        letter-spacing: -2px;
+    }
+
+    .analysis-table-row-item {
+        width: 56px;
+        height: 56px;
+        background: #ffffff;
+        border-radius: 8px;
+        line-height: 56px;
+        text-align: center;
+        color: #d2d2d2;
+    }
+
+    .analysis-table-row-item-active {
+        font-weight: 400;
+        font-size: 24px;
+        color: #ffffff;
+        background-color: #2c8eff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .overview-show {
+        margin-top: 36px;
+    }
+
+    .overview-show-content {
+        margin: 32px 0 64px 0;
+    }
+
+    .overview-show-content-info {
+        margin-bottom: 32px;
+        height: 289px;
+        display: flex;
+        width: 100%;
+        gap: 16px;
+    }
+
+    .show-content-info-left {
+        font-weight: 500;
+        font-size: 36px;
+        background: url("https://storage.iquizoo.com/static/img/report/trainingcourse/overview-show-left.png") no-repeat;
+        color: #333333;
+        width: 514px;
+        background-size: 514px 288px;
+        padding: 58px 0 0 76px;
+        flex-shrink: 0;
+        height: 288px;
+    }
+
+    .info-left-score {
+        font-weight: 600;
+        font-size: 72px;
+        color: #403000;
+        position: relative;
+        display: inline-block;
+        z-index: 3;
+    }
+
+    .info-left-score::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        display: inline-block;
+        z-index: -1;
+        top: 54px;
+        background: #ffeb9f;
+        width: 100%;
+        height: 48px;
+        border-radius: 198px;
+    }
+
+    .show-content-info-top {
+        width: 424px;
+        height: 136px;
+        background: url("https://storage.iquizoo.com/static/img/report/trainingcourse/overview-show-top.png") no-repeat;
+        background-size: 424px 136px;
+        margin-bottom: 18px;
+        padding: 34px 0 28px 60px;
+        box-sizing: border-box;
+    }
+
+    .show-content-info-bom {
+        width: 464px;
+        height: 136px;
+        background: url("https://storage.iquizoo.com/static/img/report/trainingcourse/overview-show-bom.png") no-repeat;
+        background-size: 464px 136px;
+        transform: translateX(-40px);
+        padding: 20px 0 20px 100px;
+    }
+
+    .info-top-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-top-wrapper-label::before {
+        content: "";
+        width: 6px;
+        height: 24px;
+        display: inline-block;
+        background: #d26719;
+        border-radius: 198px;
         margin-right: 8px;
     }
-     .modal-content{
 
-     }
-    .modal-p {
+    .info-top-wrapper-label {
+        font-weight: 500;
+        font-size: 28px;
         color: #333333;
-        font-size: 24px;
-        margin-bottom: 14px;
     }
 
-    .modal-p span {
-        color: #489EFF;
-    }
-    .modal-footer{
-        display:flex;
-        justify-content:center;
-        padding-bottom:20px;
-     }
-
-    .modal-btn {
-        height: 30px;
-        padding: 0 10px;
-        background: #489EFF;
-        border-radius:18px;
-        color: #fff;
-        line-height: 30px;
-        text-align: center;
-        font-size: 20px;
-        padding: 8px 14px;
-        cursor: pointer;
-    }
-     .modal-btn-sub{
-         height: 30px;
-         background: #489EFF;
-         border-radius:4px;
-         font-size: 16px;
-         padding: 4px 22px;
-     }
-    .cover-title {
-        font-size: 48px;
-        font-weight: bold;
-        background-image: linear-gradient(90deg, #00111D, #1A86EB, #1A41BB);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-        font-size: 74px;
-        width: 100%;
-        text-align: center;
-        transform: translateY(14vh);
+    .info-top-wrapper-rate {
+        font-weight: 500;
+        font-size: 36px;
+        color: #d26719;
     }
 
-    .start-answer {
-        color: #fff;
-        font-size: 32px;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 9vh;
-        padding: 20px 50px;
-        border-radius: 20px;
-    }`
+    .info-top-wrapper img {
+        height: 32px;
+        width: 32px;
+    }
 
-    const phoneStyle = `
-    .cover-remark {
-        background-color: transparent;
-        width: 82%;
-        height: 19vh;
-        border-radius: 12px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -76%);
-        box-sizing: border-box;
+    .info-top-desc {
+        font-weight: 400;
+        font-size: 18px;
+        color: #111111;
+    }
+
+    .info-bom-head {
+        font-weight: 500;
+        font-size: 28px;
         color: #333333;
-        padding: 6px 10px;
-        line-height: 1.5;
-        text-align: justify;
-        justify-content: center;
-        align-items: center;
+        margin-bottom: 4px;
         display: flex;
-        font-size: 12px;
+        align-items: center;
     }
-     .cover {
-            width: 100%;
-            height: 100vh;
-            background-image: url("./activity/cover_bg.png") no-repeat;
-            background-size: 100% 100vh;
-            position: relative;
-        }
 
-        .cover-title {
-            font-size: 48px;
-            font-weight: bold;
-            background-image: linear-gradient(90deg, #00111D, #1A86EB, #1A41BB);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            font-size: 36px;
-            width: 100%;
-            text-align: center;
-            transform: translateY(20vh);
-        }
+    .info-bom-head::before {
+        content: "";
+        width: 6px;
+        height: 24px;
+        display: inline-block;
+        background: #269fff;
+        border-radius: 198px;
+        margin-right: 8px;
+    }
 
-        .start-answer-move {
-            color: #fff;
-            font-size: 20px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 16vh;
-            border-radius: 20px;
-        }
+    .info-bom-text {
+        font-weight: 500;
+        font-size: 36px;
+        color: #269fff;
+    }
 
-        .questions-header {
-            position: relative;
-            height: 109px;
-            background: url("./activity/question_header_move.png") no-repeat;
-            background-size: 100% 109px;
-            font-size: 11px;
-            color: #333;
-            padding: 0 6%;
-            display: flex;
-            flex-direction: column;
-            justify-content: end;
-            font-weight: 500;
-            font-weight: 500;
-        }
+    .overview-nb-card {
+        display: flex;
+        gap: 18px;
+        margin-bottom: 32px;
+    }
 
-        .questions-header-text {
-            margin-bottom: 6px;
-        }
+    .overview-nb-card-item {
+        background: var(--url) no-repeat;
+        width: 304px;
+        background-size: 304px 186px;
+        height: 186px;
+        display: flex;
+        align-items: center;
+        /* justify-content: center; */
+        padding-top: 36px;
+        box-sizing: border-box;
+        flex-direction: column;
+    }
 
-        .questions-body {
-            padding: 0 calc(6% - 10px);
-            overflow: auto;
-            padding-bottom:100px;
-        }
+    .nb-card-item-label {
+        font-weight: 500;
+        font-size: 28px;
+        color: #333333;
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+    }
 
-        .questions-header-text:nth-child(2) {
-            margin-bottom: 20px;
-        }
+    .nb-card-item-label::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 24px;
+        background: var(--c);
+        margin-right: 8px;
+        border-radius: 198px;
+    }
 
-        .exam-time {
-            position: absolute;
-            color: #489EFF;
-            font-size: 14px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-65%, 0);
-        }
+    .nb-card-item-score {
+        font-weight: 600;
+        font-size: 36px;
+        color: var(--c);
+    }
 
-        .exam-time img {
-            width: 18px;
-            height: 18px;
-            margin-right: 6px;
-        }
+    .nb-card-item-course {
+        font-weight: 400;
+        font-size: 16px;
+        color: var(--c);
+    }
 
-        .question-body-item {
-            margin: 16px 0;
-            margin-bottom: 30px;
-            box-sizing: border-box;
-            padding: 12px 10px;
-            border: 2px dotted transparent;
-        }
+    .overview-nb-content {
+        margin-top: 32px;
+        margin-bottom: 64px;
+    }
 
-        .questions-body-title {
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
+    .overview-level-content {
+        margin-top: 32px;
+        display: flex;
+        gap: 40px;
+        align-items: center;
+    }
 
-        .nopage .questions-body-title {
-            color: #333;
-        }
+    .overview-level-card {
+        width: 480px;
+        height: 198px;
+        background: linear-gradient(90deg, #478BFF, #47C2FF);
+        flex-shrink: 0;
+        border-radius: 16px;
+        background-color: #fafeff;
+        box-sizing: border-box;
+        padding: 1px;
+    }
 
-        .nopage-option-head {
-            font-size: 12px;
-            color: #333333;
-            margin-bottom: 20px;
-        }
+    .overview-level-wrapper {
+        background-color: #fafeff;
+        width: 478px;
+        height: 196px;
+        border-radius: 16px;
+        padding: 24px 24px 24px 16px;
+        box-sizing: border-box;
+    }
 
-        .option-item-nopage {
-            width: 21px;
-            height: 21px;
-            border-radius: 50%;
-            box-sizing: border-box;
-            border: 1px solid #489EFF;
-            background-color: #fff;
-            color: #489EFF;
-            line-height: 19px;
-            text-align: center;
-            font-size: 12px;
-        }
+    .level-card-icon-score {
+        font-weight: 400;
+        font-size: 22px;
+        color: #478bff;
+    }
 
-        .option-item-nopage .option-tip-box {
-            display: none;
-            background: url("./activity/tip_box.png") no-repeat;
-            background-size: 100%;
-            width: 80px;
-            height: 32px;
-            font-size: 12px;
-            line-height: 30px;
-            position: absolute;
-            color: #fff;
-            left: 50%;
-            top: 22px;
-            transform: translateX(-50%);
-        }
+    .level-card-icon-score span {
+        font-weight: 600;
+        font-size: 22px;
+        color: #478bff;
+    }
 
-        .option-item-nopage-active {
-            background-color: #489EFF;
-            color: #fff;
-        }
+    .level-card-icon-score-nb {
+        color: #213044;
+    }
 
-        .option-error-nopage {
-            display: none;
-        }
-
-        .question-body-item-empty .option-error-nopage {
-            display: flex;
-            background-color: #FFE9E9;
-            height: 40px;
-            padding: 4px 8px;
-            box-sizing: border-box;
-            margin-top: 16px;
-        }
-
-        .question-body-item-empty {
-            border: 2px dotted #FF3333;
-            border-radius: 4px;
-        }
-
-        .option-error-nopage-icon {
-            width: 25px;
-            height: 25px;
-        }
-
-        .option-error-nopage-text {
-            color: #333;
-            font-size: 12px;
-            margin-left: 8px;
-            font-weight: 500;
-        }
-
-        .option-error-nopage-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        .modal-p {
-            color: #333333;
-            font-size: 16px;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .modal-p span {
-            color: #489EFF;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: center;
-        }
-
-        .modal-btn {
-            height: 30px;
-            padding: 6px 16px;
-            background: #489EFF;
-            border-radius: 20px;
-            color: #fff;
-            line-height: 30px;
-            text-align: center;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .modal-btn-default {
-            height: 30px;
-            padding: 6px 16px;
-            border-radius: 20px;
-            color: #489EFF;
-            line-height: 30px;
-            text-align: center;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-             .questions-body-option {
+    .level-card-icon-score-nb span {
         color: #000;
-        font-size: 24px;
+    }
+
+    .level-card-top {
+        display: flex;
+        gap: 20px;
+    }
+
+    .overview-level-card-icon {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+    }
+
+    .overview-level-card-right {
+        flex: 1;
+    }
+
+    .level-progress {
+        width: 100%;
+        height: 8px;
+        background: #e7e7e7;
+        border-radius: 198px;
+        margin: 16px 0 10px 0;
+        position: relative;
+    }
+
+    .level-progress-value {
+        width: calc(100% * var(--val) + 12px);
+        background: linear-gradient(90deg, #478bff, #47c2ff);
+        border-radius: 198px;
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+    }
+
+    .level-progress-crice {
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        width: 24px;
+        height: 24px;
+        border: 6px solid #47bbff;
+        box-sizing: border-box;
+        border-radius: 50%;
+        top: calc(50% - 12px);
+        background-color: #fff;
+    }
+
+    .level-next {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        font-weight: 600;
+        font-size: 20px;
+        color: #989187;
+    }
+
+    .level-next-active {
+        font-weight: 600;
+        font-size: 20px;
+        color: #333333;
+    }
+
+    .level-card-bottom {
+        font-weight: 400;
+        font-size: 20px;
+        color: #213044cb;
         display: flex;
         align-items: center;
-        margin-bottom: 12px;
-    }
-    .questions-body-option label {
-        margin-left: 8px;
-        font-size: 14px;
+        margin-top: 12px;
     }
 
-    .questions-body-option .radio {
-        width: 18px;
-        height: 18px;
-        border: 1px solid #999999;
-        border-radius: 50%;
-        box-sizing: border-box;
+    .level-card-bottom img {
+        width: 20px;
+        margin-right: 4px;
+        height: 20px;
     }
 
-    .questions-body-option .active {
-        border: 6px solid #489EFF;
-    }
-            
-    .questions-confirm {
-        background-color: #489EFF;
-        width: 120px;
-        height: 42px;
-        color: #fff;
+    .gap-score {
+        font-weight: 400;
         font-size: 20px;
-        border-radius: 22px;
-        line-height: 42px;
+        color: #213044;
+    }
+
+    .task-count {
+        margin-bottom: 40px;
+    }
+
+    .task-type {
+        margin-bottom: 20px;
+    }
+
+    .task-time {
+        margin-bottom: 50px;
+    }
+
+    .annex-table {
+        margin-top: 20px;
+    }
+
+    .annex-head {
+        width: 100%;
+        background-color: #4d96ff;
+        height: 84px;
+        border-radius: 8px;
+        display: flex;
+        box-sizing: border-box;
+        padding: 30px 24px 28px 30px;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .annex-head-th {
+        font-weight: 500;
+        font-family: Bold;
+        font-size: 18px;
+        color: #ffffff;
         text-align: center;
-        margin-bottom:20px;
-        cursor: pointer;
     }
-     .questions-body-options-nopage {
-        width: 100%;
+
+    .annex-head-th,
+    .annex-tbody-td {
+        width: 162px;
     }
-    .option-line-nopage {
-        background-color: #489EFF;
-        height: 2px;
-        width: 100%;
+
+    .w54 {
+        width: 76px;
+        text-align: center;
     }
-        .options-nopage {
+
+    .annex-tbody-tr {
+        display: flex;
+        align-items: center;
+        padding: 16px 24px 16px 30px;
+        background-color: #e8f2fe;
+    }
+
+    .annex-tbody-tr-even {
+        background-color: #fff;
+        padding-bottom: 30px;
+        padding-top: 30px;
+    }
+
+    .annex-tbody-td {
+        font-weight: 500;
+        font-size: 18px;
+        color: #333333;
+        font-family: Bold;
+        text-align: center;
+    }
+
+    .annex-tbody-td.w54 {
+        width: 76px;
+    }
+
+    .courseDetail-content {
+        margin-top: 28px;
+    }
+
+    .courseDetail-item {
+        width: 950px;
+        min-height: 126px;
+        height: auto;
+        background: linear-gradient(90deg,
+                rgba(71, 139, 255, 1),
+                rgba(71, 194, 255, 1));
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        margin-bottom: 40px;
+    }
+
+    .courseDetail-item-wrapper {
+        background: #fafcff;
+        width: 946px;
+        min-height: 120px;
+        height: calc(100%);
+        border-radius: 6px;
+        box-sizing: border-box;
+        padding: 12px 0 12px 12px;
+        display: flex;
+    }
+
+    .courseDetail-item-lable {
+        width: 40px;
+        height: 102px;
+        background: #eaf2ff;
+        font-family: Bold;
+        font-weight: 500;
+        font-size: 18px;
+        flex-shrink: 0;
+        color: #7eaeff;
+        border-radius: 4px;
+        box-sizing: border-box;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .courseDetail-item-lable-active {
+        color: #fff;
+        background-color: #5ee247;
+    }
+
+    .courseDetail-item-lable-error {
+        color: #fff;
+        background-color: #ff4a00;
+    }
+
+    .courseDetail-item-body {
+        margin-left: 32px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-right: 12px;
+    }
+
+    .courseDetail-item-top {
+        display: flex;
+    }
+
+    .courseDetail-item-top-item {
+        min-width: 56px;
+        flex: 1;
+        height: 70px;
+        margin-right: 60px;
+        position: relative;
+    }
+
+    .courseDetail-item-top-item::after {
+        content: "";
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        left: 0;
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
+        right: -30px;
+        width: 1px;
+        height: 38px;
+        background-color: #4798ff;
     }
 
-    .option-item-nopage {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        box-sizing: border-box;
-        border: 1px solid #489EFF;
-        background-color: #fff;
-        color: #489EFF;
-        line-height: 20px;
-        text-align: center;
-        font-size: 12px;
+    .courseDetail-item-top-item:first-child {
+        margin-right: 104px;
     }
 
-    .show-tip .option-tip-box {
-        display: block;
-    }
-.option-item-nopage-active {
-        background-color: #489EFF;
-        color: #fff;
+    .courseDetail-item-top-item:first-child::after {
+        right: -52px;
     }
 
-    .option-error-nopage {
+    .courseDetail-item-name {
+        font-size: 18px;
+        font-family: Bold;
+        font-weight: 500;
+        color: #4793ff;
+        border-bottom: 1px dashed #000000af;
+        display: inline-block;
+        padding-bottom: 1px;
+        margin-bottom: 2px;
+        white-space: nowrap;
+    }
+
+    .courseDetail-item-top .courseDetail-item-top-item:last-child .courseDetail-item-name {
+        width: 110px;
+    }
+
+    .courseDetail-item-top .courseDetail-item-top-item:last-child::after {
         display: none;
     }
-    `
 
-    function browserRedirect() {
-        var sUserAgent = navigator.userAgent.toLowerCase()
-        var bIsIpad = sUserAgent.match(/ipad/i) == 'ipad'
-        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == 'iphone os'
-        var bIsMidp = sUserAgent.match(/midp/i) == 'midp'
-        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == 'rv:1.2.3.4'
-        var bIsUc = sUserAgent.match(/ucweb/i) == 'ucweb'
-        var bIsAndroid = sUserAgent.match(/android/i) == 'android'
-        var bIsCE = sUserAgent.match(/windows ce/i) == 'windows ce'
-        var bIsWM = sUserAgent.match(/windows mobile/i) == 'windows mobile'
-        // document.writeln("您的浏览设备为：");
-        if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
-            return 'phone'
-        }
-        return 'pc'
+    .courseDetail-item-count {
+        font-weight: 400;
+        font-size: 18px;
+        color: #000000;
     }
 
-    const device = browserRedirect();
-    const style = document.createElement('style')
-    if (device == 'pc') {
-        style.innerText = pcStyle
-    } else {
-        style.innerText = phoneStyle
+    .courseDetail-item-bottom {
+        font-weight: 400;
+        font-size: 18px;
+        color: #333333;
+        display: flex;
     }
-    document.head.append(style)
 
+    .courseDetail-item-bottom-text {
+        font-weight: 400;
+        font-size: 18px;
+        color: #000000;
+        font-family: Bold;
+    }
 
-</script>
+    .courseDetail-item-bottom-label {
+        flex-shrink: 0;
+    }
+
+    .capup-score {
+        margin-bottom: 58px;
+    }
+
+    .capup-score-content {
+        margin-top: 24px;
+    }
+
+    .capup-score-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+
+    .capup-score-item:last-child {
+        margin-bottom: 24px;
+    }
+
+    .capup-score-label {
+        width: 128px;
+        height: 62px;
+        background: var(--bg, #f5fbff);
+        border-radius: 8px;
+        border: 2px solid var(--br, #b9dcf8);
+        font-weight: 500;
+        font-family: Bold;
+        font-size: 24px;
+        color: #2675b5;
+        text-align: center;
+        line-height: 62px;
+    }
+
+    .capup-score-wrapper>div {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .capup-score-wrapper>div div:last-child {
+        font-weight: 400;
+        font-size: 14px;
+        color: #666666;
+        white-space: nowrap;
+    }
+
+    .capup-score-progress {
+        width: 744px;
+        height: 30px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        margin-bottom: 2px;
+        position: relative;
+    }
+
+    .capup-score-progress-val {
+        width: calc(100% * var(--val, 0));
+        border-radius: 4px;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        overflow: hidden;
+        top: 0;
+        background-color: var(--bg);
+        z-index: 99;
+    }
+
+    .capup-score-progress-score {
+        line-height: 30px;
+        font-weight: 500 !important;
+        font-size: 20px !important;
+        position: absolute;
+        right: 20px;
+        color: #ffffff !important;
+    }
+
+    .capup-score-tip {
+        font-weight: 400;
+        font-size: 22px;
+        color: #213044c3;
+        display: flex;
+        align-items: center;
+        margin-bottom: 28px;
+        justify-content: center;
+    }
+
+    .capup-score-tip img {
+        width: 20px;
+        height: 20px;
+        margin-right: 6px;
+    }
+
+    .capup-level-content {
+        margin-top: 32px;
+    }
+
+    .capup-level-left-top {
+        display: flex;
+        align-items: center;
+    }
+
+    .capup-level-left-top .left-item-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .capup-level-left-top .left-item-name {
+        font-weight: 500;
+        font-size: 32px;
+        color: #333333;
+    }
+
+    .capup-level-left-top .left-item-text {
+        font-weight: 500;
+        font-size: 22px;
+        color: #333333;
+        align-self: flex-end;
+    }
+
+    .left-bottom-current {
+        width: 94px;
+        height: 94px;
+        background: #f0f0f0;
+        border-radius: 8px;
+        border: 1px solid #ededed;
+    }
+
+    .left-bottom-current {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        align-self: flex-end;
+        width: 94px;
+        height: 94px;
+    }
+
+    .left-bottom-current img {
+        width: 26px;
+        height: 26px;
+        margin-bottom: 6px;
+    }
+
+    .left-bottom-current div {
+        font-weight: 500;
+        font-family: Bold;
+        font-size: 18px;
+        color: #ffffff;
+        width: 69px;
+        height: 32px;
+        background: #c3c3c3;
+        border-radius: 145px;
+        text-align: center;
+        line-height: 32px;
+    }
+
+    .capup-level-item {
+        width: 946px;
+        height: 196px;
+        border-radius: 8px;
+        border: 2px solid #3fbeff;
+        padding: 22px 0 16px 28px;
+        display: flex;
+        margin-bottom: 36px;
+    }
+
+    .capup-level-item-left,
+    .capup-level-item-right {
+        flex: 1;
+    }
+
+    .capup-level-left-bottom {
+        display: flex;
+        gap: 0 62px;
+    }
+
+    .left-bottom-up {
+        width: 122px;
+        align-self: flex-end;
+        height: 80px;
+        font-weight: 900;
+        font-size: 28px;
+        color: #659dff;
+        background: var(--bg,
+                url("https://storage.iquizoo.com/static/img/report/trainingcourse/cap-up.png")) no-repeat;
+        background-size: 123px 80px;
+    }
+
+    .left-bottom-target {
+        width: 114px;
+        height: 114px;
+        background: url("https://storage.iquizoo.com/static/img/report/trainingcourse/level-box.png") no-repeat;
+        background-size: 114px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        justify-content: center;
+        position: relative;
+    }
+
+    .left-bottom-target img {
+        display: none;
+    }
+
+    .left-bottom-target div {
+        font-weight: 500;
+        font-family: Bold;
+        text-align: center;
+        line-height: 38px;
+        font-size: 22px;
+        color: #ffffff;
+        margin-top: 46px;
+        margin-left: 6px;
+    }
+
+    .capup-level-right-top {
+        font-weight: 500;
+        font-size: 22px;
+        color: #333333;
+        margin-bottom: 4px;
+    }
+
+    .capup-level-right-bottom {
+        width: 338px;
+        height: 122px;
+        background: #f9f9f9;
+        border-radius: 12px;
+        padding: 12px 10px 10px 10px;
+        display: flex;
+    }
+
+    .capup-level-right-bottom div {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #fff;
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .capup-level-right-bottom div span {
+        font-weight: 600;
+        font-size: 17px;
+        color: #564900;
+    }
+
+    .left-bottom-up-stage {
+        font-family: Source-Sans-Pro-Bold-2;
+        font-weight: 700;
+        font-size: 28px;
+        color: #659dff;
+        margin-left: 14px;
+        position: relative;
+        top: -4px;
+    }
+
+    .capup-level-item-right {
+        margin-left: 88px;
+    }
+
+    .capup-level-desc {
+        margin-top: 60px;
+        width: 946px;
+        background: #f5f5f5;
+        border-radius: 20px;
+        padding: 30px;
+        box-sizing: border-box;
+        font-weight: 400;
+        font-size: 20px;
+        color: #213044c6;
+        line-height: 1.8;
+    }
+
+    .capup-level-desc p {
+        margin-bottom: 36px;
+    }
+
+    .capup-level-desc p:last-child {
+        margin-bottom: 0;
+    }
+
+    .analysis .pointer {
+        position: absolute;
+    }
+
+    .task-type-content {
+        width: 1150px;
+        margin-left: -84px;
+        height: 290px;
+    }
+
+    .task-count-content {
+        height: 336px;
+        width: 1250px;
+        transform: translateX(-80px);
+    }
+
+    .task-time-content {
+        height: 336px;
+        width: 1250px;
+        transform: translateX(-80px);
+    }
+
+    .task-tip {
+        color: #213044cb;
+        font-weight: 400;
+        transform: translateY(-64px);
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+    }
+    .task-tip img{
+        width: 18px;
+        height: 18px;
+        margin-right: 6px;
+    }
+
+    .trend-char-content {
+        width: 1150px;
+        margin-left: -84px;
+    }
+
+    .suggest-desc {
+        margin-top: 32px;
+        margin-bottom: 48px;
+    }
+
+    .suggest-items {
+        margin-top: 12px;
+        margin-bottom: 64px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px 60px;
+        margin-left: -20px;
+    }
+
+    .suggest-item {
+        width: 454px;
+        height: 248px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-sizing: border-box;
+        padding: 44px 24px 0 44px;
+        padding-bottom: 0;
+        background: var(--url) no-repeat;
+        background-size: 454px 248px;
+        position: relative;
+    }
+
+    .suggest-item-name {
+        font-weight: 500;
+        font-family: Bold;
+        font-size: 30px;
+        margin-bottom: 8px;
+        color: #333333;
+    }
+
+    .suggest-item-desc {
+        font-weight: 400;
+        font-size: 22px;
+        color: #0e1d42c4;
+    }
+
+    .suggest-item-desc-ac {
+        color: var(--ac);
+    }
+
+    .suggest-item-img {
+        text-align: end;
+        position: absolute;
+        right: 24px;
+        bottom: 8px;
+    }
+
+    .suggest-item-img img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .capacity-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 42px;
+    }
+
+    .capacity-items {
+        margin-top: 32px;
+    }
+
+    .capacity-item-left {
+        width: 100px;
+        flex-shrink: 0;
+        margin-right: 20px;
+    }
+
+    .capacity-item-right {
+        font-weight: 400;
+        font-size: 20px;
+        color: #0e1d42c6;
+    }
+
+    .active-text {
+        color: #457dff;
+    }
+
+    .annex .page-content {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+    .annex-content {
+        margin-top: 32px;
+    }
+
+    .level-progress-nb {
+        font-weight: 500;
+        font-size: 20px;
+        color: #ff6633;
+        display: flex;
+        align-items: center;
+        margin-top: 32px;
+    }
+
+    .level-progress-nb img {
+        width: 22px;
+        height: 22px;
+        margin-right: 2px;
+    }
+
+    .capup-tip {
+        border: 1px solid #478bff;
+        border-radius: 8px;
+        padding: 10px;
+        box-sizing: border-box;
+        width: 946px;
+        height: 72px;
+        color: #213044ca;
+        display: flex;
+        margin-top: 24px;
+        margin-bottom: 68px;
+    }
+
+    .capup-tip-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .capup-tip-label {
+        color: #4d5969;
+    }
+
+    .suggest .commont-title::before {
+        width: 102%;
+    }
+
+    .annex .commont-title::before {
+        width: 101%;
+    }
+
+    .annex-tbody-td p {
+        margin-bottom: 8px;
+    }
+
+    .annex-tbody-td p:last-child {
+        margin-bottom: 0;
+    }
+
+    .lift-cap {
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .cover-card-label {
+        width: 142px;
+        display: inline-block;
+    }
+
+    .suggest .page-content {
+        padding-top: 74px;
+    }
+
+    .annex .page-content {
+        padding-top: 74px;
+    }
+</style>
 
 <body>
-    <div id="main">
-    </div>
-    <div class="my-modal">
-        <div class="modal-content">
-            <div class="modal-body"></div>
-            <div class="modal-footer"></div>
+    <div class="main" id="train-report">
+        <div class="page cover no-page-number config-cover-page">
+            <div class="cover-card">
+                <div class="cover-card-wrapper">
+                    <div><span class="cover-card-label">课程名称：</span><span class="courseName"></span></div>
+                    <div><span class="cover-card-label">姓名：</span><span class="name"></span></div>
+                    <div><span class="cover-card-label">年龄：</span><span class="age"></span></div>
+                    <div><span class="cover-card-label">训练日期：</span><span class="date"></span></div>
+                </div>
+                <img class="cover-card-bg"
+                    src="https://storage.iquizoo.com/static/img/report/trainingcourse/cover-border.png" />
+            </div>
         </div>
-    </div>
-</body>
-<script>
-    // function initRem() {
-    //     const doc = document.documentElement
-    //     let clientWidth = doc.clientWidth > 1280 ? 1280 : doc.clientWidth
-    //     doc.style.fontSize = clientWidth / 100 + 'px'
-    // }
-    // initRem()
-    // window.addEventListener('resize', initRem)
-
-
-    async function getData() {
-        const url = new URLSearchParams(location.search)
-        const questionGroupId = url.get('questionGroupId')
-        const baseUrl = url.get('url') || "https://api.uat.iquizoo.com"
-        if (questionGroupId) {
-            const fm = new FormData()
-            fm.append('questionGroupId', questionGroupId)
-            const res = await fetch(baseUrl + '/anonymous/content/questiongroup/getquestiongroupbyid', {
-                method: 'post',
-                body: fm
-            })
-            const { result, statusCode } = await res.json()
-            window._startTime = +new Date()
-            if (statusCode != 200) {
-                return Promise.reject()
-            }
-            return result
-        }
-        return {
-            "id": 718144065388613,
-            "name": "请对当前学生进行打分",
-            "version": "",
-            "minAge": 1,
-            "maxAge": 12,
-            "abilityTypeId": null,
-            "abilityTypeText": "",
-            "firstAbilityId": null,
-            "firstAbilityText": "",
-            "secondAbilityId": null,
-            "secondAbilityText": "",
-            "orderType": "1",
-            "icon": "/uat/content/game/questiongroup/985f9d44-b2ad-41ca-91d7-85cdc3c9eb44.jpeg",
-            "coverPlanUri": "/uat/content/game/questiongroup/9231c4c8-075f-44b8-8d08-0e9cd72a4983.jpeg",
-            "exerciseCalculateCode": "",
-            "remark": "",
-            "pushQuestionNum": 2,
-            "finishType": 2,
-            "groupModel": 1,
-            "endTime": "14:15:00",
-            "isPerPage": 1,
-            "isShowScore": 1,
-            "isAnswerInOrder": 1,
-            "questionInfoDtos": [
-                {
-                    "id": 639937255800965,
-                    "name": "<p>请对当前学生进行打分</p>",
-                    "attachmentUrl": "",
-                    "questionType": 1,
-                    "version": "1.1.1",
-                    "abilityTypeId": 297680040763461,
-                    "abilityTypeText": "题目能力",
-                    "firstAbilityId": 297680145858629,
-                    "firstAbilityText": "成功归因得分",
-                    "secondAbilityId": 297681346695237,
-                    "secondAbilityText": "学习动机/元认知得分",
-                    "degreeOfDifficulty": 1,
-                    "remark": "",
-                    "analysis": "",
-                    "isPaging": false,
-                    "questionItems": [
-                        {
-                            "id": 639937255800966,
-                            "questionId": 639937255800965,
-                            "itemTitle": "1",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 1,
-                            "displayOrder": 1,
-                            "isRightChoice": true,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937255800967,
-                            "questionId": 639937255800965,
-                            "itemTitle": "2",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 2,
-                            "displayOrder": 2,
-                            "isRightChoice": true,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937255800968,
-                            "questionId": 639937255800965,
-                            "itemTitle": "3",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 3,
-                            "displayOrder": 3,
-                            "isRightChoice": true,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937255800969,
-                            "questionId": 639937255800965,
-                            "itemTitle": "4",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 4,
-                            "displayOrder": 4,
-                            "isRightChoice": true,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937255800970,
-                            "questionId": 639937255800965,
-                            "itemTitle": "5",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 5,
-                            "displayOrder": 5,
-                            "isRightChoice": true,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        }
-                    ]
-                },
-                {
-                    "id": 639937027260549,
-                    "name": "<p>请对当前学生进行评价打分</p>",
-                    "attachmentUrl": "",
-                    "questionType": 1,
-                    "version": "1.0.0",
-                    "abilityTypeId": 297680040763461,
-                    "abilityTypeText": "题目能力",
-                    "firstAbilityId": 297680145858629,
-                    "firstAbilityText": "成功归因得分",
-                    "secondAbilityId": 297681439625285,
-                    "secondAbilityText": "能力-成功",
-                    "degreeOfDifficulty": 1,
-                    "remark": "",
-                    "analysis": "",
-                    "isPaging": false,
-                    "questionItems": [
-                        {
-                            "id": 639937027264645,
-                            "questionId": 639937027260549,
-                            "itemTitle": "1",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 1,
-                            "displayOrder": 1,
-                            "isRightChoice": false,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937027264646,
-                            "questionId": 639937027260549,
-                            "itemTitle": "2",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 2,
-                            "displayOrder": 2,
-                            "isRightChoice": false,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937027264647,
-                            "questionId": 639937027260549,
-                            "itemTitle": "3",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 3,
-                            "displayOrder": 3,
-                            "isRightChoice": false,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937027264648,
-                            "questionId": 639937027260549,
-                            "itemTitle": "4",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 4,
-                            "displayOrder": 4,
-                            "isRightChoice": false,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937027264649,
-                            "questionId": 639937027260549,
-                            "itemTitle": "5",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 5,
-                            "displayOrder": 5,
-                            "isRightChoice": false,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937027264650,
-                            "questionId": 639937027260549,
-                            "itemTitle": "6",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 6,
-                            "displayOrder": 6,
-                            "isRightChoice": false,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        },
-                        {
-                            "id": 639937027264651,
-                            "questionId": 639937027260549,
-                            "itemTitle": "7",
-                            "itemType": 0,
-                            "itemCoutentType": 0,
-                            "itemAttachmentUrl": "",
-                            "score": 7,
-                            "displayOrder": 7,
-                            "isRightChoice": true,
-                            "skipQuestionId": 0,
-                            "skipQuestionNo": 0,
-                            "skipId": 0
-                        }
-                    ]
-                }
-            ]
-        }
-    }
-</script>
-
-<script>
-    const questionTypeTemp = {
-        1: ``,
-        2:``,
-        3:{
-
-         }
-    }
-    function getCover(params = {}) {
-        let bgName = 'cover_bg'
-        if (params.device != 'pc') {
-            bgName += '_move'
-        }
-        if (!params.description) {
-            bgName += '_no'
-        }
-        const format = (description) => description.replace(/\n/g, "<br/>")
-        const bg = `./activity/${bgName}.png`
-        const nodescStyle = "transform: translateY(calc(50vh - 100%))"
-        return `
-         <div class="cover" style='background-image: url(${bg})''>
-            <div class="cover-title" style="${!params.description ? nodescStyle : ''}">${params.name}</div>
-            <div class="cover-remark">${format(params.description)}</div>
-            <div class="start-btn ${params.device != 'pc' ? 'start-answer-move' : 'start-answer'}" >开始答题</div>
-        </div>
-        `
-    }
-    function getAnswerTemp(finishType) {
-        return `
-          <div class="questions">
-            <div class="questions-header">
-                <div class="questions-header-text question-score">
-                    <span>您当前得分：</span>
-                    <span class="my-score">0分</span>
-                </div>
-                <div class="questions-header-text">
-                    <span>您当前进度：</span>
-                    <span class="question-total">0/17</span>
-                </div>
-                ${finishType != 1 ? `<div class="exam-time flex acenter">
-                <img src = "./activity/play.png" />
-                    <span class="time">12:00:00</span>
-                </div>`: ''}
-            </div >
-            <div class="questions-body">
-            </div>
-            <div class="questions-footer flex jcenter pr">
-                <div class="questions-confirm">确认答案</div>
-            </div>
-        </div >
-            `
-    }
-    function getQuestionTemp(data, index) {
-        return `
-            <div class="question-body-item" id = "${data.id}" >
-              <div class="questions-body-title flex">${index}.${data.name}</div>
-                <div class="questions-body-options">
-                    ${data.questionItems.map((v, i) => `
-                       <div class="questions-body-option">
-                           <div class="radio" data-itemId="${v.id}" data-pid=${data.id} data-score="${v.score}"></div>
-                           <label data-itemId="${v.id}" data-pid=${data.id} data-score="${v.score}">${v.itemTitle}</label>
-                       </div>
-                    `).join('')}
-                </div>
-            </div>
-            `
-    }
-    function getQuestionTempByNoPage(data = {}, index) {
-        return `
-            <div class="question-body-item nopage" id = "${data.id}" >
-                    <div class="questions-body-title flex">
-                        ${index}. ${data.name}
-                    </div>
-                    <div class="questions-body-options-nopage">
-                        <div class="flex jbetween nopage-option-head">
-                            <span>${data.questionItems[0].itemTitle}</span>
-                            <span>${data.questionItems[data.questionItems.length - 1].itemTitle}</span>
+        <div class="page overview">
+            <div class="page-content">
+                <div class="commont-title overview-title">训练成长概览</div>
+                <div class="overview-show">
+                    <div class="content-sub-title">训练表现</div>
+                    <div class="overview-show-content">
+                        <div class="overview-show-content-info">
+                            <div class="show-content-info-left">
+                                <div>课程总得分：</div>
+                                <div class="info-left-score"></div>
+                            </div>
+                            <div class="show-content-info-right">
+                                <div class="show-content-info-top">
+                                    <div class="info-top-wrapper">
+                                        <div class="info-top-wrapper-label">正确率</div>
+                                        <div class="info-top-wrapper-rate"></div>
+                                        <img class="info-top-wrapper-icon"
+                                            src="https://storage.iquizoo.com/static/img/report/trainingcourse/content-info-top.png" />
+                                    </div>
+                                    <div class="info-top-desc">
+                                        准确率有提升空间，“建议关注错因并复盘”
+                                    </div>
+                                </div>
+                                <div class="show-content-info-bom">
+                                    <div class="info-bom-head">训练课时&天数</div>
+                                    <div class="info-bom-text"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="questions-body-option-nopage pr">
-                            <div class="option-line-nopage"></div>
-                            <div class="options-nopage">
-                                ${data.questionItems.map((v, i) => `
-                                   <div class="option-item-nopage pr" data-itemId="${v.id}" data-pid=${data.id} data-score="${v.score}">
-                                     ${i + 1}
-                                     <div class="option-tip-box">${v.itemTitle}</div>    
-                                   </div>
-                                `).join('')}
+                        <div class="common-desc overview-show-desc"></div>
+                    </div>
+                </div>
+                <div class="overview-nb">
+                    <div class="content-sub-title">高光时刻</div>
+                    <div class="overview-nb-content">
+                        <div class="overview-nb-card">
+                            <div class="overview-nb-card-item" style="
+                    --url: url('https://storage.iquizoo.com/static/img/report/trainingcourse/overview-nb-item1.png');
+                    --c: #3187ff;
+                  ">
+                                <div class="nb-card-item-label">最高得分课时</div>
+                                <div class="nb-card-item-score max-score"></div>
+                                <div class="nb-card-item-course max-course-number"></div>
+                            </div>
+                            <div class="overview-nb-card-item" style="
+                    --url: url('https://storage.iquizoo.com/static/img/report/trainingcourse/overview-nb-item2.png');
+                    --c: #b748ff;
+                  ">
+                                <div class="nb-card-item-label">刷新纪录次数</div>
+                                <div class="nb-card-item-score recordBreakingTimes" style="margin-top: 20px;"></div>
+                            </div>
+                            <div class="overview-nb-card-item" style="
+                    --url: url('https://storage.iquizoo.com/static/img/report/trainingcourse/overview-nb-item3.png');
+                    --c: #d13a3d;
+                  ">
+                                <div class="nb-card-item-label">亮点提升能力</div>
+                                <div class="nb-card-item-score lift-cap" style="margin-top: 20px;"></div>
+                            </div>
+                        </div>
+                        <div class="common-desc overview-nb-desc"></div>
+                    </div>
+                </div>
+                <div class="overview-level">
+                    <div class="content-sub-title">段位情况</div>
+                    <div class="overview-level-content">
+                        <div class="overview-level-card">
+                            <div class="overview-level-wrapper">
+                                <div class="level-card-top">
+                                    <img class="overview-level-card-icon"
+                                        src="https://storage.iquizoo.com/static/img/report/trainingcourse/level1.png" />
+                                    <div class="overview-level-card-right">
+                                        <div class="level-card-icon-score">
+                                            当前积累积分:
+                                            <span class="integral">750</span>
+                                        </div>
+                                        <div class="level-progress">
+                                            <div class="level-progress-value">
+                                                <div class="level-progress-crice"></div>
+                                            </div>
+                                        </div>
+                                        <div class="level-progress-nb">
+                                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAXCAYAAAAP6L+eAAAAAXNSR0IArs4c6QAAA3BJREFUSEuVlX1o1WUUxz/n99ubc7fhzSzLRqCsFyrt3pULjciipIReQKj9dcttWiAYYa8zFcHNf1ywfzJHRqCCCVERGpEQK3Jrafay9bKgWPsjzZl6tfnb3e/Euc/d2u++LDrwcLnPc57POef7PM/5CTOYgrB+aQwNashoRda1TAKkIk1X73kBLbVdii1oa7Ic9erxwscJWY6wELg853sa5Rc8PgP/IKPpQXlnIMjnFIB13eJrCMueBZ4CagAfy9wNM8vSxgSQRnUv/kSHvH5iZDo8AtbmxK14sge4GXCl/7eNA98S6pPSfeybSfcpsK697SZC2Y+IQb0CXtVsEIG/08VChah+h6dPyK7jA+aQBWtrshb0ELAUpBBqTvc2QXklHLaCip5MCPRSWb5SunrP5cCJzSCbcnoW7qqdC237IDMOHSk4e6qUQKZ7m7zxVYfomjvj+MEgMK+ot5X/yDPwQMotf7IfDnaClrxpf+AHN4q2JFKIvDnt1B3A813pVyyAjbvBNDa7cA46n4ZTwxBcgtCSjJiiYbNoa/IAsHoKNvdqiMXhyjpYuBjqEzCvLrr15DAMfQ0/fAl/jsD5M+53MohwwMBDkH0AMKsGWtqh7nqoqAK/HMrKi+tpetsYH4Pff4ZdL0y/MT8Z+AJQnd1tetY3QMt2iM0pdUDRect2z6swcHS67hcNnIncBtM2sQKaXoLZl80MN733tcOxI/laTxj4NBCPEPwyWPYwNL3oqihle9vh8/dgwnKL2EnRtckvUBoL9prenUdKvpes/3P3QfqvwrBKn2hrYgfI8wWr8fnQ/sHMUrQ96q5dvgk7RZsTjXjSY502sr5oCWzsdlNW6pidsUBVNZhUZjvXwY/9+dgM6t0tuhqfOcmPgXsiHrffD6mtcOkiDPZBz7sOeMdKuGW5C/D2Njj6YRQs9DA/tsL1ijVLluF7h0Gs/zq76zFYsAj6PoKRoVzGQOUsuPYGaHwIfvveBZwytf68SnYf/9SBrU02JzYh8jKS68PVMfdkMwUfB4ex525X0ypykACV7XT3bxMI/+3HqeuqqIhvBdnwP5r8ZK4B6GsEo5vlrV/HbDL6BXHw9SCvALGiDT+qqPXgM6A7CEa7JqEF4GxFW/AYbmjA0w0IDwK1+cee+38W9H08r5Or+k/IFizIlP0Dwl0fNbUCGlYAAAAASUVORK5CYII=
+                                        " />
+                                            <span>太棒了,你已达到最高成就</span>
+                                        </div>
+                                        <div class="level-next">
+                                            <span class="level-next-active">青铜一</span>
+                                            <span class="level-next-level">青铜二</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="level-card-bottom">
+                                    <img
+                                        src="https://storage.iquizoo.com/static/img/report/trainingcourse/level-card-wrain.png" />
+                                    <span>距离青铜一</span>
+                                    <span class="gap-score">还差 455 分</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="common-desc"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page task">
+            <div class="page-content">
+                <div class="commont-title">训练过程数据</div>
+                <div class="task-type">
+                    <div class="content-sub-title">任务种类</div>
+                    <div class="task-type-content"></div>
+                </div>
+                <div class="task-count">
+                    <div class="content-sub-title">能力训练次数</div>
+                    <div class="task-count-content"></div>
+                </div>
+                <div class="task-time">
+                    <div class="content-sub-title">能力训练时长</div>
+                    <div class="task-time-content"></div>
+                </div>
+                <div class="task-tip">
+                    <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/task-tip.png" />
+                    单个游戏含多能力,能力训练时长可能会重复计算
+                </div>
+                <div class="common-desc"></div>
+            </div>
+        </div>
+        <div class="page capup">
+            <div class="page-content">
+                <div class="commont-title">能力提升详情</div>
+                <div class="capup-score">
+                    <div class="content-sub-title">能力分数情况</div>
+                    <div class="capup-score-content"></div>
+                    <div class="capup-score-tip">
+                        <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/level-card-wrain.png" />
+                        <div>分数同时受最高关卡数与完成质量影响</div>
+                    </div>
+                    <div class="common-desc"></div>
+                    <div class="capup-tip">
+                        <!-- <img src="https://storage.iquizoo.com/static/img/report/learningms/suggestion-text.png"
+                            class="capup-tip-icon" />
+                        <div>
+                            <span
+                                class="capup-tip-label">得分说明：</span>能力得分详情由该课程下所有学习任务的用时，完成质量及正确率等综合统计得出。分数越高代表在该能力上的综合表现越突出。若某能力训练任务或用时较少，分数可能相对偏低，并不完全等同于能力薄弱。
+                        </div> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="page trend">
+            <div class="page-content">
+                <div class="trend-title commont-title">课时分数趋势</div>
+                <div class="trend-char">
+                    <div class="content-head">
+                        <div class="content-sub-title">趋势图</div>
+                        <div class="content-head-right">
+                            <div class="content-head-right-item">
+                                <div class="content-head-right-crice"></div>
+                                <span class="content-head-right-text">最低分</span>
+                            </div>
+                            <div class="content-head-right-item">
+                                <div class="content-head-right-crice" style="--w: #dff9da; --c: #5ee247"></div>
+                                <span class="content-head-right-text">最高分</span>
+                            </div>
+                            <div class="content-head-right-item">
+                                <div class="content-head-right-crice" style="--w: #fff4d6; --c: #ffca32"></div>
+                                <span class="content-head-right-text">最近3节</span>
                             </div>
                         </div>
                     </div>
-                    <div class="option-error-nopage flex acenter">
-                         <img class="option-error-nopage-icon" src="./activity/error_close.png" />    
-                        <span class="option-error-nopage-text">请回答此题</span>
+                    <div class="trend-char-content"></div>
+                </div>
+                <div class="contentKey">
+                    <div class="content-sub-title">关键指标概览栏</div>
+                    <div class="contentKey-content">
+                        <div class="contentKey-content-card">
+                            <div class="contentKey-content-item" style="--b: #80eb6d; --c: #1ab000; --bg: #fbfffa">
+                                <div class="contentKey-content-item-top">
+                                    <img
+                                        src="https://storage.iquizoo.com/static/img/report/trainingcourse/trend-item1.png" />
+                                    <span>最高分课时</span>
+                                </div>
+                                <div class="contentKey-content-item-score contentKey-maxscore">
+                                    149分
+                                </div>
+                                <div class="contentKey-content-item-course contentKey-maxdisplayOrder">
+                                    （第12节课时）
+                                </div>
+                            </div>
+                            <div class="contentKey-content-item" style="--b: #ffa580; --c: #ec4500; --bg: #fffdfc">
+                                <div class="contentKey-content-item-top">
+                                    <img
+                                        src="https://storage.iquizoo.com/static/img/report/trainingcourse/trend-item2.png" />
+                                    <span>最低分课时</span>
+                                </div>
+                                <div class="contentKey-content-item-score contentKey-minscore">
+                                    149分
+                                </div>
+                                <div class="contentKey-content-item-course contentKey-mindisplayOrder">
+                                    （第12节课时）
+                                </div>
+                            </div>
+                            <div class="contentKey-content-item" style="--b: #ffda72; --c: #805f00; --bg: #fffffe">
+                                <div class="contentKey-content-item-top">
+                                    <img
+                                        src="https://storage.iquizoo.com/static/img/report/trainingcourse/trend-item3.png" />
+                                    <span>近3课时平均分</span>
+                                </div>
+                                <div class="contentKey-content-item-score contentKey-avgscore">
+                                    149分
+                                </div>
+                            </div>
+                            <div class="contentKey-content-item" style="--b: #2c8eff; --c: #2c8eff; --bg: #f7fbff">
+                                <div class="contentKey-content-item-top">
+                                    <img
+                                        src="https://storage.iquizoo.com/static/img/report/trainingcourse/trend-item4.png" />
+                                    <span>刷新纪录次数</span>
+                                </div>
+                                <div class="contentKey-content-item-score contentKey-recordBreakingTimes">
+                                    149次
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contentKey-content-desc">
+                        </div>
                     </div>
-           </div>
-            `
-    }
-
-    function getFinishTemp(isShowScore) {
-        return `
-        <div class="finish flex-column jcenter acenter">
-            <div class="finish-title">游戏</div>
-            <div class="finish-item">
-                <span class="finish-item-name">题目</span>
-                <span class="finish-item-value">0</span>
+                </div>
+                <div class="analysis">
+                    <div class="content-head">
+                        <div class="content-sub-title">训练频率分析</div>
+                        <div class="content-head-right">
+                            <div class="content-head-right-item">
+                                <span class="content-head-right-text">下面是最近<span
+                                        class="content-head-right-week"></span>周的训练情况，
+                                    <div class="block">
+                                        <div class="count">1</div>
+                                        <div class="pointer">.</div>
+                                    </div>
+                                    表示当天完成的课时数量。
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="analysis-content-table">
+                            <div class="analysis-table-body">
+                                <div class="analysis-table-left"></div>
+                                <div class="analysis-table-content"></div>
+                            </div>
+                        </div>
+                        <div class="analysis-content-desc">
+                            为保证训练效果，我们建议每周至少训练3个课时。最近 4 周里，<span class="user-name"></span>每周平均完成 3.2 课时（达标）；两次训练间最长间隔 4
+                            天，节奏平稳。 自开课以来共 24 周，其中 19 周达标（79
+                            %，良好）。保持当前速度即可持续巩固效果！
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="finish-item">
-                <span class="finish-item-name">时间</span>
-                <span class="finish-item-value">0</span>
-            </div>
-            ${isShowScore?`<div class="finish-item">
-                <span class="finish-item-name">分数</span>
-                <span class="finish-item-value finish-score">100</span>
-            </div>`:''}
-          
-            <div class="finish-btn ">继续</div>
         </div>
+        <div class="page suggest">
+            <div class="page-content">
+                <div class="commont-title">发展建议</div>
+                <div class="common-desc suggest-desc">
+                    小明在本阶段课程得分为121
+                    分，整体表现稳步提升；正确率为84%，训练表现较稳。
+                    注意力得分最高(138分)，思维力得分相对较低(92分)，建议适当加强；共刷新课程纪录3次，亮点能力注意力提升了10分，训练成效明显。
+                </div>
+                <div class="suggest-content">
+                    <div class="content-sub-title">综合建议</div>
+                    <div class="suggest-items"></div>
+                    <div class="content-sub-title">能力建议</div>
+                    <div class="capacity-items"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    $(function () {
+        $('.main').css({
+            "transform": `scale(${1})`,
+            height: '100%'
+        })
+        const pageData = {
+            data: null,
+            maxLiftCap: {},
+            maxScore: {},
+            minScore: {},
+            abilityState: {
+                xData: [],
+                yData: [],
+                yDataExec: [],
+                yDataTime: [],
+                yDataScore: [],
+                totalConsumingTime: 0,
+                AvgTime: 0,
+                AvgScore: 0,
+            },
+        };
+
+        const getRateText = (rate) => {
+            if (rate >= 90) {
+                return "准确率优秀，继续保持专注与稳定";
+            } else if (rate >= 80) {
+                return `准确率良好，“可进一步巩固”`;
+            } else if (rate >= 70) {
+                return "准确率有提升空间，建议关注错因并复盘";
+            } else {
+                return "准确率偏低，需重点提升正确率";
+            }
+        };
+        const getStudyText = (study) => {
+            const index = pageData.data.childCourseStatistics.length / Math.max(1, (study / 7));
+            console.log(index, '--index');
+            if (index >= 3) {
+                return "训练节奏较好，可继续保持";
+            } else if (index >= 2) {
+                return "训练节奏较为稳定，增加频率训练效果更好";
+            } else {
+                return "训练节奏偏慢，建议提升训练频率";
+            }
+        };
+        const getSlopeLabel = (slope) => {
+            if (slope >= 1.5) {
+                return "表现提升明显";
+            } else if (slope >= 0.5) {
+                return "表现稳步提升";
+            } else if (slope >= -0.5) {
+                return "表现稳定";
+            } else if (slope >= -1.5) {
+                return "表现有所下滑";
+            } else {
+                return "表现不佳";
+            }
+        };
+        const getLevelText = () => { };
+        function getQueryString() {
+            var search = window.location.href.split("?")[1].split("&");
+            var obj = {};
+            for (var i = 0; i < search.length; i++) {
+                var split = search[i].split("=");
+                obj[split[0]] = split[1];
+            }
+            return obj;
+        }
+        function numberToChinese(num) {
+            const units = ["", "十", "百", "千", "万", "十", "百", "千", "亿"];
+            const chars = [
+                "零",
+                "一",
+                "二",
+                "三",
+                "四",
+                "五",
+                "六",
+                "七",
+                "八",
+                "九",
+            ];
+
+            const str = num.toString();
+            let result = "";
+            for (let i = 0; i < str.length; i++) {
+                const n = +str[i];
+                const unit = units[str.length - 1 - i];
+                if (n === 0) {
+                    if (!result.endsWith("零") && i !== str.length - 1) {
+                        result += "零";
+                    }
+                } else {
+                    result += chars[n] + unit;
+                }
+            }
+
+            // 特殊处理：去掉末尾的零
+            result = result.replace(/零+$/g, "");
+            // 特殊处理：十开头去掉“一”
+            if (result.startsWith("一十")) result = result.slice(1);
+
+            return result;
+        }
+
+        // const params = getQueryString();
+        const params = {
+            // host: "https://api1.uat.iquizoo.com",
+            // userCourseId: 773988307980402
+            //   userCourseId: 231872597586002,
+            ...getQueryString()
+        };
+        $('.main').css("transform", `scale(${params.scale || 1})`)
+        if (params.host.slice(0, 4) !== "http") {
+            params.host = "https://" + params.host;
+        }
+        function initConfig(PageConfig = {}) {
+            const display = (el) => $(el).css({ display: "none" });
+            const { homePageBackground } = PageConfig;
+
+            $(".config-cover-page").css({
+                "background-image": `url(${homePageBackground ||
+                    "https://storage.iquizoo.com/static/img/report/trainingcourse/cover.png"
+                    })`,
+            });
+            display(".config-hidden");
+
+            $("body").css({
+                display: "block",
+            });
+        }
+
+        const _http = (config) => {
+            const url = params.host + config.url;
+            const callback = config.callback || ((a) => void 0);
+            return $.get(url, config.data || {}, (res) => callback(res));
+        };
+
+        $(".overview-level").css({
+            display: "none",
+        });
+        $("body").css({
+            display: "none",
+        });
+
+        _http({
+            url: "/coursecenter/UserCourseReport/GetUserCourseAbilityStatistics",
+            data: {
+                userCourseId: params.userCourseId,
+            },
+            callback: initData,
+        });
+
+        function initData(res) {
+            if (res.status) {
+                const result = res.data;
+                pageData.data = result;
+                if (result.organizationId) {
+                    _http({
+                        url:
+                            "/user/OrganizationSettings/getmodelbyorganizationId?organizationId=" +
+                            result.organizationId,
+                        method: "get",
+                        callback: (res) => {
+                            initConfig(res.data);
+                            renderPage(result)
+                        },
+                    });
+                } else {
+                    initConfig({});
+                    renderPage(result)
+                }
+            }
+        }
+
+        function renderPage(result) {
+            initCoverInfo(result);
+            if (result.userId) {
+                _http({
+                    url: "/user/UserBadge/GetUserBadgeDetail",
+                    data: {
+                        userId: result.userId,
+                        badgeType: 0,
+                    },
+                    callback: initLevel,
+                });
+            } else {
+                $('.overview .page-content').css({
+                    'padding-top': '148px'
+                })
+                $('.overview-show').css({
+                    'margin-top': '68px'
+                })
+                $('.overview-show-content').css({
+                    'margin-bottom': '108px'
+                })
+            }
+        }
+        function initLevel(res) {
+            if (res.status) {
+                const {
+                    integral,
+                    nextStandard,
+                    levelName,
+                    levelDetails,
+                    badgeLevel,
+                    imgUrl,
+                    nextLevelName
+                } = res.data;
+                const { points, realName } = pageData.data;
+                if (points > integral) {
+                    $(".overview-level").css({
+                        display: "none",
+                    });
+                    $('.overview .page-content').css({
+                        'padding-top': '148px'
+                    })
+                    $('.overview-show').css({
+                        'margin-top': '68px'
+                    })
+                    return
+                }
+                $(".overview-level").css({
+                    display: "block",
+                });
+                $(".overview-level-card .integral").text(integral + "分");
+
+                const nextBade =
+                    levelDetails.find((item) => item.badgeLevel == badgeLevel + 1) || {};
+                $(".overview-level-card .level-next-active").text(levelName);
+                $(".overview-level-card .level-next-level").text(nextLevelName);
+                document
+                    .querySelector(".level-progress")
+                    .style.setProperty("--val", integral / nextStandard);
+                $(".overview-level-card-icon").attr("src", imgUrl);
+                // 王者
+                if (badgeLevel == 19) {
+                    $(".level-progress").css({
+                        display: "none",
+                    });
+                    $(".level-next").css({
+                        display: "none",
+                    });
+                    $(".overview-level .common-desc").html(`
+                 本课程<span class="active-text">累计获得积分${points}分，</span>达成最高段位成就，可继续挑战更高难度内容，突破极限！
+                `);
+                    $(".overview-level-card .level-card-bottom").html(`
+                 <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/level-card-wrain.png" />
+                <span class="gap-score">挑战更高难度关卡，获得更多积分</span>
+                `);
+                    $('.level-card-icon-score').addClass('level-card-icon-score-nb')
+                } else {
+                    $(".overview-level-card .level-card-bottom").html(`
+                 <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/level-card-wrain.png" />
+                <span>距离${nextLevelName}</span>
+                <span class="gap-score">还差 ${nextStandard - integral
+                        } 分</span>
+                `);
+                    $(".level-progress-nb").css({
+                        display: "none",
+                    });
+                    $(".overview-level .common-desc").html(`
+                 本课程<span class="active-text">累计获得积分${points}分，</span>当前段位${levelName}，距离${nextBade.levelName
+                        }还差${nextStandard - integral}分，继续坚持训练，期待更大突破！
+                `);
+                }
+            }
+        }
+
+        function initNextPage() {
+            initTaskType();
+            initTaskCount();
+            initTimeCount();
+
+            initCapup();
+            initTrendChar();
+            initSuggest();
+            initAnnex();
+            initPageNumber();
+        }
+
+        function initCoverInfo(data) {
+            const {
+                courseStatistic,
+                studyDays,
+                childCourseStatistics,
+                abilityStatistics,
+                slope,
+            } = data;
+
+            const getInfoRateDesc = (acc) => {
+                if (acc >= 90) {
+                    return `准确率优秀，“继续保持专注与稳定”`;
+                } else if (acc >= 80) {
+                    return `准确率良好，“可进一步巩固”`;
+                } else if (acc >= 70) {
+                    return `准确率有提升空间，“建议关注错因并复盘”`;
+                } else if (acc < 70) {
+                    return `准确率偏低，“需重点提升正确率”`;
+                }
+            };
+            const getInfoRateKey = (acc) => {
+                if (acc >= 90) {
+                    return 1;
+                } else if (acc >= 80) {
+                    return 2;
+                } else if (acc >= 70) {
+                    return 3;
+                } else if (acc < 70) {
+                    return 4;
+                }
+            };
+            let maxChild = childCourseStatistics[0];
+            let maxLiftCap = abilityStatistics[0]; //亮点提升能力
+            // 最高得分课时
+            for (let i = 0; i < childCourseStatistics.length; i++) {
+                const currentItem = childCourseStatistics[i];
+                if (maxChild.score < currentItem.score) {
+                    maxChild = currentItem;
+                }
+            }
+            // 亮点提升能力
+            const firstItem = abilityStatistics[0];
+            let maxTime = firstItem, //最多用时
+                minTime = firstItem,
+                maxScore = firstItem, //最多分数
+                minScore = firstItem,
+                minExec = firstItem,
+                maxExec = firstItem; //最多次数
+            for (let i = 0; i < abilityStatistics.length; i++) {
+                const currentItem = abilityStatistics[i];
+                if (maxLiftCap.promoteScore < currentItem.promoteScore) {
+                    maxLiftCap = currentItem;
+                } else if (
+                    maxLiftCap.promoteScore == currentItem.promoteScore &&
+                    currentItem.score > maxLiftCap.score
+                ) {
+                    maxLiftCap = currentItem;
+                }
+                if (maxTime.consumingTime < currentItem.consumingTime) {
+                    maxTime = currentItem;
+                }
+                if (minTime.consumingTime >= currentItem.consumingTime) {
+                    minTime = currentItem;
+                }
+                if (currentItem.score > maxScore.score) {
+                    maxScore = currentItem;
+                }
+                if (currentItem.score < minScore.score) {
+                    minScore = currentItem;
+                }
+                if (currentItem.executionsNumber <= minExec.executionsNumber) {
+                    minExec = currentItem;
+                }
+                if (currentItem.executionsNumber > maxExec.executionsNumber) {
+                    maxExec = currentItem;
+                }
+                if (pageData.abilityState.xData.length < 20) {
+                    pageData.abilityState.xData.push(currentItem.abilityName);
+                    pageData.abilityState.yData.push(currentItem.contentCount);
+                    pageData.abilityState.yDataExec.push({
+                        name: currentItem.abilityName,
+                        value: currentItem.executionsNumber,
+                        target: currentItem,
+                    });
+                    pageData.abilityState.yDataTime.push({
+                        name: currentItem.abilityName,
+                        value: currentItem.consumingTime,
+                        target: currentItem,
+                    });
+                    pageData.abilityState.yDataScore.push({
+                        value: currentItem.score,
+                        target: currentItem,
+                    });
+                }
+                pageData.abilityState.AvgScore += currentItem.score;
+                pageData.abilityState.AvgTime += currentItem.consumingTime;
+            }
+            pageData.abilityState.yDataExec.sort((a, b) => a.value - b.value)
+            pageData.abilityState.yDataTime.sort((a, b) => a.value - b.value)
+            if (abilityStatistics.length > 1) {
+
+                pageData.maxLiftCap = maxLiftCap;
+                maxScore && (maxScore._maxScore = true);
+                minScore && (minScore._minScore = true);
+                pageData.maxScore = maxScore;
+                pageData.minScore = minScore;
+
+                if (maxExec?.executionsNumber != minExec?.executionsNumber) {
+                    minExec && (minExec._minExec = true);
+                    maxExec && (maxExec._maxExec = true);
+                }
+                if (minTime?.consumingTime != maxTime?.consumingTime) {
+                    minTime && (minTime._minTime = true);
+                    maxTime && (maxTime._maxTime = true);
+                }
+
+            } else {
+                maxScore && (maxScore._maxScore = true);
+                pageData.maxScore = maxScore;
+            }
+
+            pageData.abilityState.AvgScore =
+                pageData.abilityState.AvgScore / abilityStatistics.length;
+            pageData.abilityState.AvgTime =
+                pageData.abilityState.AvgTime / abilityStatistics.length;
+            $(".cover-card .name").text(data.realName);
+            $(".user-name").text(data.realName);
+            $(".user-rate").text(courseStatistic.accuracy);
+            $(".user-score").text(courseStatistic.score);
+            $(".user-childCourseCount").text(courseStatistic.childCourseCount);
+            $(".user-timeConsuming").text(data.timeConsuming);
+            $(".user-studyDays").text(studyDays);
+            const startTime = data.startTime.split(" ")[0].replace(/-/g, ".");
+            const endTime = data.completionTime.split(" ")[0].replace(/-/g, ".");
+            $(".cover-card .date").text(startTime + " - " + endTime);
+            $(".cover-card .courseName").text(data.courseName);
+            $(".cover-card .age").text(data.age + "岁");
+
+            $(".overview .info-top-desc").text(
+                courseStatistic.accuracy < 0
+                    ? ""
+                    : getInfoRateDesc(courseStatistic.accuracy)
+            );
+            $('.info-top-wrapper-icon').attr('src', `https://storage.iquizoo.com/static/img/report/trainingcourse/overflow-rate${getInfoRateKey(courseStatistic.accuracy)}.png`)
+            $(".overview .info-left-score").text(courseStatistic.score + "分");
+            $(".overview .info-top-wrapper-rate").text(
+                courseStatistic.accuracy < 0 ? "--" : courseStatistic.accuracy + "%"
+            );
+            $(".overview .info-bom-text").text(
+                courseStatistic.childCourseCount + "课时｜" + studyDays + "天"
+            );
+            $(".overview-nb-card-item .max-score").text(maxChild.score + '分');
+            $(".overview-nb-card-item .max-course-number").text(
+                `（第${maxChild.displayOrder}节课时）`
+            );
+            $(".overview-nb-card-item .recordBreakingTimes").text(
+                courseStatistic.recordBreakingTimes + "次"
+            );
+            if (abilityStatistics.length > 1 && maxLiftCap.promoteScore > 0) {
+                $(".overview-nb-card-item .lift-cap").html(
+                    `
+                <div>${maxLiftCap.abilityName}</div>
+                `
+                );
+            } else {
+                $(".overview-nb-card-item .lift-cap").text(`--`);
+            }
+
+            $(".overview-show-desc").html(`
+            整体来看，<span class="active-text">${data.realName}本阶段课程平均得分${courseStatistic.score}分，</span>${courseStatistic.accuracy < 0 ? '' : `整体正确率为${courseStatistic.accuracy}%，${getRateText(courseStatistic.accuracy)}。`}共完成${courseStatistic.childCourseCount}节课，课时训练时长达${data.timeConsuming}分钟，累计训练天数${studyDays}天，${getStudyText(studyDays)}。
+        `);
+            $(".overview-nb-desc").html(`
+            ${data.realName}的课程最高表现出现在<span class="active-text">第${maxChild.displayOrder}课时，得分${maxChild.score}分</span>${slope ? `${"，" + getSlopeLabel(slope)}` : ""}。
+            ${!courseStatistic.recordBreakingTimes
+                    ? ""
+                    : `共刷新纪录${courseStatistic.recordBreakingTimes}次，即有${courseStatistic.recordBreakingTimes}次课时成绩超过以往最高表现。`
+                }
+            ${!maxLiftCap?.promoteScore
+                    ? "各能力维度得分变化不大，可继续保持均衡训练。"
+                    : `提升幅度最大的能力为${maxLiftCap.abilityName}，该能力训练成效显著。`
+                }
+        `);
+            initNextPage();
+        }
+
+
+        function initTaskType() {
+            const { abilityStatistics } = pageData.data;
+            const { xData, yData } = pageData.abilityState;
+            const option = {
+                xAxis: {
+                    type: "category",
+                    data: xData,
+                    axisLabel: {
+                        interval: 0,
+                        width: 80,
+                        color: "#B4B4B4",
+                        fontSize: 20,
+                        fontWeight: 500,
+                        align: "center",
+                        lineHeight: 26,
+                        overflow: "breakAll",
+                        verticalAlign: "middle",
+                        margin: 30,
+                        formatter: (e) => {
+                            return e;
+                        },
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: "#E2E6ED", // 设置底部轴线为红色
+                            width: 4, // 可选，设置线宽
+                        },
+                    },
+
+                    axisTick: {
+                        show: false,
+                    },
+                    splitLine: { show: false },
+                },
+                yAxis: {
+                    type: "value",
+                    axisLabel: {
+                        color: "#B4B4B4",
+                        fontSize: 22,
+                        fontWeight: 500,
+                        fontFamily: "custom",
+                        formatter: function (value) {
+                            return Number.isInteger(value) ? value : "";
+                        },
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: "#EFF4F7",
+                        },
+                    },
+                },
+                series: [
+                    {
+                        barWidth: 20,
+
+                        label: {
+                            show: true,
+                            position: "top",
+                            color: "#478FFF",
+                            fontSize: 22,
+                            fontFamily: "PingFang",
+                            fontWeight: 500,
+                        },
+                        itemStyle: {
+                            color: {
+                                type: "linear",
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1, // 垂直渐变
+                                colorStops: [
+                                    { offset: 0, color: "#478BFF" }, // 顶部颜色
+                                    { offset: 1, color: "#47C2FF" }, // 底部颜色
+                                ],
+                            },
+                            borderRadius: [50, 50, 0, 0],
+                        },
+                        data: yData,
+                        type: "bar",
+                    },
+                ],
+            };
+            const myChart = echarts.init(
+                document.querySelector(".task-type-content")
+            );
+            option && myChart.setOption(option);
+        }
+        function initTaskCount() {
+            const total = pageData.data.abilityStatistics.reduce((a, b) => a + b.executionsNumber, 0)
+            const option = {
+                legend: {
+                    orient: "vertical",
+                    right: 280,
+                    itemWidth: 16,
+                    itemHeight: 16,
+                    itemGap: 12,
+                    selectedMode: false,
+                    textStyle: {
+                        color: "#000000",
+                        fontSize: 18,
+                    },
+                    data: pageData.abilityState.xData.map((name) => ({
+                        name: name,
+                        textStyle: {},
+                    })),
+                    formatter: function (name, e) {
+                        const item = pageData.abilityState.yDataExec.find(
+                            (v) => v.name == name
+                        );
+                        return (
+                            name +
+                            "\u202F\u202F\u202F\u202F\u202F\u2009".repeat(5 - name.length) +
+                            "次数：" +
+                            item.value +
+                            "次"
+                        );
+                    },
+                },
+                tooltip: {
+                    show: false
+                },
+                graphic: {
+                    elements: [
+                        {
+                            type: "text",
+                            left: "26.8%",
+                            top: "43%",
+                            style: {
+                                text: "总训练次数",
+                                textAlign: "center",
+                                fill: "#000",
+                                fontSize: 16,
+                            },
+                        },
+                        {
+                            type: "text",
+                            left:
+                                365 -
+                                String(total).length * 6,
+                            top: "50%",
+                            textConfig: {
+                                position: "insideTopRight",
+                            },
+                            style: {
+                                text: total + "次",
+                                fill: "#000",
+                                fontSize: 20,
+                                textAlign: "center",
+                                fontWeight: "bold",
+                            },
+                        },
+                    ],
+                },
+                series: [
+                    {
+                        name: "Access From",
+                        type: "pie",
+                        radius: ["30%", "63%"],
+                        center: ["30%", "50%"],
+                        selectedMode: 'single',
+                        itemStyle: {
+                            borderColor: "#fff",
+                            borderWidth: 2,
+                        },
+                        silent: true,
+                        data: pageData.abilityState.yDataExec.map((item) => {
+                            const params = {
+                                selected:!!item.target._maxExec,
+                                itemStyle: {
+                                    color: item.target.color
+                                },
+                                label: {
+                                    show: !!item.target._minExec,
+                                    formatter: (e) => {
+                                        return `{img|} {value|「${e.name}」} {value|次数最少}`;
+                                    },
+                                    rich: {
+                                        img: {
+                                            height: 24,
+                                            width: 24,
+                                            backgroundColor: {
+                                                image:
+                                                    "https://storage.iquizoo.com/static/img/report/trainingcourse/pie-waster.png",
+                                            },
+                                        },
+                                        value: {
+                                            fontSize: 18,
+                                            color: "#FF5754",
+                                            fontWeight: 500,
+                                        },
+                                    },
+                                },
+                                labelLine: {
+                                    show: !!item.target._minExec,
+                                    lineStyle: {
+                                        color: "#FF5754",
+                                        type: "dashed",
+                                    },
+                                },
+                            };
+                            return Object.assign({}, item, params);
+                        }),
+                    },
+                    {
+                        type: "pie",
+                        radius: ["30%", "70%"],
+                        center: ["30%", "50%"],
+                        label: {
+                            show: false,
+                            position: "center",
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 40,
+                                fontWeight: "bold",
+                            },
+                        },
+                        labelLine: {
+                            show: false,
+                        },
+                        itemStyle: {
+                            borderColor: "#fff",
+                            borderWidth: 2,
+                            opacity: 0.1, // 或其他样式以区分
+                        },
+                        silent: true,
+                        data: pageData.abilityState.yDataExec.map(v => ({
+                            itemStyle: {
+                                color: v.target.color
+                            },
+                            ...v
+                        })),
+                    },
+                    {
+                        type: "pie",
+                        radius: ["30%", "70%"],
+                        center: ["30%", "50%"],
+                        selectedMode: 'single',
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderColor: "#fff",
+                            borderWidth: 2,
+                            opacity: 0, // 或其他样式以区分
+                        },
+                        silent: true,
+                        data: pageData.abilityState.yDataExec.map((item, index) => ({
+                            ...item,
+                            selected:!!item.target._maxExec,
+                            itemStyle: {
+                                ...item.itemStyle,
+                                opacity: !!item.target._maxExec ? 1 : 0,
+                                color: item.target.color
+                            },
+                            label: {
+                                show: !!item.target._maxExec,
+                                formatter: (e) => {
+                                    return `{img|} {value|「${e.name}」} {value|次数最多}`;
+                                },
+                                rich: {
+                                    img: {
+                                        height: 24,
+                                        width: 24,
+                                        backgroundColor: {
+                                            image:
+                                                "https://storage.iquizoo.com/static/img/report/trainingcourse/pie-nb.png",
+                                        },
+                                    },
+                                    value: {
+                                        fontSize: 18,
+                                        color: "#478BFF",
+                                        fontWeight: 500,
+                                    },
+                                },
+                            },
+                            labelLine: {
+                                show: !!item.target._maxExec,
+                                lineStyle: {
+                                    color: "#478BFF",
+                                    type: "dashed",
+                                },
+                            },
+                        })),
+                    },
+                ],
+            };
+            const myChart = echarts.init(
+                document.querySelector(".task-count-content")
+            );
+            option && myChart.setOption(option);
+        }
+        function initTimeCount() {
+            const { abilityStatistics, contentStatistics } = pageData.data;
+            const { xData, yData, yDataExec, yDataTime } = pageData.abilityState;
+            const formatTime = (consumingTime) => {
+                if (consumingTime > 1000) {
+                    return Math.round(consumingTime / 60) + "小时";
+                } else {
+                    return consumingTime + "分钟";
+                }
+            };
+
+            const totalTime = abilityStatistics.reduce((a, b) => a + b.consumingTime, 0)
+            const totalCount = pageData.data.abilityStatistics.reduce((a, b) => a + b.executionsNumber, 0)
+            const option = {
+                legend: {
+                    orient: "vertical",
+                    right: 280,
+                    itemWidth: 16,
+                    selectedMode: false,
+                    itemHeight: 16,
+                    itemGap: 12,
+                    textStyle: {
+                        color: "#000000",
+                        fontSize: 18,
+                    },
+                    data: pageData.abilityState.yDataExec.map((item) => ({
+                        name: item.name,
+                        textStyle: {},
+                    })),
+                    formatter: function (name, e) {
+                        const item = pageData.abilityState.yDataTime.find(
+                            (v) => v.name == name
+                        );
+                        return name + "\u202F\u202F\u202F\u202F\u2009\u2009".repeat(5 - name.length) + "用时：" + formatTime(item.value)
+                    },
+                },
+                graphic: {
+                    elements: [
+                        {
+                            type: "text",
+                            left: "26.8%",
+                            top: "43%",
+                            style: {
+                                text: "总学习用时",
+                                textAlign: "center",
+                                fill: "#000",
+                                fontSize: 16,
+                                width: 200,
+                            },
+                        },
+                        {
+                            type: "text",
+                            left: 365 - String(formatTime(totalTime)).length * 6,
+                            top: "50%",
+                            style: {
+                                text: formatTime(totalTime),
+                                textAlign: "center",
+                                fill: "#000",
+                                fontSize: 20,
+                                width: 50,
+                                fontWeight: "bold",
+                            },
+                        },
+                    ],
+                },
+                series: [
+                    {
+                        name: "Access From",
+                        type: "pie",
+                        radius: ["30%", "63%"],
+                        center: ["30%", "50%"],
+                        selectedMode: 'single',
+                        itemStyle: {
+                            borderColor: "#fff",
+                            borderWidth: 2,
+                        },
+                        silent: true,
+                        data: pageData.abilityState.yDataTime.map((item, index) => {
+                            const params = {
+                                selected:!!item.target._maxTime,
+                                itemStyle: {
+                                    color: item.target.color
+                                },
+                                label: {
+                                    show: !!item.target._minTime,
+                                    formatter: (e) => {
+                                        return `{img|} {value|「${e.name}」} {value|用时最短}`;
+                                    },
+                                    rich: {
+                                        img: {
+                                            height: 24,
+                                            width: 24,
+                                            backgroundColor: {
+                                                image:
+                                                    "https://storage.iquizoo.com/static/img/report/trainingcourse/pie-waster.png",
+                                            },
+                                        },
+                                        value: {
+                                            fontSize: 18,
+                                            color: "#FF5754",
+                                            fontWeight: 500,
+                                        },
+                                    },
+                                },
+                                labelLine: {
+                                    show: !!item.target._minTime,
+                                    lineStyle: {
+                                        color: "#FF5754",
+                                        type: "dashed",
+                                    },
+                                },
+                            };
+                            return Object.assign({}, item, params);
+                        }),
+                    },
+                    {
+                        type: "pie",
+                        radius: ["30%", "70%"],
+                        center: ["30%", "50%"],
+                        label: {
+                            show: false,
+                            position: "center",
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 40,
+                                fontWeight: "bold",
+                            },
+                        },
+                        labelLine: {
+                            show: false,
+                        },
+                        itemStyle: {
+                            borderColor: "#fff",
+                            borderWidth: 4,
+                            opacity: 0.1, // 或其他样式以区分
+                        },
+                        silent: true,
+                        data: pageData.abilityState.yDataTime.map(v => ({
+                            ...v,
+                            itemStyle: {
+                                color: v.target.color
+                            }
+                        })),
+                    },
+                    {
+                        type: "pie",
+                        radius: ["30%", "70%"],
+                        selectedMode: 'single',
+                        center: ["30%", "50%"],
+                        itemStyle: {
+                            borderColor: "#fff",
+                            borderWidth: 2,
+                            opacity: 0, // 或其他样式以区分
+                        },
+                        silent: true,
+                        data: pageData.abilityState.yDataTime.map((item, index) => ({
+                            ...item,
+                            selected:!!item.target._maxTime ,
+                            itemStyle: {
+                                ...item.itemStyle,
+                                opacity: !!item.target._maxTime ? 1 : 0,
+                                color: item.target.color
+                            },
+                            label: {
+                                show: !!item.target._maxTime,
+                                formatter: (e) => {
+                                    return `{img|} {value|「${e.name}」} {value|用时最长}`;
+                                },
+                                rich: {
+                                    img: {
+                                        height: 24,
+                                        width: 24,
+                                        backgroundColor: {
+                                            image:
+                                                "https://storage.iquizoo.com/static/img/report/trainingcourse/pie-nb.png",
+                                        },
+                                    },
+                                    value: {
+                                        fontSize: 18,
+                                        color: "#478BFF",
+                                        fontWeight: 500,
+                                    },
+                                },
+                            },
+                            labelLine: {
+                                show: !!item.target._maxTime,
+                                lineStyle: {
+                                    color: "#478BFF",
+                                    type: "dashed",
+                                },
+                            },
+                        })),
+                    },
+                ],
+            };
+            const myChart = echarts.init(
+                document.querySelector(".task-time-content")
+            );
+            option && myChart.setOption(option);
+            const descData = {
+                maxContent: abilityStatistics[0],
+                minContent: abilityStatistics[0],
+                maxExec: abilityStatistics[0],
+                minExec: abilityStatistics[0],
+                maxTime: abilityStatistics[0],
+                minTime: abilityStatistics[0],
+            };
+            for (let i = 0; i < abilityStatistics.length; i++) {
+                const item = abilityStatistics[i];
+                if (item.contentCount > descData.maxContent.contentCount) {
+                    descData.maxContent = item;
+                }
+                if (item.contentCount <= descData.minContent.contentCount) {
+                    descData.minContent = item;
+                }
+                if (item.executionsNumber > descData.maxExec.executionsNumber) {
+                    descData.maxExec = item;
+                }
+                if (item.executionsNumber <= descData.minExec.executionsNumber) {
+                    descData.minExec = item;
+                }
+                if (item.consumingTime > descData.maxTime.consumingTime) {
+                    descData.maxTime = item;
+                }
+                if (item.consumingTime <= descData.minTime.consumingTime) {
+                    descData.minTime = item;
+                }
+            }
+            if (!abilityStatistics.length) return
+
+            const getContentByAbility = (name) => {
+                let count = 0
+                contentStatistics.forEach(v => {
+                    if (v.abilityNames.includes(name)) {
+                        count++
+                    }
+                })
+                return count
+            }
+
+            const eqItem = (item1, item2) => {
+                if (descData.maxContent.contentCount != descData.minContent.contentCount) {
+                    return false
+                }
+                if (descData.maxExec.executionsNumber != descData.minExec.executionsNumber) {
+                    return false
+                }
+
+                if (descData.maxTime.consumingTime != descData.minTime.consumingTime) {
+                    return false
+                }
+
+                return true
+            }
+
+            if (!eqItem()) {
+                $(".task .common-desc").html(
+                    `
+             <p>
+                本阶段共完成${contentStatistics.length}个不同类型的训练任务
+                ${descData.minContent.contentCount == descData.maxContent.contentCount ? '。' : `，<span class="active-text">其中${descData.maxContent.abilityName}训练最多</span>（${descData.maxContent.contentCount}个），${descData.minContent.abilityName}训练最少（${descData.minContent.contentCount}个）。`}
+             </p>
+            <p>
+                总完成次数为${totalCount}次${descData.maxExec.executionsNumber === descData.minExec.executionsNumber ? '。' : `，其中${descData.maxExec.abilityName}训练最多（${descData.maxExec.executionsNumber}次），${descData.minExec.abilityName}训练最少（${descData.minExec.executionsNumber}次）。`}
+            </p>
+            <p>
+               累计训练${formatTime(totalTime)}${descData.maxTime.consumingTime == descData.minTime.consumingTime ? '。' : `，其中${descData.maxTime.abilityName}用时最长（${formatTime(descData.maxTime.consumingTime)}），${descData.minTime.abilityName}用时最少（${formatTime(descData.minTime.consumingTime)}）。`}
+            </p>
+            `
+                );
+            } else {
+                $(".task .common-desc").html(`
+            本阶段共完成${contentStatistics.length}个不同类型的训练任务，总完成次数为${totalCount}次，累计训练${totalTime}分钟。
+            `)
+            }
+
+        }
+        function initCapup() {
+            const { abilityStatistics } = pageData.data;
+            const getLvDesc = (startStage, endStage) => {
+                const AvgStage = endStage; //平均关卡数
+                const AvgUp = endStage - startStage; // 平均提升数
+                if (AvgStage >= 40 && AvgUp >= 5) {
+                    return "能力已接近高阶关卡，建议保持挑战高难度，巩固高级策略";
+                } else if (AvgStage >= 40 && AvgUp < 5) {
+                    return "关卡已较高，但近期提升有限，可尝试刷新星级或提高正确率";
+                } else if (AvgStage >= 25 && AvgStage < 40 && AvgUp >= 5) {
+                    return "已稳定通过中等难度关卡，本阶段提升明显，建议继续保持节奏，逐步向高阶挑战";
+                } else if (AvgStage >= 25 && AvgStage < 40 && AvgUp < 5) {
+                    return "当前已具备中等难度能力，但提升速度较慢，可结合复盘进一步提升准确率与完成效率";
+                } else if (AvgStage < 25 && AvgUp >= 5) {
+                    return "进步明显，保持当前节奏，继续冲击更高关卡";
+                } else {
+                    return "通关层级与提升均偏低，建议增加练习频次，循序推进关卡";
+                }
+            };
+            const getRateDesc = (rate) => {
+                if (rate >= 90) {
+                    return "通关比例优异，完成质量高，建议继续保持高正确率";
+                } else if (rate >= 80) {
+                    return "通关比例良好，表现稳定，可适当挑战更高难度";
+                } else if (rate >= 60) {
+                    return "通关比例尚可，建议巩固当前关卡，提高一次通过率";
+                } else {
+                    return "通关比例偏低，建议提升正确率后再向更高关卡进阶";
+                }
+            };
+            const getDescText = (score, time) => {
+                const { AvgScore, AvgTime } = pageData.abilityState;
+                if (score >= AvgScore && time >= AvgTime) {
+                    return "该能力训练时间较长、得分稳定，建议继续保持节奏";
+                } else if (score >= AvgScore && time < AvgTime) {
+                    return "该能力得分较高，尽管训练较少，展现出较好的潜力，可考虑适当增加练习任务";
+                } else if (score < AvgScore && time < AvgTime) {
+                    return "该能力训练较少、得分也偏低，建议在后续阶段增加相关任务，避免能力偏弱";
+                } else {
+                    return "该能力训练时间较长但得分不高，建议关注孩子在相关游戏中的完成质量与正确率";
+                }
+            };
+            const getTemp = (item, index) => {
+                const color = [
+                    {
+                        br: "#70A5FF",
+                        bg: "#F2F7FF",
+                    },
+                    {
+                        br: "#B9DCF8",
+                        bg: "#F5FBFF",
+                    },
+                ];
+
+                const itemColor = color[index % 2];
+                return `
+            <div class="capup-score-item">
+                <div class="capup-score-label">${item.abilityName}</div>
+                <div class="capup-score-wrapper">
+                    <div>
+                        <div class="capup-score-progress" style="--bg:#5C99FF;--val:${item.score / 170
+                    }">
+                            <div class="capup-score-progress-val">
+                                <div class="capup-score-progress-score">${item.score
+                    }分</div>
+                            </div>
+                        </div>
+                        <div>分数/分</div>
+                    </div>
+                    <div>
+                        <div class="capup-score-progress" style="--bg:#56C7FF;--val:${item.accuracy / 100}">
+                            <div class="capup-score-progress-val">
+                                <div class="capup-score-progress-score">${item.accuracy}%</div>
+                            </div>
+                        </div>
+                        <div>正确率/%</div>
+                    </div>
+                </div>
+            </div>
+            `;
+            };
+            const getTempCapItem = (item) => {
+
+                const upStage = item.endStage - item.startStage;
+                return `
+                    <div class="capup-level-item">
+                            <div class="capup-level-item-left">
+                                <div class="capup-level-left-top">
+                                    <img class="left-item-icon" src="${item.icon
+                    }" />
+                                    <span class="left-item-name">${item.abilityName
+                    }</span>
+                                    <span class="left-item-text">（提升情况）</span>
+                                </div>
+                                <div class="capup-level-left-bottom">
+                                    <div class="left-bottom-current">
+                                        <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/cap-start.png"/>
+                                        <div>
+                                            Lv.${String(
+                        item.startStage
+                    ).padStart(2, 0)}
+                                        </div>
+                                    </div>
+                                    <div class="left-bottom-up" style="margin-bottom:${upStage <= 0 ? '16px' : '0'};--bg:url(${`https://storage.iquizoo.com/static/img/report/trainingcourse/cap-${upStage > 0
+                        ? "up"
+                        : upStage == 0
+                            ? "flat"
+                            : "down"
+                    }.png`})">
+                                        ${upStage > 0
+                        ? `<span class="left-bottom-up-stage">+${upStage}</span>`
+                        : ""
+                    }
+                                    </div>
+                                    <div class="left-bottom-target">
+                                        <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/cap-end.png" />
+                                        <div>
+                                          Lv.${String(item.endStage).padStart(
+                        2,
+                        0
+                    )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="capup-level-item-right">
+                                <div class="capup-level-right-top">(星星数占比)</div>
+                                <div class="capup-level-right-bottom">
+                                    <div class="">
+                                      <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/cap-star1.png" />
+                                      <span>${item.oneStar}%</span>
+                                    </div>
+                                    <div class="">
+                                      <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/cap-star2.png" />
+                                      <span>${item.twoStar}%</span>
+                                    </div>
+                                    <div class="">
+                                      <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/cap-star3.png" />
+                                      <span>${item.threeStar}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            `;
+            };
+
+            const headDetailTemp = `
+                <div class="capup-level">
+                    <div class="content-sub-title">能力关卡进阶情况</div>
+                    <div class="capup-level-content"></div>
+                </div>
         `
-    }
+            const capupScore = $(".capup-score-content");
+            const capupLevel = $(".capup-level-content");
+            const capNextLevel = $(".capup-next .capup-level-list");
+            let maxAbility = null,
+                minAbility = null;
 
 
+            abilityStatistics.forEach((item, index) => {
+                if (item._maxScore) {
+                    maxAbility = item;
+                }
+                if (item._minScore) {
+                    minAbility = item;
+                }
+                $(".capup .capup-score-content").append(getTemp(item, index + 1));
+            });
+            $(".capup:last .common-desc").html(
+                `
+            综合来看，${pageData.data.realName}在本次训练课程中主要锻炼了${pageData.abilityState.xData.join("、")}，<span class="active-text">其中最高得分能力为${maxAbility.abilityName}，</span>得分${maxAbility.score}分，
+            ${maxAbility.accuracy < 0 ? '' : `正确率为${maxAbility.accuracy}%，`}${getDescText(maxAbility.score, maxAbility.consumingTime)}；
+            ${minAbility ? `最低得分能力为${minAbility.abilityName}，得分${minAbility.score}分，
+            ${minAbility.accuracy < 0 ? '' : `正确率为${minAbility.accuracy}%，`}${getDescText(minAbility.score, minAbility.consumingTime)}。 ` : ""}
+            `
+            );
+            $('.capup:last .capup-tip').html(`
+             <img src="https://storage.iquizoo.com/static/img/report/learningms/suggestion-text.png"
+                class="capup-tip-icon" />
+              <div>
+                <span class="capup-tip-label">得分说明：</span>能力得分详情由该课程下所有学习任务的用时，完成质量及正确率等综合统计得出。分数越高代表在该能力上的综合表现越突出。若某能力训练任务或用时较少，分数可能相对偏低，并不完全等同于能力薄弱。
+             </div>
+        `)
+            // 
+            const offset = $('.capup:last .page-content').height() - ($('.capup:last .capup-score').height() || 0) - 104 - 70 - 60
+            const itemLen = Math.floor(offset / 232)
 
-    function polling(fn, time) {
-        let timeId = null
-        const start = () => {
-            timeId = setTimeout(() => {
-                fn && fn()
-                start()
-            }, time)
+            if (itemLen > 0) {
+                $('.capup .page-content').append(headDetailTemp)
+                abilityStatistics.slice(0, itemLen).forEach(item => {
+                    $('.capup .capup-level-content').append(getTempCapItem(item))
+                })
+                if (abilityStatistics.slice(itemLen).length) {
+                    const appendNextPage = () => {
+                        $('.capup:last').after(`
+                      <div class="page capup">
+                        <div class="page-content">
+                            <div class="capup-level">
+                              <div class="capup-level-content">
+                              </div>
+                          </div>
+                        </div>  
+                      </div>
+                 `)
+                    }
+                    const slice = abilityStatistics.slice(itemLen)
+                    appendNextPage()
+                    slice.forEach((item, i) => {
+                        $('.capup:last .capup-level-content').append(getTempCapItem(item))
+                        const height = $('.capup:last .capup-level-content').height()
+                        if (height > 1350 && (i + 1) != slice.length) {
+                            appendNextPage()
+                        }
+                    })
+                }
+            } else {
+                $('.capup').after(`
+              <div class="page capup">
+                <div class="page-content">
+                   ${headDetailTemp}
+                </div>  
+              </div>
+            `)
+
+                abilityStatistics.forEach(item => {
+                    $('.capup:last .capup-level-content').append(getTempCapItem(item))
+                    if ($('.capup:last .capup-level-content').height() > 1350) {
+                        $('.capup:last').after(`
+                     <div class="page capup">
+                       <div class="page-content">
+                          <div class="capup-level">
+                             <div class="capup-level-content"></div>
+                          </div>
+                       </div>  
+                     </div>
+                 `)
+                    }
+                })
+            }
+
+            let descOffset = $('.capup:last .page-content').height() - $('.capup:last .capup-level-content').height() - 60 - 60
+            if ($('.capup').length == 1) {
+                descOffset = descOffset - $('.capup:last .capup-score').height() - 104 - 80
+            }
+            const descItems = Math.floor(descOffset / 120)
+            if (descOffset > 160 && descItems > 0) {
+                $('.capup:last .capup-level-content').append(`
+               <div class="capup-level-desc">
+                 ${abilityStatistics.slice(0, descItems)
+                        .map((item) => {
+                            return `
+                            <p>
+                                可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
+                                提升了${item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                                ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
+                            </p>
+                       `;
+                        })
+                        .join(" ")}
+                </div>
+            `)
+                if (abilityStatistics.slice(descItems).length) {
+                    $('.capup:last').after(`
+                <div class="page capup capup-next">
+                  <div class="page-content">
+                   <div class="capup-level-desc">
+                    </div>
+                  </div>
+               </div>
+            `)
+
+                    abilityStatistics.slice(descItems).forEach((item, i) => {
+                        $('.capup:last .capup-level-desc').append(`
+                    <p>
+                        可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
+                        提升了${item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                        ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
+                    </p>
+                `)
+                        if ($('.capup:last .capup-level-desc').height() > 1400 && (i + 1) != abilityStatistics.slice(descItems).length) {
+                            $('.capup:last').after(`
+                      <div class="page capup capup-next">
+                        <div class="page-content">
+                         <div class="capup-level-desc">
+                          </div>
+                        </div>
+                     </div>
+                   `)
+                        }
+                    })
+                }
+            } else {
+                $('.capup:last').after(`
+                <div class="page capup capup-next">
+                  <div class="page-content">
+                   <div class="capup-level-desc">
+                    </div>
+                  </div>
+               </div>
+            `)
+                const slice = abilityStatistics
+                slice.forEach((item, i) => {
+
+                    $('.capup:last .capup-level-desc').append(`
+                    <p>
+                        可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
+                        提升了${item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                        ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
+                    </p>
+                `)
+                    if ($('.capup:last .capup-level-desc').height() > 1400 && (i + 1) != slice.length) {
+                        $('.capup:last').after(`
+                      <div class="page capup capup-next">
+                        <div class="page-content">
+                         <div class="capup-level-desc">
+                          </div>
+                        </div>
+                     </div>
+                   `)
+                    }
+
+                })
+
+
+            }
+
         }
 
-        const end = () => {
-            clearTimeout(timeId)
-            timeId = null
+        function initTrendChar() {
+            let {
+                childCourseStatistics,
+                slope,
+                trainingFrequencyList,
+                adherenceWeeks,
+                totalWeeks,
+            } = pageData.data;
+            totalWeeks = totalWeeks || 1
+            const getcourseSlope = (slope) => {
+                if (slope >= 1.5) {
+                    return {
+                        text: `课程分快速上升，平均每课+${Math.floor(slope)}分，继续保持当前节奏`,
+                        label: "表现提升明显",
+                    };
+                } else if (slope >= 0.5) {
+                    return {
+                        text: `课程分稳步提升，整体表现持续向好`,
+                        label: "表现稳步提升",
+                    };
+                } else if (slope >= -0.5) {
+                    return {
+                        text: `课程分基本保持稳定，可尝试挑战更高关卡`,
+                        label: "表现稳定",
+                    };
+                } else if (slope >= -1.5) {
+                    return {
+                        text: `建议及时调整训练状态，避免持续下降`,
+                        label: "表现有所下滑",
+                    };
+                } else {
+                    return {
+                        text: `课程分表现不佳，建议重点复盘错因，优化训练方式`,
+                        label: "表现不佳",
+                    };
+                }
+            };
+
+            let maxItem = childCourseStatistics[0],
+                minItem = childCourseStatistics[0];
+            let std = 0;
+            let avgScore = 0;
+
+            for (let i = 0; i < childCourseStatistics.length; i++) {
+                const item = childCourseStatistics[i];
+                item._completionTime = +new Date(item.completionTime);
+                if (item.score > maxItem.score) {
+                    maxItem = item;
+                }
+                if (minItem.score > item.score) {
+                    minItem = item;
+                }
+                avgScore += item.score;
+            }
+            avgScore = avgScore / childCourseStatistics.length;
+            const deviation = Math.sqrt(
+                childCourseStatistics.reduce(
+                    (total, item) => (item.score - avgScore) ** 2 + total,
+                    0
+                ) / childCourseStatistics.length
+            );
+            if (childCourseStatistics.length > 1) {
+                minItem._min = true;
+                maxItem._max = true;
+            }
+            const courseList = JSON.parse(JSON.stringify(childCourseStatistics)).sort(
+                (a, b) => b._completionTime - a._completionTime
+            );
+            const displayOrders = courseList.slice(0, 3).map((v) => v.displayOrder);
+            const option = {
+                xAxis: {
+                    type: "category",
+                    boundaryGap: false,
+                    data: Array.from(
+                        { length: childCourseStatistics.length },
+                        (_, i) => i + 1
+                    ),
+                    labelLine: {
+                        show: false,
+                    },
+                    axisTick: {
+                        show: false,
+                    },
+                    splitLine: { show: false },
+                    axisLabel: {
+                        color: "#B4B4B4",
+                        fontSize: 16,
+                        align: "center",
+                        margin: 10,
+                        formatter: (e) => {
+                            return e;
+                        },
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: "#E2E6ED", // 设置底部轴线为红色
+                            width: 4, // 可选，设置线宽
+                        },
+                    },
+                },
+                yAxis: {
+                    min: 50,
+                    max: 170,
+                    type: "value",
+                    labelLine: {
+                        show: false,
+                    },
+                    axisLabel: {
+                        color: "#B4B4B4",
+                        fontSize: 18,
+                    },
+                },
+                series: [
+                    {
+                        data: childCourseStatistics.map((v) => {
+                            const item = {
+                                value: v.score,
+                            };
+                            item.symbol = "none";
+                            if (displayOrders.includes(v.displayOrder)) {
+                                item.symbolSize = 32;
+                                item.symbol =
+                                    "image://https://storage.iquizoo.com/static/img/report/trainingcourse/point-warn.png";
+                            }
+                            if (v.displayOrder == maxItem.displayOrder) {
+                                item.symbol =
+                                    "image://https://storage.iquizoo.com/static/img/report/trainingcourse/poinr-nb.png";
+                                item.symbolSize = 32;
+                            }
+                            if (v.displayOrder == minItem.displayOrder) {
+                                item.symbolSize = 32;
+                                item.symbol =
+                                    "image://https://storage.iquizoo.com/static/img/report/trainingcourse/point-error.png";
+                            }
+                            return item;
+                        }),
+                        type: "line",
+                        markLine: {
+                            z: 1,
+                            symbol: ['none', 'none'], // 不显示箭头
+                            clip: true,
+                            data: [
+                                [
+                                {
+                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == minItem.displayOrder),50],
+                                    lineStyle: {
+                                        color: '#FF4A00',
+                                    },
+                                    label: {
+                                        show: false
+                                    }
+                                },
+                                {
+                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == minItem.displayOrder),minItem.score -2],
+                                    lineStyle: {
+                                        color: '#FF4A00',
+                                    },
+                                    label: {
+                                        show: false
+                                    }
+                                },
+                                ],
+                                [
+                                {
+                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == maxItem.displayOrder),50],
+                                    lineStyle: {
+                                        color: '#5EE247',
+                                    },
+                                    label: {
+                                        show: false
+                                    }
+                                },
+                                {
+                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == maxItem.displayOrder),maxItem.score-2],
+                                    lineStyle: {
+                                        color: '#5EE247',
+                                    },
+                                    label: {
+                                        show: false
+                                    }
+                                }
+                                ]
+                               
+                            ],
+                            lineStyle: {
+                                type: 'dashed'
+                            }
+                        },
+                        markPoint: {
+
+                            data: [
+                                {
+                                    type: "max",
+                                    name: "Max",
+                                    symbol:
+                                        "image://https://storage.iquizoo.com/static/img/report/trainingcourse/tip-nb.png",
+                                    symbolSize: [138, 46],
+                                    symbolOffset: [-70, -40],
+                                    label: {
+                                        formatter: (e) => {
+                                            return "最高分:" + e.value;
+                                        },
+                                        offset: [0, -4],
+                                        fontWeight: 500,
+                                        fontSize: 18,
+                                        fontFamily: "Bold",
+                                        color: "#0C5200",
+                                    },
+                                },
+                                {
+                                    type: "min",
+                                    name: "Min",
+                                    symbol:
+                                        "image://https://storage.iquizoo.com/static/img/report/trainingcourse/tip-waster.png",
+                                    symbolSize: [138, 46],
+                                    symbolOffset: [70, -40],
+                                    label: {
+                                        formatter: (e) => {
+                                            return "最低分:" + e.value;
+                                        },
+                                        offset: [0, -4],
+                                        fontWeight: 500,
+                                        fontFamily: "Bold",
+                                        fontSize: 18,
+                                        color: "#FFFFFF",
+                                    },
+                                },
+                            ],
+                        },
+                        lineStyle: {
+                            width: 4,
+                            color: "#478BFF",
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1, // 从上到下渐变（x0,y0,x2,y2）
+                                [
+                                    { offset: 0, color: "#478aff53" }, // 顶部颜色
+                                    { offset: 1, color: "#FFFFFF" }, // 底部颜色
+                                ]
+                            ),
+                        },
+                    },
+                ],
+            };
+            const myChart = echarts.init(
+                document.querySelector(".trend-char-content")
+            );
+            option && myChart.setOption(option);
+            $(".contentKey-maxscore").text(maxItem.score + "分");
+            $(".contentKey-maxdisplayOrder").text(
+                "（第" + maxItem.displayOrder + "节课时）"
+            );
+            $(".contentKey-minscore").text(minItem.score + "分");
+            $(".contentKey-mindisplayOrder").text(
+                "（第" + minItem.displayOrder + "节课时）"
+            );
+            $(".contentKey-recordBreakingTimes").text(
+                pageData.data.courseStatistic.recordBreakingTimes + "次"
+            );
+            if (courseList.length < 3) {
+                $(".contentKey-avgscore").text(
+                    "课程数据不足，请继续训练，解锁成长分析"
+                );
+                $(".contentKey-avgscore").css({
+                    color: "#805F00",
+                    fontSize: "16px",
+                    fontWeight: 400,
+                    textAlign: "center",
+                });
+            } else {
+                const [{ score: score1 }, { score: score2 }, { score: score3 }] =
+                    courseList;
+                $(".contentKey-avgscore").text(
+                    Math.floor((score1 + score2 + score3) / 3) + "分"
+                );
+            }
+            const slopetext = getcourseSlope(slope);
+            $(".contentKey-content-desc").html(
+                `
+            综合来看，${courseList.length == 1
+                    ? "课程分自第1课时"
+                    : `课程分自第1课时至第${courseList.length}课时`
+                }，
+            ${slope != null ? "整体" + slopetext.label + '。' : ""}最高得分出现在第${maxItem.displayOrder
+                }课时（${maxItem.score}分），最低得分出现在第${minItem.displayOrder}课时（${minItem.score}分）${slope != null ? "，" + slopetext.text : ""}。${deviation > 10 ? "分数波动较大，建议关注训练专注度与正确率。" : ""}
+            `
+            );
+            if (!trainingFrequencyList.length) {
+                $(".trend .analysis").css({
+                    display: "none",
+                });
+            }
+
+            const weekList = [];
+            let weeklyAvg = 0;
+            let maxGap = 0;
+            let adherence = Number((adherenceWeeks / totalWeeks) * 100).toFixed(0);
+
+            for (let i = 0; i < trainingFrequencyList.length; i += 7) {
+                const slice = trainingFrequencyList.slice(i, i + 7);
+                weekList.push(slice);
+                weeklyAvg += slice.reduce((a, b) => a + b, 0);
+                const matches = slice.join("").match(/0+/g);
+                const long = matches
+                    ? matches.reduce((a, b) => (a.length > b.length ? a : b))
+                    : 0;
+                if (long.length > maxGap) {
+                    maxGap = long.length;
+                }
+            }
+            weeklyAvg = weeklyAvg / weekList.length;
+            pageData.weeklyAvg = weeklyAvg;
+            const analysisContent = $(".analysis-table-content");
+            const getAnalyItemContent = (val) => {
+                if (!val) return "(空)";
+                return `
+            <div class="count">${val}</div>
+            <div class="pointer">${String(".").repeat(Math.min(val, 4))}</div>
+            `;
+            };
+            const weekmap = {
+                1: "一",
+                2: "二",
+                3: "三",
+                4: "四",
+            };
+            const len = weekList.length
+            $('.content-head-right-week').text(weekList.length)
+            const trandContent = $('.trend .page-content')
+            if (len == 4) {
+                trandContent.css({
+                    'padding-top': "56px"
+                })
+            } else if (len == 3 || len == 2) {
+                trandContent.css({
+                    'padding-top': "104px"
+                })
+            } else {
+                trandContent.css({
+                    'padding-top': "144px"
+                })
+            }
+            weekList.forEach((item, i) => {
+                $(".analysis-table-left").append(`<div>第${weekmap[i + 1]}周</div>`);
+                analysisContent.append(`
+            <div class="analysis-table-row">
+                ${item
+                        .map(
+                            (v) => `
+                   <div class="analysis-table-row-item ${v ? "block" : ""}">
+                    ${getAnalyItemContent(v)}
+                    </div>`
+                        )
+                        .join(" ")}
+            </div>
+            `);
+            });
+
+            const getWeekDesc = (weeklyAvg, maxGap) => {
+                const name = pageData.data.realName;
+                if (trainingFrequencyList.length < 28) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时`;
+                }
+                if (weeklyAvg >= 3 && weeklyAvg < 5 && maxGap <= 5) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时。最近4周里，${name}每周平均完成${weeklyAvg}课时，两次训练间最长间隔${maxGap}天，节奏平稳，建议继续保持即可稳定巩固成效`;
+                } else if (
+                    weeklyAvg >= 3 &&
+                    weeklyAvg < 5 &&
+                    maxGap > 5 &&
+                    maxGap < 7
+                ) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时。最近4周${name}每周平均完成${weeklyAvg}课时，但出现最长${maxGap}天的训练空档。建议将课时更均匀地分散到每周，避免间隔过长，巩固训练成果`;
+                } else if (weeklyAvg >= 3 && weeklyAvg < 5) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时。最近4周里，${name}每周平均完成${weeklyAvg}课时，请继续保持当前频率，并固定训练日，用2-3个月把累计达标率提升到70%以上`;
+                } else if (weeklyAvg >= 2 && weeklyAvg < 3) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时。最近4周${name}平均每周完成${weeklyAvg}课时，略低于建议频次。最长间隔${maxGap}天。为了保证训练效果，建议把训练日固定在每周至少3天（例如周二/周四/周末），即可达到推荐节奏`;
+                } else if (weeklyAvg < 2 || maxGap >= 7) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时。最近4周${name}训练频次不足（平均${weeklyAvg}课时/周），且出现最长${maxGap}天未训练的空档。这样会显著削弱训练效果。建议立即制定固定训练计划——每周3次、间隔不超过3天，并在家长端开启提醒功能`;
+                } else if (weeklyAvg >= 5 && maxGap <= 2) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时。最近4周里，${name}平均每周完成${weeklyAvg}课时，训练节奏优秀，两次训练间最长间隔仅${maxGap}天，保持着高专注和高投入！当前策略已经非常理想，请继续维持这样的训练热情，效果将进一步巩固与提升`;
+                } else if (weeklyAvg >= 5 && maxGap > 2) {
+                    return `为保证训练效果，我们建议每周至少训练3个课时。最近4周平均${weeklyAvg}课时/周，训练节奏较好，但最长间隔${maxGap}天，训练日分布略不均匀。建议在空档较长的周中再穿插1-2课时，使高频优势转化为更稳定的提升`;
+                }
+            };
+            const getAdherenDesc = (adherence) => {
+                if (adherence >= 90) {
+                    return `自开课以来共${totalWeeks}周，其中${adherenceWeeks}周达标（${adherence}%，优秀）。训练节奏极为稳定，请继续保持，效果将持续巩固并加速提升！`;
+                } else if (adherence < 90 && adherence >= 70) {
+                    return `自开课以来共${totalWeeks}周，其中${adherenceWeeks}周达标（${adherence}%，良好）。保持当前速度即可持续巩固效果；如想进一步提升，可把训练日安排得更均匀`;
+                } else if (adherence < 70 && adherence >= 50) {
+                    return `自开课以来共${totalWeeks}周，其中${adherenceWeeks}周达标（${adherence}%，中等）。坚持度尚可，但仍有提升空间。建议确保每周至少3次训练，提高达标周比例`;
+                } else if (adherence < 50 && adherence >= 30) {
+                    return `自开课以来共${totalWeeks}周，其中${adherenceWeeks}周达标（${adherence}%，较低）。训练间隔过长会削弱效果。请与孩子共订固定训练日，并开启提醒功能`;
+                } else {
+                    return `自开课以来共${totalWeeks}周，其中${adherenceWeeks}周达标（${adherence}%，严重不足）。当前达标率远低于建议水平。请立即调整计划，确保每周至少完成3次训练`;
+                }
+            };
+            $(".analysis-content-desc").html(
+                `
+            <p>${getWeekDesc(weeklyAvg, maxGap)}。</p>
+            <p>${totalWeeks == 0 ? '' : (getAdherenDesc(adherence) + (adherence >= 90 ? '' : '。'))}</p>
+            `
+            );
         }
 
-        const toggTime = () => {
-            timeId ? end() : start()
+        function initSuggest() {
+            const { maxScore, minScore, maxLiftCap, weeklyAvg, abilityState } =
+                pageData;
+            const { AvgScore, AvgTime } = abilityState;
+            const { courseStatistic, slope, realName, abilityStatistics } =
+                pageData.data;
+            const { recordBreakingTimes, accuracy } = courseStatistic;
+
+            const getAccuracyDesc = (acc) => {
+                if (acc >= 90) {
+                    return `完成质量高`;
+                } else if (acc >= 80) {
+                    return `表现较稳`;
+                } else if (acc >= 70) {
+                    return `正确率有待提升`;
+                } else {
+                    return `准确性偏低`;
+                }
+            };
+            $(".suggest .suggest-desc").html(`
+          <p> ${realName}在本阶段课程得分为${courseStatistic.score}分，整体表现稳步提升；
+            ${courseStatistic.accuracy < 0 ? '' : `正确率为${courseStatistic.accuracy}%，${getAccuracyDesc(courseStatistic.accuracy)}。`}
+          </p>
+          <p>
+           ${maxScore.abilityName}得分最高(${maxScore.score}分)${minScore.abilityName ? `，${minScore.abilityName}得分相对较低(${minScore.score}分)，建议适当加强。` : "。"}${recordBreakingTimes
+                    ? `共刷新课程纪录${recordBreakingTimes}次，`
+                    : ""
+                }${maxLiftCap.promoteScore
+                    ? `亮点能力${maxLiftCap.abilityName}，训练成效明显。`
+                    : ""
+                }
+          </p>
+         `);
+
+            const acMap = {
+                1: '#0CAE59',
+                2: "#4D87FD",
+                3: "#EDAE41",
+                4: "#FF4D4D"
+            }
+            const suggestItemConfig = [
+                {
+                    name: "课程趋势",
+                    br: "#3DD685",
+                    ac: "#0CAE59",
+                    url: "url('https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-border1.png')",
+                    burl: "https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-item1.png",
+                },
+                {
+                    name: "难度进阶",
+                    br: "#4E89FF",
+                    ac: "#4D87FD",
+                    url: "url('https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-border2.png')",
+                    burl: "https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-item2.png",
+                },
+                {
+                    name: "正确率",
+                    br: "#FFBE4E",
+                    ac: "#EDAE41",
+                    url: "url('https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-border3.png')",
+                    burl: "https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-item-rate.png",
+                },
+                {
+                    name: "平均每周课时",
+                    br: "#FF6C6C",
+                    ac: "#FF4D4D",
+                    url: "url('https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-border4.png')",
+                    burl: "https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-item4.png",
+                },
+            ];
+
+            const getsugDescitem1 = () => {
+                const label = getSlopeLabel(slope);
+                return {
+                    表现提升明显: {
+                        text: "<span class='suggest-item-desc-ac'>训练趋势良好，</span>建议继续保持当下频率与节奏，循序渐进推进系统安排的任务内容。",
+                        key: 1
+                    },
+                    表现稳步提升: {
+                        text: "<span class='suggest-item-desc-ac'>训练趋势良好，</span>建议继续保持当下频率与节奏，循序渐进推进系统安排的任务内容。",
+                        key: 1
+                    },
+                    表现稳定: {
+                        key: 3,
+                        text: "<span class='suggest-item-desc-ac'>表现整体稳定，</span>建议持续配合系统节奏完成任务，并关注每次训练的完成质量。"
+                    },
+                    表现有所下滑: {
+                        key: 3,
+                        text: "<span class='suggest-item-desc-ac'>最近训练得分略有下降，</span>建议复盘近期的低分任务，帮助孩子理清错因，稳住训练节奏。"
+                    },
+                    表现不佳: {
+                        key: 4,
+                        text: "<span class='suggest-item-desc-ac'>得分存在波动或连续走低，</span>建议先保证任务专注度，降低焦虑情绪，再逐步恢复节奏。"
+                    },
+                }[label];
+            };
+            const getsugDescitem2 = () => {
+                const { contentStatistics } = pageData.data
+                const TotalRate = contentStatistics.reduce((target, item) => item.stageCompletionRate + target, 0); //关卡数
+                const AvgStage = TotalRate / contentStatistics.length; //平均关卡比
+                const AvgUp = contentStatistics.reduce((target, item) => item.promoteStage + target, 0) / contentStatistics.length; // 平均提升数
+                console.log(AvgStage,AvgUp);
+                if (AvgStage >= 0.8 && AvgUp >= 5) {
+                    return {
+                        key: 1,
+                        text: `<span class="suggest-item-desc-ac">当前已稳定完成高阶任务，</span>建议保持挑战状态，同时巩固训练质量。`
+                    };
+                } else if (AvgStage >= 0.8 && AvgUp < 5) {
+                    return {
+                        text: `<span class="suggest-item-desc-ac">当前关卡水平较高但阶段内提升缓慢，</span>建议关注任务策略执行与一次性完成率。`,
+                        key: 1
+                    };
+                } else if (AvgStage >= 0.5 && AvgStage < 0.8 && AvgUp >= 5) {
+                    return {
+                        key: 2,
+                        text: `<span class="suggest-item-desc-ac">本阶段能力提升明显，</span>建议保持训练节奏，同时阶段性巩固已通关任务，防止遗忘。`
+                    };
+                } else if (AvgStage >= 0.5 && AvgStage < 0.8 && AvgUp < 5) {
+                    return {
+                        key: 2,
+                        text: `<span class="suggest-item-desc-ac">当前已具备中等能力水平，</span>但提升速度偏慢，建议优化任务专注度，稳定训练状态。`
+                    };
+                } else if (AvgStage < 0.5 && AvgUp >= 5) {
+                    return {
+                        key: 4,
+                        text: `<span class="suggest-item-desc-ac">初阶关卡提升明显，</span>建议继续保持节奏，逐步向更高关卡挑战。`
+                    };
+                } else if (AvgStage < 0.5 && AvgUp < 5) {
+                    return {
+                        key: 4,
+                        text: `<span class="suggest-item-desc-ac">当前仍处于基础关卡，</span>进展较慢，建议提高训练专注度与完成质量，先稳住基础再逐步提升。`
+                    };
+                }
+            };
+            const getsugDescitem3 = () => {
+                if (accuracy >= 90) {
+                    return {
+                        key: 1,
+                        text: `<span class="suggest-item-desc-ac">正确率稳定，</span>建议保持当前完成方式，并引导孩子逐步尝试更高阶任务挑战。`
+                    };
+                } else if (accuracy >= 80) {
+                    return {
+                        text: '<span class="suggest-item-desc-ac">答题表现较为稳定，</span>训练后可简单回顾错题或难题，加深理解。',
+                        key: 2
+                    };
+                } else if (accuracy >= 70) {
+                    return {
+                        key: 3,
+                        text: '<span class="suggest-item-desc-ac">正确率有待提升，</span>建议训练结束后用2–3分钟帮助孩子分析错因，防止重复失误。'
+                    };
+                } else {
+                    return {
+                        key: 4,
+                        text: '<span class="suggest-item-desc-ac">正确率偏低，</span>建议控制训练节奏，先稳固基础任务，提高答题准确性再逐步进阶。'
+                    };
+                }
+            };
+            const getsugDescitem4 = () => {
+                if (weeklyAvg >= 3) {
+                    return {
+                        text: '<span class="suggest-item-desc-ac">训练频率合理，</span>继续保持良好节奏，将有助于稳步积累认知训练效果。',
+                        key: 1
+                    };
+                } else if (weeklyAvg >= 2) {
+                    return {
+                        key: 2,
+                        text: '<span class="suggest-item-desc-ac">训练频率较为稳定，</span>若有条件，可在周末增加一节任务，强化训练持续性。'
+                    };
+                } else {
+                    return {
+                        key: 4,
+                        text: '<span class="suggest-item-desc-ac">训练节奏偏慢，</span>建议固定每周2–3天练习，帮助建立稳定习惯和节奏感。'
+                    };
+                }
+            };
+            const getDesc = (name) => {
+
+                const map = {
+                    课程趋势: {
+                        text: `${realName}在本阶段课程中，` + getsugDescitem1().text,
+                        key: getsugDescitem1().key,
+                    },
+                    难度进阶: {
+                        text: "在难度进阶上面，" + getsugDescitem2().text,
+                        key: getsugDescitem2().key,
+                    },
+                    正确率: {
+                        text: "在正确率方面，" + getsugDescitem3().text,
+                        key: getsugDescitem3().key,
+                    },
+                    平均每周课时: {
+                        text: "在训练频率方面，" + getsugDescitem4().text,
+                        key: getsugDescitem4().key,
+                    }
+                }
+
+                return map[name]
+            };
+            suggestItemConfig.forEach((item, index) => {
+
+                const { text, key } = getDesc(item.name)
+                $(".suggest-items").append(`
+            <div class="suggest-item"
+                style="--url:url('https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-border${key}.png');--ac:${acMap[key]};">
+                 <div class="suggest-item-name">${item.name}</div>
+                <div class="suggest-item-desc">
+                    ${text}
+                </div>
+                <div class="suggest-item-img">
+                <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-${index + 1}-${key}.png" />
+                </div>
+            </div>
+         `);
+            });
+
+            const capacityState = {
+                A: [],
+                B: [],
+                C: [],
+                D: [],
+            };
+
+            for (let i = 0; i < abilityStatistics.length; i++) {
+                const currentItem = abilityStatistics[i];
+                const { score, consumingTime } = currentItem;
+                if (score >= AvgScore && consumingTime >= AvgTime) {
+                    capacityState.A.push(currentItem);
+                } else if (score >= AvgScore && consumingTime < AvgTime) {
+                    capacityState.B.push(currentItem);
+                } else if (score < AvgScore && consumingTime < AvgTime) {
+                    capacityState.C.push(currentItem);
+                } else {
+                    capacityState.D.push(currentItem);
+                }
+            }
+            const getCapacityDesc = (level, list) => {
+                const abilityName = list.map((v) => v.abilityName).join("、");
+                if (level == "A") {
+                    return {
+                        key: 1,
+                        text: `${abilityName}是系统重点安排的训练能力之一，孩子在该方向完成度较高，得分表现稳定，说明已逐步适应任务形式与挑战节奏。建议继续保持训练状态，积累更多表现优势。`,
+                    };
+                } else if (level == "B") {
+                    return {
+                        key: 2,
+                        text: `${abilityName}得分较高，尽管训练安排不多，说明孩子对该类任务具备良好基础或潜力。建议家长继续关注后续系统任务，保持现有优势的延续性。`,
+                    };
+                } else if (level == "C") {
+                    return {
+                        key: 3,
+                        text: `${abilityName}在当前课程中训练安排较少，得分也相对偏低，属于系统尚未重点推进的方向。建议家长耐心等待系统逐步推荐此类任务，并在过程中给予鼓励，避免形成能力盲区。`,
+                    };
+                } else {
+                    return {
+                        key: 4,
+                        text: `${abilityName}是本阶段训练中的高频能力之一，但得分表现暂时偏低，可能与关卡难度增加或任务完成方式有关。建议家长关注孩子的训练过程，帮助其调整策略，逐步提升完成质量。`,
+                    };
+                }
+            };
+            Object.keys(capacityState).forEach((Level) => {
+                if (capacityState[Level].length) {
+                    const desc = getCapacityDesc(Level, capacityState[Level]);
+                    $(".capacity-items").append(
+                        `
+                <div class="capacity-item">
+                    <div class="capacity-item-left">
+                        <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/capacity-item${desc.key}.png" />
+                    </div>
+                    <div class="capacity-item-right">
+                        ${desc.text}
+                    </div>
+                </div>
+                `
+                    );
+                }
+            });
         }
-        start()
-        return toggTime
-    }
 
-    function timeTotamp(match) {
-        if (match) {
-            const hours = parseInt((match[0]));
-            const minutes = parseInt((match[1]));
-            const seconds = parseInt((match[2]));
-            // 将小时、分钟和秒转换为毫秒，并相加
-            const totalMilliseconds = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
-            return totalMilliseconds;
+        function initAnnex() {
+            const { contentStatistics, childCourseStatistics } = pageData.data;
+            const formatDate = (completionTime) => {
+                const data = completionTime.split(" ")[0].split("-");
+                return (
+                    data[0] +
+                    "-" +
+                    String(data[1]).padStart(2, 0) +
+                    "-" +
+                    String(data[2]).padStart(2, 0)
+                );
+            };
+            const formatPage = (list, pageSize) => {
+                const data = [];
+                for (let i = 0; i < list.length; i += pageSize) {
+                    data.push(list.slice(i, i + pageSize));
+                }
+                return data;
+            };
+
+            const contentTemps = [];
+            const childTemps = [];
+            //-----------------------
+            const appendPage = (index, query) => {
+                const temp = `
+          <div class="page annex">
+              <div class="page-content">
+               ${index === 0 ? ' <div class="commont-title">附录</div>' : ""}
+                <div class="annex-content">
+                    ${index === 0
+                        ? '<div class="content-sub-title">任务表现详情</div>'
+                        : ""
+                    }
+                    <div class="annex-table">
+                        <div class="annex-head">
+                            <div class="annex-head-th">任务名称</div>
+                            <div class="annex-head-th">能力维度</div>
+                            <div class="annex-head-th">正确率</div>
+                            <div class="annex-head-th">最高分数</div>
+                            <div class="annex-head-th w54">
+                                <div>最高</div>
+                                <div>关卡数</div>
+                            </div>
+                            <div class="annex-head-th w54">
+                                <div>提升</div>
+                                <div>关卡数</div>
+                            </div>
+                            <div class="annex-head-th">训练次数</div>
+                        </div>
+                        <div class="annex-tbody">
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </div>
+            `;
+                query ? $(query).after(temp) : $('.suggest').after(temp)
+            }
+            appendPage(0)
+            for (let i = 0; i < contentStatistics.length; i++) {
+                const item = contentStatistics[i]
+
+                $('.annex:last-child .annex-tbody').append(`
+                            <div class="annex-tbody-tr ${(i + 1) % 2 == 0 ? "annex-tbody-tr-even" : ""
+                    }">
+                                <div class="annex-tbody-td">${item.name}</div>
+                                <div class="annex-tbody-td">
+                                    ${item.abilityNames.map(name => `<p>${name}</p>`).join(' ')}
+                                </div>
+                                <div class="annex-tbody-td">${item.accuracy < 0 ? '--' : (item.accuracy + '%')}</div>
+                                <div class="annex-tbody-td">${item.maxScore
+                    }</div>
+                                <div class="annex-tbody-td w54">${item.maxStage
+                    }</div>
+                                <div class="annex-tbody-td w54">${item.promoteStage
+                    }</div>
+                                <div class="annex-tbody-td">${item.executionsNumber
+                    }</div>
+             </div>
+        `)
+                const height = $('.annex:last-child .annex-tbody').height()
+                console.log(height, 'height');
+                if (height >= 1090 && contentStatistics.length != (i + 1)) {
+                    appendPage(undefined, '.annex:last-child')
+                }
+            }
+
+            const appendCoursePage = (index, query) => {
+                const tmpChild = `
+                  <div class="page courseDetail">
+                     <div class="page-content">
+                     ${index === 0
+                        ? '<div class="content-sub-title">课时表现详情</div>'
+                        : ""
+                    }
+                     <div class="courseDetail-content">
+                      
+                     </div>
+            </div>
+         </div>
+            `;
+                query ? $(query).after(tmpChild) : $('.annex:last').after(tmpChild)
+            }
+            appendCoursePage(0)
+            const childList = JSON.parse(JSON.stringify(childCourseStatistics)).sort((a, b) => a.displayOrder - b.displayOrder)
+            for (let i = 0; i < childList.length; i++) {
+                const item = childList[i]
+                $('.courseDetail:last-child .courseDetail-content').append(`
+                      <div class="courseDetail-item">
+                        <div class="courseDetail-item-wrapper">
+                            <div class="courseDetail-item-lable ${item._max ? "courseDetail-item-lable-active" : ""
+                    } ${item._min ? "courseDetail-item-lable-error" : ""
+                    }">
+                                ${item._min
+                        ? "最低分"
+                        : item._max
+                            ? "最高分"
+                            : i + 1
+                    }
+                            </div>
+                            <div class="courseDetail-item-body">
+                                <div class="courseDetail-item-top">
+                                    <div class="courseDetail-item-top-item">
+                                        <div class="courseDetail-item-name">${item.name}</div>
+                                        <div class="courseDetail-item-count">课时名称</div>
+                                    </div>
+                                    <div class="courseDetail-item-top-item">
+                                        <div class="courseDetail-item-name">${item.score
+                    }</div>
+                                        <div class="courseDetail-item-count">课时得分</div>
+                                    </div>
+                                    <div class="courseDetail-item-top-item">
+                                        <div class="courseDetail-item-name">${item.accuracy < 0 ? '--' : (item.accuracy + '%')}</div>
+                                        <div class="courseDetail-item-count">正确率</div>
+                                    </div>
+                                    <div class="courseDetail-item-top-item">
+                                        <div class="courseDetail-item-name">${item.timeConsuming
+                    }分钟</div>
+                                        <div class="courseDetail-item-count">训练时长</div>
+                                    </div>
+                                    <div class="courseDetail-item-top-item">
+                                        <div class="courseDetail-item-name">${formatDate(
+                        item.completionTime
+                    )}</div>
+                                        <div class="courseDetail-item-count">完成日期</div>
+                                    </div>
+                                </div>
+                                <div class="courseDetail-item-bottom">
+                                    <div class="courseDetail-item-bottom-label">训练收获：</div>
+                                    <div class="courseDetail-item-bottom-text">锻炼${item.underlyingAbilitys.length
+                    }项底层能力:${item.underlyingAbilitys.join(
+                        "、"
+                    )}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                `)
+
+                const height = $('.courseDetail:last-child .courseDetail-content').height()
+                if (height >= 1230 && childList.length != (i + 1)) {
+                    appendCoursePage(undefined, '.courseDetail:last')
+                }
+            }
         }
 
-        return null; // 如果字符串不匹配格式，返回 null
-    }
-    function timeToString(timestamp) {
-        const hours = Math.floor(timestamp / (1000 * 60 * 60));
-
-        const minutes = Math.floor((timestamp % (1000 * 60 * 60)) / (1000 * 60));
-
-        const seconds = Math.floor((timestamp % (1000 * 60)) / 1000);
-
-        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-    }
-
-    function rederModal(props = {}, handler) {
-        $('.my-modal').css('display', "block")
-        const content = $('.modal-content .modal-body')
-        const footer = $('.modal-content .modal-footer')
-        content.append(props.content)
-        $('.modal-content').css(props.style || {})
-        content.css(props.bodyStyle || {})
-        footer.css(props.footerStyle || {})
-        footer.append(props.footer)
-        $('body').css('overflow', "hidden")
-        const cancel = () => {
-            $('body').css('overflow', "initial")
-            $('.my-modal').css('display', "none")
-            content.html('')
-            footer.html('')
-            const c = $('.modal-content').get()[0]
-            c.style = ''
-            content.get()[0].style = ''
-            footer.get()[0].style = ''
+        function initPageNumber() {
+            let index = 1;
+            $(".page").each(function () {
+                const self = $(this);
+                if (!self.hasClass("no-page-number")) {
+                    self.append(`
+              <div class="page-number">${String(index++).padStart(2, 0)}</div>
+            `);
+                }
+            });
         }
-        document.querySelector('.modal-content .modal-footer .modal-click').addEventListener('click', (e) => {
-            typeof handler === 'function' ? handler(e, cancel) : cancel()
-        }, { once: true })
-        return cancel
-    }
 
+        // resizeScale()
+        // window.addEventListener('resize', resizeScale)
+
+        function resizeScale() {
+            const width = 1190
+            const innerWidth = window.innerWidth
+            if (innerWidth < 1190 && params.scale == undefined) {
+                const scale = innerWidth / width
+                $('.main').css({
+                    "transform": `scale(${scale || 1})`,
+                    'transform-origin': 'left top',
+                    height: 100 * scale + '%'
+                })
+            }
+        }
+
+    })
 </script>
 
-<script type="module">
-    const pageData = {
-        currentAswer: 0,
-        current: 0,
-        total: 0,
-        score: 0
-    }
-    const resultMap = new Map()
+<script>
 
-    const { questionInfoDtos = [], isPerPage, isShowScore, endTime, remark: description, finishType, name } = await getData()
-
-    pageData.total = questionInfoDtos.length
-    const getTemplate = isPerPage ? getQuestionTemp : getQuestionTempByNoPage
-    renderCover()
-
-
-    function renderCover() {
-        const params = {
-            description,
-            device,
-            name
-        }
-        const template = getCover(params)
-        $('#main').html(template)
-        $('.start-btn').click(startAnswer)
-    }
-
-
-    function intiRender(questionInfoDtos, isPage) {
-        questionInfoDtos.forEach(v => resultMap.set(v.id, null))
-        if (!isShowScore) {
-            $('.question-score').css({ display: 'none' })
-        } else {
-            $('.my-scord').text(pageData.score)
-        }
-        $('.question-total').text(`${pageData.current + '/' + pageData.total} `)
-        if (isPage == 1 && pageData.total > 0) {
-            $('.question_menu').css('display', 'none')
-            renderQuest(questionInfoDtos[0])
-        } else {
-            renderQuest(questionInfoDtos)
-        }
-        isPage ? $('.questions-confirm').click(comfirAnswer) : $('.questions-confirm').click(submitAnswer)
-        $(".questions-body").click(clickQuestItem)
-        if (finishType != 1) {
-            $('.exam-time img').click(function () {
-                rederModal({
-                    style: {
-                        paddingTop: "60px"
-                    },
-                    footer: `<div class="modal-btn modal-click" style = "margin-top:40px" > 继续答题</div> `,
-                    content: `
-            <p class="modal-p" > 题目进度：<span>${pageData.current + '/' + pageData.total}</span></p>
-                <p class="modal-p">剩余时间：<span>${timeToString(toggTimeFn.get())}</span></p>
-        `
-                }, (_, cancel) => (toggTimeFn(), cancel()))
-                toggTimeFn()
-            })
-        }
-
-    }
-
-    function renderQuest(options) {
-        if (!Array.isArray(options)) {
-            options = [options]
-        }
-        const contentBody = $(".questions-body")
-        const temps = options.map((v, i) => getTemplate(v, isPerPage ? pageData.current + 1 : i + 1))
-        contentBody.html('')
-        contentBody.append(...temps)
-    }
-
-
-    function clickQuestItem(e) {
-        const { itemid, pid, score } = e.target.dataset
-        if (itemid && pid) {
-            e.stopPropagation()
-            if (!isPerPage) {
-                const classList = e.target.classList
-                if (!classList.contains('option-item-nopage-active')) {
-                    $(e.target).siblings().each(function () {
-                        this.classList.remove('option-item-nopage-active', 'show-tip')
-                    })
-                    classList.add('option-item-nopage-active', 'show-tip')
-                    setTimeout(() => classList.remove('show-tip'), 2000)
-                    const prevResult = resultMap.get(+pid)
-                    if (prevResult) {
-                        pageData.score -= (+prevResult.score)
-                    } else {
-                        pageData.current++
-                    }
-                    pageData.score += (+score)
-                    resultMap.set(+pid, {
-                        itemId: +itemid,
-                        score: +score,
-                    })
-                    setTimeout(() => {
-                        const item = resultMap.get(+pid)
-                        item.question = questionInfoDtos.find(v => v.id == pid)
-                        resultMap.set(+pid, item)
-                    })
-                    $("#" + pid).removeClass('question-body-item-empty')
-                    $('.question-total').text(`${pageData.current + '/' + pageData.total} `)
-                    $('.my-score').text(pageData.score + '分')
-                }
-            } else {
-                let target = e.target
-                const classList = target.classList
-                if (!classList.contains('questions-body-option')) {
-                    target = target.parentElement
-                }
-                $(target).siblings().each(function () {
-                    const children = this.children[0]
-                    children.classList.remove('active')
-                })
-                target.children[0]?.classList.add('active')
-                resultMap.set(+pid, {
-                    itemId: +itemid,
-                    score: +score
-                })
-                setTimeout(() => {
-                    const item = resultMap.get(+pid)
-                    item.question = questionInfoDtos.find(v => v.id == pid)
-                    resultMap.set(+pid, item)
-                })
-            }
-
-        }
-    }
-
-
-    function pushQuestItem(itemId) {
-        const target = document.getElementById(itemId);
-        target.scrollIntoView({ behavior: 'smooth' });
-        target.classList.add('question-body-item-empty')
-    }
-
-    //开始答题
-    function startAnswer() {
-        $('#main').html(getAnswerTemp(finishType))
-        window.toggTimeFn = startCountTime()
-        intiRender(questionInfoDtos, isPerPage)
-    }
-
-    function comfirAnswer() {
-        const currentIndex = pageData.current
-        const currentItem = questionInfoDtos[currentIndex]
-        const currentAnswer = resultMap.get(currentItem.id)
-        if (currentAnswer) {
-            if (currentIndex < pageData.total && !window._submit) {
-                pageData.score += currentAnswer.score
-            }
-            if (isShowScore) {
-                $('.my-score').text(pageData.score + '分')
-            }
-            if (pageData.total - 2 == pageData.current) {
-                $('.questions-confirm').text('提交')
-            }
-            if (pageData.current == pageData.total - 1) {
-                $('.question-total').text(`${pageData.current + 1 + '/' + pageData.total} `)
-                submitAnswer()
-            } else {
-                if (pageData.current < pageData.total) {
-                    pageData.current++
-                }
-                $('.question-total').text(`${pageData.current + '/' + pageData.total} `)
-                renderQuest(questionInfoDtos[pageData.current])
-            }
-
-        } else {
-            let style = {}
-            if (device == 'pc') {
-                style.style = {
-                    width: '256px',
-                    height: "132px",
-                    color: "#666",
-                    fontSize: "14px",
-                    paddingBottom: "10px",
-                    paddingTop: "30px",
-                    borderRadius: '8px',
-                }
-                style.bodyStyle = {
-                    paddingBottom: '30px'
-                }
-                style.footerStyle = {
-                    display: 'flex',
-                    justifyContent: 'end'
-                }
-            } else {
-                style.bodyStyle = {
-                    color: "#666",
-                    paddingBottom: '30px',
-                    paddingTop: "10px",
-                    textAlign: "center"
-                }
-                style.style = {
-                    paddingBottom: '10px'
-                }
-            }
-            rederModal({
-                footer: `<div class="${device == 'pc' ? 'modal-btn modal-btn-sub' : 'modal-btn-default'} modal-click"> 确定</div>`,
-                content: '本题需答完，才能进入下一题',
-                ...style
-            })
-        }
-    }
-
-    function submitAnswer() {
-        const orginalData = []
-        for (let [key, value] of resultMap) {
-            if (!value && !isPerPage) {
-                return pushQuestItem(key)
-            }
-            const { question, itemId, score } = value
-            orginalData.push({
-                ACC: 1,
-                CResp: question.questionItems.map(v => v.id).join(","),
-                Device: device,
-                ItemID: question.id,
-                NumAlts: question.questionItems.length,
-                RT: 0, // 每一题耗时
-                Resp: itemId,
-                Score: score,
-                titleLength: question.name.length
-            })
-
-        }
-
-        const gameResultData = {
-            endTime: Date.now(),
-            orginalData: orginalData,
-            resultData: {
-                errorNum: 0,
-                rightNum: resultMap.size,
-                stopSeconds: "0",
-                submitObj: {},
-                totalNum: resultMap.size,
-                totalTime: "",
-                totalTurn: 0,
-                userAgent: navigator.userAgent
-            },
-            startTime: window._startTime,
-            tempScore: 0,
-            timeConsuming: Date.now() - window._startTime,
-        };
-        parent.postMessage(gameResultData, '*')
-        window._submit = true
-    }
-
-
-    function startCountTime() {
-        const timeArr = endTime.split(':')
-        let times = timeTotamp(timeArr)
-
-        $('.exam-time .time').text(endTime)
-        const handler = () => {
-            if (times <= 0) {
-                return submitAnswer()
-            }
-            times = times - 1000
-            const str = timeToString(times)
-            $('.exam-time .time').text(str)
-        }
-        const fn = polling(handler, 1000)
-        fn.get = () => times
-        return fn
-    }
 
 </script>
 
