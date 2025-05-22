@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0,user-scalable=yes"> -->
-    <meta name="viewport" content="width=device-width,user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0,user-scalable=yes">
+    <!-- <meta name="viewport" content="width=device-width,user-scalable=yes"> -->
     <script src="https://cdn.iquizoo.com/static/js/jquery/jquery-1.8.3.min.js"></script>
     <script src="https://cdn.iquizoo.com/static/js/echarts.js"></script>
     <title>训练课程成长报告</title>
@@ -312,6 +312,7 @@
     .contentKey-content-item-top img {
         width: 24px;
         height: 24px;
+        margin-right: 6px;
     }
 
     .contentKey-content-item-score {
@@ -1352,12 +1353,13 @@
     .task-tip {
         color: #213044cb;
         font-weight: 400;
-        transform: translateY(-64px);
+        transform: translateY(-46px);
         font-size: 18px;
         display: flex;
         align-items: center;
     }
-    .task-tip img{
+
+    .task-tip img {
         width: 18px;
         height: 18px;
         margin-right: 6px;
@@ -1438,6 +1440,7 @@
     .capacity-item-left {
         width: 100px;
         flex-shrink: 0;
+        height: 88px;
         margin-right: 20px;
     }
 
@@ -1532,6 +1535,40 @@
 
     .annex .page-content {
         padding-top: 74px;
+    }
+</style>
+<style>
+    @media screen and (max-width:768px) {
+        .page-number {
+            display: none;
+        }
+
+        .page-content {
+            background-image: none;
+        }
+
+        .page {
+            margin-bottom: 0;
+            background-color: #fff;
+            padding: 0;
+            box-shadow: 0px 0 32px rgba(0, 0, 0, 0.16);
+            margin: 0 30px;
+            width: calc(1190px - 60px);
+        }
+
+        .page-content {
+            padding-right: 63px;
+            padding-left: 63px;
+        }
+
+        .commont-title {
+            font-size: 83px;
+        }
+
+        .cover {
+
+            margin-bottom: 32px;
+        }
     }
 </style>
 
@@ -1757,7 +1794,7 @@
                                         src="https://storage.iquizoo.com/static/img/report/trainingcourse/trend-item3.png" />
                                     <span>近3课时平均分</span>
                                 </div>
-                                <div class="contentKey-content-item-score contentKey-avgscore">
+                                <div class="contentKey-content-item-score contentKey-avgscore" style="margin-top: 6px;">
                                     149分
                                 </div>
                             </div>
@@ -1767,7 +1804,8 @@
                                         src="https://storage.iquizoo.com/static/img/report/trainingcourse/trend-item4.png" />
                                     <span>刷新纪录次数</span>
                                 </div>
-                                <div class="contentKey-content-item-score contentKey-recordBreakingTimes">
+                                <div class="contentKey-content-item-score contentKey-recordBreakingTimes"
+                                    style="margin-top: 6px;">
                                     149次
                                 </div>
                             </div>
@@ -1934,12 +1972,12 @@
 
         // const params = getQueryString();
         const params = {
-            // host: "https://api1.uat.iquizoo.com",
+            host: "https://api1.uat.iquizoo.com",
             // userCourseId: 773988307980402
-            //   userCourseId: 231872597586002,
+              userCourseId: 231872597586002,
             ...getQueryString()
         };
-        $('.main').css("transform", `scale(${params.scale || 1})`)
+        // $('.main').css("transform", `scale(${params.scale || 1})`)
         if (params.host.slice(0, 4) !== "http") {
             params.host = "https://" + params.host;
         }
@@ -2140,12 +2178,14 @@
                 }
             };
             let maxChild = childCourseStatistics[0];
+            maxChild._index = 1
             let maxLiftCap = abilityStatistics[0]; //亮点提升能力
             // 最高得分课时
             for (let i = 0; i < childCourseStatistics.length; i++) {
                 const currentItem = childCourseStatistics[i];
                 if (maxChild.score < currentItem.score) {
                     maxChild = currentItem;
+                    maxChild._index = i + 1
                 }
             }
             // 亮点提升能力
@@ -2261,7 +2301,7 @@
             );
             $(".overview-nb-card-item .max-score").text(maxChild.score + '分');
             $(".overview-nb-card-item .max-course-number").text(
-                `（第${maxChild.displayOrder}节课时）`
+                `（第${maxChild._index}节课时）`
             );
             $(".overview-nb-card-item .recordBreakingTimes").text(
                 courseStatistic.recordBreakingTimes + "次"
@@ -2280,7 +2320,7 @@
             整体来看，<span class="active-text">${data.realName}本阶段课程平均得分${courseStatistic.score}分，</span>${courseStatistic.accuracy < 0 ? '' : `整体正确率为${courseStatistic.accuracy}%，${getRateText(courseStatistic.accuracy)}。`}共完成${courseStatistic.childCourseCount}节课，课时训练时长达${data.timeConsuming}分钟，累计训练天数${studyDays}天，${getStudyText(studyDays)}。
         `);
             $(".overview-nb-desc").html(`
-            ${data.realName}的课程最高表现出现在<span class="active-text">第${maxChild.displayOrder}课时，得分${maxChild.score}分</span>${slope ? `${"，" + getSlopeLabel(slope)}` : ""}。
+            ${data.realName}的课程最高表现出现在<span class="active-text">第${maxChild._index}课时，得分${maxChild.score}分</span>${slope ? `${"，" + getSlopeLabel(slope)}` : ""}。
             ${!courseStatistic.recordBreakingTimes
                     ? ""
                     : `共刷新纪录${courseStatistic.recordBreakingTimes}次，即有${courseStatistic.recordBreakingTimes}次课时成绩超过以往最高表现。`
@@ -2387,14 +2427,15 @@
             const option = {
                 legend: {
                     orient: "vertical",
-                    right: 280,
-                    itemWidth: 16,
-                    itemHeight: 16,
+                    right: 270,
+                    top: 'middle',
+                    itemWidth: 14,
+                    itemHeight: 14,
                     itemGap: 12,
                     selectedMode: false,
                     textStyle: {
                         color: "#000000",
-                        fontSize: 18,
+                        fontSize: 16,
                     },
                     data: pageData.abilityState.xData.map((name) => ({
                         name: name,
@@ -2420,7 +2461,7 @@
                     elements: [
                         {
                             type: "text",
-                            left: "26.8%",
+                            left: "29.8%",
                             top: "43%",
                             style: {
                                 text: "总训练次数",
@@ -2432,7 +2473,7 @@
                         {
                             type: "text",
                             left:
-                                365 -
+                                405 -
                                 String(total).length * 6,
                             top: "50%",
                             textConfig: {
@@ -2452,8 +2493,8 @@
                     {
                         name: "Access From",
                         type: "pie",
-                        radius: ["30%", "63%"],
-                        center: ["30%", "50%"],
+                        radius: ["30%", "68%"],
+                        center: ["33%", "50%"],
                         selectedMode: 'single',
                         itemStyle: {
                             borderColor: "#fff",
@@ -2462,7 +2503,7 @@
                         silent: true,
                         data: pageData.abilityState.yDataExec.map((item) => {
                             const params = {
-                                selected:!!item.target._maxExec,
+                                selected: !!item.target._maxExec,
                                 itemStyle: {
                                     color: item.target.color
                                 },
@@ -2500,8 +2541,8 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "70%"],
-                        center: ["30%", "50%"],
+                        radius: ["30%", "75%"],
+                        center: ["33%", "50%"],
                         label: {
                             show: false,
                             position: "center",
@@ -2531,8 +2572,8 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "70%"],
-                        center: ["30%", "50%"],
+                        radius: ["30%", "75%"],
+                        center: ["33%", "50%"],
                         selectedMode: 'single',
                         avoidLabelOverlap: false,
                         itemStyle: {
@@ -2543,7 +2584,7 @@
                         silent: true,
                         data: pageData.abilityState.yDataExec.map((item, index) => ({
                             ...item,
-                            selected:!!item.target._maxExec,
+                            selected: !!item.target._maxExec,
                             itemStyle: {
                                 ...item.itemStyle,
                                 opacity: !!item.target._maxExec ? 1 : 0,
@@ -2582,7 +2623,10 @@
                 ],
             };
             const myChart = echarts.init(
-                document.querySelector(".task-count-content")
+                document.querySelector(".task-count-content"),
+                null, {
+                renderer: 'svg'
+            }
             );
             option && myChart.setOption(option);
         }
@@ -2602,14 +2646,15 @@
             const option = {
                 legend: {
                     orient: "vertical",
-                    right: 280,
-                    itemWidth: 16,
+                    right: 270,
+                    top: 'middle',
+                    itemWidth: 14,
                     selectedMode: false,
-                    itemHeight: 16,
+                    itemHeight: 14,
                     itemGap: 12,
                     textStyle: {
                         color: "#000000",
-                        fontSize: 18,
+                        fontSize: 16,
                     },
                     data: pageData.abilityState.yDataExec.map((item) => ({
                         name: item.name,
@@ -2626,7 +2671,7 @@
                     elements: [
                         {
                             type: "text",
-                            left: "26.8%",
+                            left: "29.8%",
                             top: "43%",
                             style: {
                                 text: "总学习用时",
@@ -2638,7 +2683,7 @@
                         },
                         {
                             type: "text",
-                            left: 365 - String(formatTime(totalTime)).length * 6,
+                            left: 405 - String(formatTime(totalTime)).length * 6,
                             top: "50%",
                             style: {
                                 text: formatTime(totalTime),
@@ -2655,8 +2700,8 @@
                     {
                         name: "Access From",
                         type: "pie",
-                        radius: ["30%", "63%"],
-                        center: ["30%", "50%"],
+                        radius: ["30%", "68%"],
+                        center: ["33%", "50%"],
                         selectedMode: 'single',
                         itemStyle: {
                             borderColor: "#fff",
@@ -2665,7 +2710,7 @@
                         silent: true,
                         data: pageData.abilityState.yDataTime.map((item, index) => {
                             const params = {
-                                selected:!!item.target._maxTime,
+                                selected: !!item.target._maxTime,
                                 itemStyle: {
                                     color: item.target.color
                                 },
@@ -2703,8 +2748,8 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "70%"],
-                        center: ["30%", "50%"],
+                        radius: ["30%", "75%"],
+                        center: ["33%", "50%"],
                         label: {
                             show: false,
                             position: "center",
@@ -2734,9 +2779,9 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "70%"],
+                        radius: ["30%", "75%"],
                         selectedMode: 'single',
-                        center: ["30%", "50%"],
+                        center: ["33%", "50%"],
                         itemStyle: {
                             borderColor: "#fff",
                             borderWidth: 2,
@@ -2745,7 +2790,7 @@
                         silent: true,
                         data: pageData.abilityState.yDataTime.map((item, index) => ({
                             ...item,
-                            selected:!!item.target._maxTime ,
+                            selected: !!item.target._maxTime,
                             itemStyle: {
                                 ...item.itemStyle,
                                 opacity: !!item.target._maxTime ? 1 : 0,
@@ -2784,7 +2829,10 @@
                 ],
             };
             const myChart = echarts.init(
-                document.querySelector(".task-time-content")
+                document.querySelector(".task-time-content"),
+                null, {
+                renderer: 'svg'
+            }
             );
             option && myChart.setOption(option);
             const descData = {
@@ -3118,7 +3166,7 @@
                             return `
                             <p>
                                 可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
-                                提升了${item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                                提升了${item.endStage - item.startStage < 0 ? 0 : item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
                                 ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
                             </p>
                        `;
@@ -3140,7 +3188,7 @@
                         $('.capup:last .capup-level-desc').append(`
                     <p>
                         可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
-                        提升了${item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                        提升了${item.endStage - item.startStage < 0 ? 0 : item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
                         ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
                     </p>
                 `)
@@ -3171,7 +3219,7 @@
                     $('.capup:last .capup-level-desc').append(`
                     <p>
                         可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
-                        提升了${item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                        提升了${item.endStage - item.startStage < 0 ? 0 : item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
                         ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
                     </p>
                 `)
@@ -3233,6 +3281,8 @@
 
             let maxItem = childCourseStatistics[0],
                 minItem = childCourseStatistics[0];
+            maxItem._index = 1
+            minItem._index = 1
             let std = 0;
             let avgScore = 0;
 
@@ -3241,9 +3291,11 @@
                 item._completionTime = +new Date(item.completionTime);
                 if (item.score > maxItem.score) {
                     maxItem = item;
+                    maxItem._index = i + 1
                 }
                 if (minItem.score > item.score) {
                     minItem = item;
+                    minItem._index = i + 1
                 }
                 avgScore += item.score;
             }
@@ -3312,11 +3364,6 @@
                                 value: v.score,
                             };
                             item.symbol = "none";
-                            if (displayOrders.includes(v.displayOrder)) {
-                                item.symbolSize = 32;
-                                item.symbol =
-                                    "image://https://storage.iquizoo.com/static/img/report/trainingcourse/point-warn.png";
-                            }
                             if (v.displayOrder == maxItem.displayOrder) {
                                 item.symbol =
                                     "image://https://storage.iquizoo.com/static/img/report/trainingcourse/poinr-nb.png";
@@ -3327,69 +3374,74 @@
                                 item.symbol =
                                     "image://https://storage.iquizoo.com/static/img/report/trainingcourse/point-error.png";
                             }
+                            if (displayOrders.includes(v.displayOrder)) {
+                                item.symbolSize = 32;
+                                item.symbol =
+                                    "image://https://storage.iquizoo.com/static/img/report/trainingcourse/point-warn.png";
+                            }
                             return item;
                         }),
                         type: "line",
+                        z: 10,
                         markLine: {
                             z: 1,
                             symbol: ['none', 'none'], // 不显示箭头
                             clip: true,
                             data: [
                                 [
-                                {
-                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == minItem.displayOrder),50],
-                                    lineStyle: {
-                                        color: '#FF4A00',
+                                    {
+                                        coord: [childCourseStatistics.findIndex(v => v.displayOrder == minItem.displayOrder), 50],
+                                        lineStyle: {
+                                            color: '#FF4A00',
+                                        },
+                                        label: {
+                                            show: false
+                                        }
                                     },
-                                    label: {
-                                        show: false
-                                    }
-                                },
-                                {
-                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == minItem.displayOrder),minItem.score -2],
-                                    lineStyle: {
-                                        color: '#FF4A00',
+                                    {
+                                        coord: [childCourseStatistics.findIndex(v => v.displayOrder == minItem.displayOrder), minItem.score],
+                                        lineStyle: {
+                                            color: '#FF4A00',
+                                        },
+                                        label: {
+                                            show: false
+                                        }
                                     },
-                                    label: {
-                                        show: false
-                                    }
-                                },
                                 ],
                                 [
-                                {
-                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == maxItem.displayOrder),50],
-                                    lineStyle: {
-                                        color: '#5EE247',
+                                    {
+                                        coord: [childCourseStatistics.findIndex(v => v.displayOrder == maxItem.displayOrder), 50],
+                                        lineStyle: {
+                                            color: '#5EE247',
+                                        },
+                                        label: {
+                                            show: false
+                                        }
                                     },
-                                    label: {
-                                        show: false
+                                    {
+                                        coord: [childCourseStatistics.findIndex(v => v.displayOrder == maxItem.displayOrder), maxItem.score],
+                                        lineStyle: {
+                                            color: '#5EE247',
+                                        },
+                                        label: {
+                                            show: false
+                                        }
                                     }
-                                },
-                                {
-                                    coord:[childCourseStatistics.findIndex(v => v.displayOrder == maxItem.displayOrder),maxItem.score-2],
-                                    lineStyle: {
-                                        color: '#5EE247',
-                                    },
-                                    label: {
-                                        show: false
-                                    }
-                                }
                                 ]
-                               
+
                             ],
                             lineStyle: {
+                                z: -1,
                                 type: 'dashed'
                             }
                         },
                         markPoint: {
-
                             data: [
                                 {
                                     type: "max",
                                     name: "Max",
-                                    symbol:
-                                        "image://https://storage.iquizoo.com/static/img/report/trainingcourse/tip-nb.png",
-                                    symbolSize: [138, 46],
+                                    symbol: "image://https://storage.iquizoo.com/static/img/report/trainingcourse/tip-nb.png",
+                                    symbolSize: 138,
                                     symbolOffset: [-70, -40],
                                     label: {
                                         formatter: (e) => {
@@ -3407,7 +3459,7 @@
                                     name: "Min",
                                     symbol:
                                         "image://https://storage.iquizoo.com/static/img/report/trainingcourse/tip-waster.png",
-                                    symbolSize: [138, 46],
+                                    symbolSize: 138,
                                     symbolOffset: [70, -40],
                                     label: {
                                         formatter: (e) => {
@@ -3442,16 +3494,19 @@
                 ],
             };
             const myChart = echarts.init(
-                document.querySelector(".trend-char-content")
+                document.querySelector(".trend-char-content"),
+                null, {
+                renderer: 'svg'
+            }
             );
             option && myChart.setOption(option);
             $(".contentKey-maxscore").text(maxItem.score + "分");
             $(".contentKey-maxdisplayOrder").text(
-                "（第" + maxItem.displayOrder + "节课时）"
+                "（第" + maxItem._index + "节课时）"
             );
             $(".contentKey-minscore").text(minItem.score + "分");
             $(".contentKey-mindisplayOrder").text(
-                "（第" + minItem.displayOrder + "节课时）"
+                "（第" + minItem._index + "节课时）"
             );
             $(".contentKey-recordBreakingTimes").text(
                 pageData.data.courseStatistic.recordBreakingTimes + "次"
@@ -3480,8 +3535,8 @@
                     ? "课程分自第1课时"
                     : `课程分自第1课时至第${courseList.length}课时`
                 }，
-            ${slope != null ? "整体" + slopetext.label + '。' : ""}最高得分出现在第${maxItem.displayOrder
-                }课时（${maxItem.score}分），最低得分出现在第${minItem.displayOrder}课时（${minItem.score}分）${slope != null ? "，" + slopetext.text : ""}。${deviation > 10 ? "分数波动较大，建议关注训练专注度与正确率。" : ""}
+            ${slope != null ? "整体" + slopetext.label + '。' : ""}最高得分出现在第${maxItem._index
+                }课时（${maxItem.score}分），最低得分出现在第${minItem._index}课时（${minItem.score}分）${slope != null ? "，" + slopetext.text : ""}。${deviation > 10 ? "分数波动较大，建议关注训练专注度与正确率。" : ""}
             `
             );
             if (!trainingFrequencyList.length) {
@@ -3492,20 +3547,15 @@
 
             const weekList = [];
             let weeklyAvg = 0;
-            let maxGap = 0;
+            const matches = trainingFrequencyList.join("").match(/0+/g);
+            const long = matches ? matches.reduce((a, b) => (a.length > b.length ? a : b)) : 0;
+            let maxGap = long.length;
             let adherence = Number((adherenceWeeks / totalWeeks) * 100).toFixed(0);
 
             for (let i = 0; i < trainingFrequencyList.length; i += 7) {
                 const slice = trainingFrequencyList.slice(i, i + 7);
                 weekList.push(slice);
                 weeklyAvg += slice.reduce((a, b) => a + b, 0);
-                const matches = slice.join("").match(/0+/g);
-                const long = matches
-                    ? matches.reduce((a, b) => (a.length > b.length ? a : b))
-                    : 0;
-                if (long.length > maxGap) {
-                    maxGap = long.length;
-                }
             }
             weeklyAvg = weeklyAvg / weekList.length;
             pageData.weeklyAvg = weeklyAvg;
@@ -3703,7 +3753,7 @@
                 const TotalRate = contentStatistics.reduce((target, item) => item.stageCompletionRate + target, 0); //关卡数
                 const AvgStage = TotalRate / contentStatistics.length; //平均关卡比
                 const AvgUp = contentStatistics.reduce((target, item) => item.promoteStage + target, 0) / contentStatistics.length; // 平均提升数
-                console.log(AvgStage,AvgUp);
+                console.log(AvgStage, AvgUp);
                 if (AvgStage >= 0.8 && AvgUp >= 5) {
                     return {
                         key: 1,
@@ -3954,7 +4004,7 @@
                     }</div>
                                 <div class="annex-tbody-td w54">${item.maxStage
                     }</div>
-                                <div class="annex-tbody-td w54">${item.promoteStage
+                                <div class="annex-tbody-td w54">${item.promoteStage < 0 ? 0 : item.promoteStage
                     }</div>
                                 <div class="annex-tbody-td">${item.executionsNumber
                     }</div>
@@ -4059,7 +4109,7 @@
             });
         }
 
-        // resizeScale()
+        resizeScale()
         // window.addEventListener('resize', resizeScale)
 
         function resizeScale() {
@@ -4076,11 +4126,6 @@
         }
 
     })
-</script>
-
-<script>
-
-
 </script>
 
 </html>
