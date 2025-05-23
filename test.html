@@ -1549,6 +1549,9 @@
     }
 
     @media screen and (max-width: 768px) {
+        body{
+            background: #E2E2E2;
+        }
         .xs-hidden {
             display: none !important;
         }
@@ -1574,6 +1577,7 @@
         .page-content {
             padding-right: 69px;
             padding-left: 69px;
+            padding-bottom: 100px;
         }
 
         .cover {
@@ -1634,6 +1638,11 @@
             transform: translateX(0);
             margin-bottom: 16px;
             order: 2;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
 
         .info-bom-head {
@@ -1646,7 +1655,7 @@
 
         .info-top-wrapper-label {
             font-size: 36px;
-            margin-left: 16px;
+            margin-left: 44px;
         }
 
         .info-top-wrapper-label {
@@ -1670,6 +1679,26 @@
         .task-tip,
         .capup-score-tip {
             font-size: 26px;
+        }
+        .level-card-icon-score,.level-next,.level-next-active,.level-next-level{
+            font-size: 28px;
+        }
+        .level-card-bottom,.gap-score{
+            font-size: 31px;
+        }
+        .level-card-bottom img{
+            width: 28px;
+            height: 28px;
+        }
+        .overview-level-card{
+            height: 239px;
+            padding: 2px;
+            width: 513px;
+        }
+        .overview-level-wrapper{
+            height: 235px;
+            width: 509px;
+            padding: 26px;
         }
 
         .contentKey-content-card {
@@ -1837,6 +1866,7 @@
         .suggest-item-wrapper {
             display: flex;
             gap: 25px;
+            align-items: center;
         }
 
         .suggest-item-desc {
@@ -1934,11 +1964,15 @@
             gap: 14px;
         }
         .analysis-content-table {
-        width: 100%
+           width: 100%
         }
         .task-count-content,.task-time-content{
             height: 500px;
             /* width: 100%; */
+        }
+        .task-type-content{
+            height: 400px;
+            width: 1250px;
         }
         .capup-score-wrapper>div div:last-child{
             font-size: 24px;
@@ -3755,7 +3789,7 @@
                     splitLine: { show: false },
                     axisLabel: {
                         color: "#B4B4B4",
-                        fontSize: 16,
+                        fontSize: IsPc?16:24,
                         align: "center",
                         margin: 10,
                         formatter: (e) => {
