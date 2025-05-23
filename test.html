@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0,user-scalable=yes">
-    <!-- <meta name="viewport" content="width=device-width,user-scalable=yes"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0,user-scalable=yes"> -->
+    <meta name="viewport" content="width=device-width,user-scalable=yes">
     <script src="https://cdn.iquizoo.com/static/js/jquery/jquery-1.8.3.min.js"></script>
     <script src="https://cdn.iquizoo.com/static/js/echarts.js"></script>
     <title>训练课程成长报告</title>
@@ -26,6 +26,10 @@
 
         .page {
             margin: 0 !important;
+        }
+
+        .to-top {
+            display: none;
         }
     }
 
@@ -1538,7 +1542,17 @@
     }
 </style>
 <style>
-    @media screen and (max-width:768px) {
+    @media screen and (min-width:769px) {
+        .lg-hidden {
+            display: none !important;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .xs-hidden {
+            display: none !important;
+        }
+
         .page-number {
             display: none;
         }
@@ -1551,29 +1565,419 @@
             margin-bottom: 0;
             background-color: #fff;
             padding: 0;
-            box-shadow: 0px 0 32px rgba(0, 0, 0, 0.16);
-            margin: 0 30px;
-            width: calc(1190px - 60px);
+            /* box-shadow: 0 0 32px rgba(0, 0, 0, 0.16); */
+            margin: 0 0;
+            width: calc(1190px);
+            height: auto;
         }
 
         .page-content {
-            padding-right: 63px;
-            padding-left: 63px;
+            padding-right: 69px;
+            padding-left: 69px;
+        }
+
+        .cover {
+            height: 1682px;
+            margin-bottom: 32px;
         }
 
         .commont-title {
             font-size: 83px;
         }
 
-        .cover {
 
-            margin-bottom: 32px;
+
+        .content-sub-title {
+            font-size: 49px;
         }
+
+        .content-sub-title::before {
+            width: 10px;
+            height: 41px;
+        }
+
+        .common-desc {
+            font-size: 32px;
+        }
+
+        .overview-show-content-info {}
+
+        .show-content-info-left {
+            width: 492px;
+            height: 277px;
+            background-size: 492px 277px;
+        }
+
+        .show-content-info-right {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .show-content-info-top {
+            width: 549px;
+            height: 132px;
+            background-size: 549px 132px;
+            transform: translateX(-40px);
+            margin-bottom: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            order: 3;
+        }
+
+        .show-content-info-bom {
+            width: 510px;
+            height: 129px;
+            background-size: 510px 129px;
+            transform: translateX(0);
+            margin-bottom: 16px;
+            order: 2;
+        }
+
+        .info-bom-head {
+            font-size: 33px;
+        }
+
+        .info-bom-text {
+            font-size: 32px;
+        }
+
+        .info-top-wrapper-label {
+            font-size: 36px;
+            margin-left: 16px;
+        }
+
+        .info-top-wrapper-label {
+            font-size: 36px;
+        }
+
+        .info-top-desc {
+            font-size: 26px;
+            white-space: nowrap;
+        }
+
+        .info-top-wrapper-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .overview-show-content {
+            margin-bottom: 59px !important;
+        }
+
+        .task-tip,
+        .capup-score-tip {
+            font-size: 26px;
+        }
+
+        .contentKey-content-card {
+            flex-wrap: wrap;
+        }
+
+        .overview-nb-card-item {
+            width: 333px;
+            height: 201px;
+            background-size: 333px 201px;
+        }
+
+        .overview-nb-card {
+            justify-content: space-between;
+        }
+
+        .nb-card-item-label {
+            font-size: 31px;
+        }
+
+        .nb-card-item-score {
+            font-size: 42px;
+        }
+
+        .nb-card-item-course {
+            font-size: 24px;
+        }
+
+        .capup-tip {
+            font-size: 26px;
+            height: 142px;
+            width: 100%;
+        }
+
+        .capup-level-item {
+            height: 222px;
+            width: 100%;
+        }
+
+        .capup-level-left-top .left-item-name {
+            font-size: 38px;
+        }
+
+        .capup-level-left-top .left-item-text,
+        .capup-level-right-top {
+            font-size: 28px;
+        }
+
+        .capup-level-right-bottom {
+            width: 451px;
+            justify-content: space-between;
+            padding: 10px 21px;
+            height: 125px;
+        }
+
+        .capup-level-desc {
+            width: 100%;
+            font-size: 35px;
+        }
+
+        .capup-level-desc p {
+            margin-bottom: 56px;
+        }
+
+        .contentKey-content-card {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .contentKey-content-item {
+            width: 385px;
+            height: 226px;
+        }
+
+        .contentKey-content-item-top {
+            font-size: 31px;
+        }
+
+        .contentKey-content-item-score {
+            font-size: 49px;
+        }
+
+        .contentKey-content-item-course {
+            font-size: 35px;
+        }
+
+        .contentKey-content-item-top img {
+            width: 31px;
+            height: 31px;
+            margin-right: 10px;
+        }
+
+        .contentKey-content-item:last-child .contentKey-content-item-score {
+            margin-top: 21px !important;
+        }
+
+        .analysis .block {
+            width: 52px;
+            height: 52px;
+            border-radius: 6px;
+        }
+
+        .analysis-table-row .block {
+            width: 83px;
+            height: 83px;
+            border-radius: 8px;
+            font-size: 28px;
+        }
+
+        .content-head-right-text {
+            font-size: 28px;
+        }
+
+        .content-head-right,
+        .content-sub-title {
+            white-space: nowrap;
+        }
+
+        .analysis-table-left {
+            display: none;
+        }
+
+        .analysis-table-rwarpper-name {
+            font-weight: 500;
+            font-size: 35px;
+            color: #333333;
+            margin-bottom: 14px;
+        }
+
+        .analysis-table-rwarpper {
+            /* margin-bottom: 49px; */
+        }
+        .analysis-table-content{
+            gap: 49px;
+        }
+
+        .analysis-table-row {
+            justify-content: space-between;
+        }
+
+        .analysis-table-row-item {
+            font-size: 28px;
+            width: 83px;
+            height: 83px;
+        }
+
+        .analysis-content-table {
+            padding: 35px;
+            border-radius: 16px;
+        }
+
+        .suggest-item {
+            height: 238px;
+            width: 100%;
+            background-size: 100%;
+            padding: 54px 24px 0 54px;
+        }
+
+        .suggest-item-name {
+            font-size: 35px;
+        }
+
+        .suggest-item-wrapper {
+            display: flex;
+            gap: 25px;
+        }
+
+        .suggest-item-desc {
+            flex: 1;
+            font-size: 32px;
+        }
+
+        .suggest-item-img {
+            width: 69px;
+            height: 69px;
+            flex-shrink: 0;
+            position: relative;
+            margin-left: 58px;
+        }
+
+        .suggest-item-img img {
+            width: 69px;
+            height: 69px;
+        }
+
+        .capacity-item-left {
+            width: 173px;
+            height: 153px;
+        }
+
+        .capacity-item-left img {
+            width: 173px;
+            height: 153px;
+        }
+
+        .capacity-item-right {
+            font-size: 28px;
+            line-height: 1.8;
+        }
+
+        .annex .page-content,
+        .courseDetail .page-content {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .annex-head-th {
+            font-size: 28px;
+        }
+
+        .annex-head {
+            border-radius: 0;
+            padding-left: 28px;
+            height: 118px;
+        }
+
+        .annex-head-th,
+        .annex-tbody-td {
+            width: 178px;
+        }
+
+        .w54,
+        .annex-tbody-td.w54 {
+            width: 120px;
+        }
+
+        .annex-tbody-td {
+            font-size: 28px;
+        }
+
+        .courseDetail-item {
+            width: 100%;
+            border-radius: 0;
+            min-height: 180px
+        }
+
+        .courseDetail-item-top-item {
+            height: 87px;
+        }
+
+        .courseDetail-item-wrapper {
+            width: 100%;
+            border-radius: 0;
+            min-height: 180px
+        }
+
+        .courseDetail-item-lable {
+            width: 42px;
+            height: 139px;
+        }
+
+        .courseDetail-item-name,
+        .courseDetail-item-count,
+        .courseDetail-item-bottom-text,
+        .courseDetail-item-bottom-label {
+            font-size: 28px;
+        }
+
+        .courseDetail-item-body {
+            gap: 14px;
+        }
+        .analysis-content-table {
+        width: 100%
+        }
+        .task-count-content,.task-time-content{
+            height: 500px;
+            /* width: 100%; */
+        }
+        .capup-score-wrapper>div div:last-child{
+            font-size: 24px;
+        }
+        .capup-score-progress-score{
+            font-size: 28px !important;
+        }
+        .capup-level-right-bottom div{
+            width: 104px;
+            height: 104px;
+        }
+        .capup-level-right-bottom div span{
+            font-size: 24px;
+        }
+     }
+
+    .to-top {
+        width: 125px;
+        height: 125px;
+        position: fixed;
+        bottom: 50px;
+        right: -200px;
+        z-index: 10;
+        transition: all 0.5s;
     }
+
+    .to-top img {
+        width: 100%;
+        height: 100%;
+    }
+
+
 </style>
 
 <body>
-    <div class="main" id="train-report">
+    <div class="to-top">
+        <img src="./images/toTop.png" />
+    </div>
+    <div class="main">
         <div class="page cover no-page-number config-cover-page">
             <div class="cover-card">
                 <div class="cover-card-wrapper">
@@ -1724,12 +2128,6 @@
                     </div>
                     <div class="common-desc"></div>
                     <div class="capup-tip">
-                        <!-- <img src="https://storage.iquizoo.com/static/img/report/learningms/suggestion-text.png"
-                            class="capup-tip-icon" />
-                        <div>
-                            <span
-                                class="capup-tip-label">得分说明：</span>能力得分详情由该课程下所有学习任务的用时，完成质量及正确率等综合统计得出。分数越高代表在该能力上的综合表现越突出。若某能力训练任务或用时较少，分数可能相对偏低，并不完全等同于能力薄弱。
-                        </div> -->
                     </div>
                 </div>
 
@@ -1810,7 +2208,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="contentKey-content-desc">
+                        <div class="contentKey-content-desc common-desc">
                         </div>
                     </div>
                 </div>
@@ -1837,7 +2235,7 @@
                                 <div class="analysis-table-content"></div>
                             </div>
                         </div>
-                        <div class="analysis-content-desc">
+                        <div class="analysis-content-desc common-desc">
                             为保证训练效果，我们建议每周至少训练3个课时。最近 4 周里，<span class="user-name"></span>每周平均完成 3.2 课时（达标）；两次训练间最长间隔 4
                             天，节奏平稳。 自开课以来共 24 周，其中 19 周达标（79
                             %，良好）。保持当前速度即可持续巩固效果！
@@ -1977,7 +2375,6 @@
               userCourseId: 231872597586002,
             ...getQueryString()
         };
-        // $('.main').css("transform", `scale(${params.scale || 1})`)
         if (params.host.slice(0, 4) !== "http") {
             params.host = "https://" + params.host;
         }
@@ -2010,6 +2407,7 @@
             display: "none",
         });
 
+        const IsPc = window.innerWidth < 768 ? false : true
         _http({
             url: "/coursecenter/UserCourseReport/GetUserCourseAbilityStatistics",
             data: {
@@ -2343,9 +2741,8 @@
                     data: xData,
                     axisLabel: {
                         interval: 0,
-                        width: 80,
                         color: "#B4B4B4",
-                        fontSize: 20,
+                        fontSize: IsPc?20:28,
                         fontWeight: 500,
                         align: "center",
                         lineHeight: 26,
@@ -2427,15 +2824,15 @@
             const option = {
                 legend: {
                     orient: "vertical",
-                    right: 270,
+                    ...(IsPc?{right: 270}:{right:90}),
                     top: 'middle',
-                    itemWidth: 14,
-                    itemHeight: 14,
+                    itemWidth: IsPc?14:20,
+                    itemHeight: IsPc?14:20,
                     itemGap: 12,
                     selectedMode: false,
                     textStyle: {
                         color: "#000000",
-                        fontSize: 16,
+                        fontSize: IsPc?16:24,
                     },
                     data: pageData.abilityState.xData.map((name) => ({
                         name: name,
@@ -2461,19 +2858,19 @@
                     elements: [
                         {
                             type: "text",
-                            left: "29.8%",
+                            left: IsPc?"29.8%":"30.8%",
                             top: "43%",
                             style: {
                                 text: "总训练次数",
                                 textAlign: "center",
                                 fill: "#000",
-                                fontSize: 16,
+                                fontSize: IsPc?16:26,
                             },
                         },
                         {
                             type: "text",
                             left:
-                                405 -
+                                (IsPc?405:428) -
                                 String(total).length * 6,
                             top: "50%",
                             textConfig: {
@@ -2482,7 +2879,7 @@
                             style: {
                                 text: total + "次",
                                 fill: "#000",
-                                fontSize: 20,
+                                fontSize: IsPc?20:28,
                                 textAlign: "center",
                                 fontWeight: "bold",
                             },
@@ -2493,8 +2890,8 @@
                     {
                         name: "Access From",
                         type: "pie",
-                        radius: ["30%", "68%"],
-                        center: ["33%", "50%"],
+                        radius: IsPc?["30%", "68%"]:["35%", "68%"],
+                        center: IsPc?["33%", "50%"]:["36%", "50%"],
                         selectedMode: 'single',
                         itemStyle: {
                             borderColor: "#fff",
@@ -2541,8 +2938,8 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "75%"],
-                        center: ["33%", "50%"],
+                        radius: IsPc?["30%", "75%"]:["35%", "75%"],
+                        center: IsPc?["33%", "50%"]:["36%", "50%"],
                         label: {
                             show: false,
                             position: "center",
@@ -2572,8 +2969,8 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "75%"],
-                        center: ["33%", "50%"],
+                        radius: IsPc?["30%", "75%"]:["35%", "75%"],
+                        center: IsPc?["33%", "50%"]:["36%", "50%"],
                         selectedMode: 'single',
                         avoidLabelOverlap: false,
                         itemStyle: {
@@ -2646,15 +3043,15 @@
             const option = {
                 legend: {
                     orient: "vertical",
-                    right: 270,
+                    ...(IsPc?{right: 270}:{right:90}),
                     top: 'middle',
-                    itemWidth: 14,
+                    itemWidth: IsPc?14:20,
                     selectedMode: false,
-                    itemHeight: 14,
+                    itemHeight: IsPc?14:20,
                     itemGap: 12,
                     textStyle: {
                         color: "#000000",
-                        fontSize: 16,
+                        fontSize: IsPc?16:24,
                     },
                     data: pageData.abilityState.yDataExec.map((item) => ({
                         name: item.name,
@@ -2671,25 +3068,25 @@
                     elements: [
                         {
                             type: "text",
-                            left: "29.8%",
+                            left: IsPc?"29.8%":"30.8%",
                             top: "43%",
                             style: {
                                 text: "总学习用时",
                                 textAlign: "center",
                                 fill: "#000",
-                                fontSize: 16,
+                                fontSize: IsPc?16:26,
                                 width: 200,
                             },
                         },
                         {
                             type: "text",
-                            left: 405 - String(formatTime(totalTime)).length * 6,
+                            left: (IsPc?405:428) - String(formatTime(totalTime)).length * 6,
                             top: "50%",
                             style: {
                                 text: formatTime(totalTime),
                                 textAlign: "center",
                                 fill: "#000",
-                                fontSize: 20,
+                                fontSize: IsPc?20:28,
                                 width: 50,
                                 fontWeight: "bold",
                             },
@@ -2700,8 +3097,8 @@
                     {
                         name: "Access From",
                         type: "pie",
-                        radius: ["30%", "68%"],
-                        center: ["33%", "50%"],
+                        radius: IsPc?["30%", "68%"]:["35%", "68%"],
+                        center: IsPc?["33%", "50%"]:["36%", "50%"],
                         selectedMode: 'single',
                         itemStyle: {
                             borderColor: "#fff",
@@ -2748,8 +3145,8 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "75%"],
-                        center: ["33%", "50%"],
+                        radius:IsPc?["30%", "75%"]:["35%", "75%"],
+                        center: IsPc?["33%", "50%"]:["36%", "50%"],
                         label: {
                             show: false,
                             position: "center",
@@ -2779,9 +3176,9 @@
                     },
                     {
                         type: "pie",
-                        radius: ["30%", "75%"],
+                        radius: IsPc?["30%", "75%"]:["35%", "75%"],
                         selectedMode: 'single',
-                        center: ["33%", "50%"],
+                        center: IsPc?["33%", "50%"]:["36%", "50%"],
                         itemStyle: {
                             borderColor: "#fff",
                             borderWidth: 2,
@@ -3097,17 +3494,18 @@
              </div>
         `)
             // 
-            const offset = $('.capup:last .page-content').height() - ($('.capup:last .capup-score').height() || 0) - 104 - 70 - 60
-            const itemLen = Math.floor(offset / 232)
+            if (IsPc) {
+                const offset = $('.capup:last .page-content').height() - ($('.capup:last .capup-score').height() || 0) - 104 - 70 - 60
+                const itemLen = Math.floor(offset / 232)
 
-            if (itemLen > 0) {
-                $('.capup .page-content').append(headDetailTemp)
-                abilityStatistics.slice(0, itemLen).forEach(item => {
-                    $('.capup .capup-level-content').append(getTempCapItem(item))
-                })
-                if (abilityStatistics.slice(itemLen).length) {
-                    const appendNextPage = () => {
-                        $('.capup:last').after(`
+                if (itemLen > 0) {
+                    $('.capup .page-content').append(headDetailTemp)
+                    abilityStatistics.slice(0, itemLen).forEach(item => {
+                        $('.capup .capup-level-content').append(getTempCapItem(item))
+                    })
+                    if (abilityStatistics.slice(itemLen).length) {
+                        const appendNextPage = () => {
+                            $('.capup:last').after(`
                       <div class="page capup">
                         <div class="page-content">
                             <div class="capup-level">
@@ -3117,19 +3515,19 @@
                         </div>  
                       </div>
                  `)
-                    }
-                    const slice = abilityStatistics.slice(itemLen)
-                    appendNextPage()
-                    slice.forEach((item, i) => {
-                        $('.capup:last .capup-level-content').append(getTempCapItem(item))
-                        const height = $('.capup:last .capup-level-content').height()
-                        if (height > 1350 && (i + 1) != slice.length) {
-                            appendNextPage()
                         }
-                    })
-                }
-            } else {
-                $('.capup').after(`
+                        const slice = abilityStatistics.slice(itemLen)
+                        appendNextPage()
+                        slice.forEach((item, i) => {
+                            $('.capup:last .capup-level-content').append(getTempCapItem(item))
+                            const height = $('.capup:last .capup-level-content').height()
+                            if (height > 1350 && (i + 1) != slice.length) {
+                                appendNextPage()
+                            }
+                        })
+                    }
+                } else {
+                    $('.capup').after(`
               <div class="page capup">
                 <div class="page-content">
                    ${headDetailTemp}
@@ -3137,10 +3535,10 @@
               </div>
             `)
 
-                abilityStatistics.forEach(item => {
-                    $('.capup:last .capup-level-content').append(getTempCapItem(item))
-                    if ($('.capup:last .capup-level-content').height() > 1350) {
-                        $('.capup:last').after(`
+                    abilityStatistics.forEach(item => {
+                        $('.capup:last .capup-level-content').append(getTempCapItem(item))
+                        if ($('.capup:last .capup-level-content').height() > 1350) {
+                            $('.capup:last').after(`
                      <div class="page capup">
                        <div class="page-content">
                           <div class="capup-level">
@@ -3149,33 +3547,33 @@
                        </div>  
                      </div>
                  `)
-                    }
-                })
-            }
+                        }
+                    })
+                }
 
-            let descOffset = $('.capup:last .page-content').height() - $('.capup:last .capup-level-content').height() - 60 - 60
-            if ($('.capup').length == 1) {
-                descOffset = descOffset - $('.capup:last .capup-score').height() - 104 - 80
-            }
-            const descItems = Math.floor(descOffset / 120)
-            if (descOffset > 160 && descItems > 0) {
-                $('.capup:last .capup-level-content').append(`
+                let descOffset = $('.capup:last .page-content').height() - $('.capup:last .capup-level-content').height() - 60 - 60
+                if ($('.capup').length == 1) {
+                    descOffset = descOffset - $('.capup:last .capup-score').height() - 104 - 80
+                }
+                const descItems = Math.floor(descOffset / 120)
+                if (descOffset > 160 && descItems > 0) {
+                    $('.capup:last .capup-level-content').append(`
                <div class="capup-level-desc">
                  ${abilityStatistics.slice(0, descItems)
-                        .map((item) => {
-                            return `
+                            .map((item) => {
+                                return `
                             <p>
                                 可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
                                 提升了${item.endStage - item.startStage < 0 ? 0 : item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
                                 ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
                             </p>
                        `;
-                        })
-                        .join(" ")}
+                            })
+                            .join(" ")}
                 </div>
             `)
-                if (abilityStatistics.slice(descItems).length) {
-                    $('.capup:last').after(`
+                    if (abilityStatistics.slice(descItems).length) {
+                        $('.capup:last').after(`
                 <div class="page capup capup-next">
                   <div class="page-content">
                    <div class="capup-level-desc">
@@ -3184,7 +3582,38 @@
                </div>
             `)
 
-                    abilityStatistics.slice(descItems).forEach((item, i) => {
+                        abilityStatistics.slice(descItems).forEach((item, i) => {
+                            $('.capup:last .capup-level-desc').append(`
+                    <p>
+                        可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
+                        提升了${item.endStage - item.startStage < 0 ? 0 : item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                        ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
+                    </p>
+                `)
+                            if ($('.capup:last .capup-level-desc').height() > 1400 && (i + 1) != abilityStatistics.slice(descItems).length) {
+                                $('.capup:last').after(`
+                      <div class="page capup capup-next">
+                        <div class="page-content">
+                         <div class="capup-level-desc">
+                          </div>
+                        </div>
+                     </div>
+                   `)
+                            }
+                        })
+                    }
+                } else {
+                    $('.capup:last').after(`
+                <div class="page capup capup-next">
+                  <div class="page-content">
+                   <div class="capup-level-desc">
+                    </div>
+                  </div>
+               </div>
+            `)
+                    const slice = abilityStatistics
+                    slice.forEach((item, i) => {
+
                         $('.capup:last .capup-level-desc').append(`
                     <p>
                         可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
@@ -3192,7 +3621,7 @@
                         ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
                     </p>
                 `)
-                        if ($('.capup:last .capup-level-desc').height() > 1400 && (i + 1) != abilityStatistics.slice(descItems).length) {
+                        if ($('.capup:last .capup-level-desc').height() > 1400 && (i + 1) != slice.length) {
                             $('.capup:last').after(`
                       <div class="page capup capup-next">
                         <div class="page-content">
@@ -3202,43 +3631,38 @@
                      </div>
                    `)
                         }
+
                     })
+
+
                 }
-            } else {
-                $('.capup:last').after(`
-                <div class="page capup capup-next">
-                  <div class="page-content">
-                   <div class="capup-level-desc">
-                    </div>
-                  </div>
-               </div>
-            `)
-                const slice = abilityStatistics
-                slice.forEach((item, i) => {
-
-                    $('.capup:last .capup-level-desc').append(`
-                    <p>
-                        可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
-                        提升了${item.endStage - item.startStage < 0 ? 0 : item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
-                        ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
-                    </p>
-                `)
-                    if ($('.capup:last .capup-level-desc').height() > 1400 && (i + 1) != slice.length) {
-                        $('.capup:last').after(`
-                      <div class="page capup capup-next">
-                        <div class="page-content">
-                         <div class="capup-level-desc">
-                          </div>
-                        </div>
-                     </div>
-                   `)
-                    }
-
-                })
-
-
             }
-
+            else {
+                $('.capup').after(`
+                      <div class="page capup">
+                        <div class="page-content">
+                           ${headDetailTemp}
+                        </div>  
+                     </div>
+                  `)
+                abilityStatistics.forEach(item => {
+                    $('.capup .capup-level-content').append(getTempCapItem(item))
+                })
+                $('.capup:last .capup-level-content').append(`
+               <div class="capup-level-desc">
+                 ${abilityStatistics.map((item) => {
+                    return `
+                            <p>
+                                可以看出，${pageData.data.realName}的${item.abilityName}平均达到了${item.endStage}关，
+                                提升了${item.endStage - item.startStage < 0 ? 0 : item.endStage - item.startStage}关，${getLvDesc(item.startStage, item.endStage)}。
+                                ${(item.twoStar + item.threeStar) < 0 ? '' : `通关比例达到${item.twoStar + item.threeStar}%，${getRateDesc(item.twoStar + item.threeStar)}。`}
+                            </p>
+                       `;
+                })
+                        .join(" ")}
+                </div>
+            `)
+            }
         }
 
         function initTrendChar() {
@@ -3441,15 +3865,15 @@
                                     type: "max",
                                     name: "Max",
                                     symbol: "image://https://storage.iquizoo.com/static/img/report/trainingcourse/tip-nb.png",
-                                    symbolSize: 138,
-                                    symbolOffset: [-70, -40],
+                                    symbolSize: IsPc?138:180,
+                                    symbolOffset: IsPc?[-70, -40]:[-90, -40],
                                     label: {
                                         formatter: (e) => {
                                             return "最高分:" + e.value;
                                         },
                                         offset: [0, -4],
                                         fontWeight: 500,
-                                        fontSize: 18,
+                                        fontSize: IsPc?18:24,
                                         fontFamily: "Bold",
                                         color: "#0C5200",
                                     },
@@ -3459,8 +3883,8 @@
                                     name: "Min",
                                     symbol:
                                         "image://https://storage.iquizoo.com/static/img/report/trainingcourse/tip-waster.png",
-                                    symbolSize: 138,
-                                    symbolOffset: [70, -40],
+                                        symbolSize: IsPc?138:180,
+                                    symbolOffset: IsPc?[70, -40]:[90,-40],
                                     label: {
                                         formatter: (e) => {
                                             return "最低分:" + e.value;
@@ -3468,7 +3892,7 @@
                                         offset: [0, -4],
                                         fontWeight: 500,
                                         fontFamily: "Bold",
-                                        fontSize: 18,
+                                        fontSize: IsPc?18:24,
                                         color: "#FFFFFF",
                                     },
                                 },
@@ -3517,7 +3941,7 @@
                 );
                 $(".contentKey-avgscore").css({
                     color: "#805F00",
-                    fontSize: "16px",
+                    fontSize: IsPc ? "16px" : '28px',
                     fontWeight: 400,
                     textAlign: "center",
                 });
@@ -3590,19 +4014,30 @@
                 })
             }
             weekList.forEach((item, i) => {
-                $(".analysis-table-left").append(`<div>第${weekmap[i + 1]}周</div>`);
-                analysisContent.append(`
-            <div class="analysis-table-row">
-                ${item
-                        .map(
-                            (v) => `
-                   <div class="analysis-table-row-item ${v ? "block" : ""}">
-                    ${getAnalyItemContent(v)}
-                    </div>`
-                        )
-                        .join(" ")}
-            </div>
-            `);
+                if (IsPc) {
+                    $(".analysis-table-left").append(`<div>第${weekmap[i + 1]}周</div>`);
+                    analysisContent.append(`
+                     <div class="analysis-table-row">
+                         ${item.map((v) => `
+                            <div class="analysis-table-row-item ${v ? "block" : ""}">
+                             ${getAnalyItemContent(v)}
+                             </div>`).join(" ")}
+                     </div>
+                     `);
+                } else {
+                    analysisContent.append(`
+                     <div class="analysis-table-rwarpper">
+                        <div class="analysis-table-rwarpper-name">第${weekmap[i + 1]}周</div>
+                        <div class="analysis-table-row">
+                            ${item.map((v) => `
+                               <div class="analysis-table-row-item ${v ? "block" : ""}">
+                                ${getAnalyItemContent(v)}
+                                </div>`).join(" ")}
+                        </div>
+                     <div>
+                     `);
+                }
+
             });
 
             const getWeekDesc = (weeklyAvg, maxGap) => {
@@ -3853,18 +4288,34 @@
             suggestItemConfig.forEach((item, index) => {
 
                 const { text, key } = getDesc(item.name)
-                $(".suggest-items").append(`
-            <div class="suggest-item"
-                style="--url:url('https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-border${key}.png');--ac:${acMap[key]};">
-                 <div class="suggest-item-name">${item.name}</div>
-                <div class="suggest-item-desc">
-                    ${text}
-                </div>
-                <div class="suggest-item-img">
-                <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-${index + 1}-${key}.png" />
-                </div>
-            </div>
-         `);
+                if (IsPc) {
+                    $(".suggest-items").append(`
+                       <div class="suggest-item" style="--url:url('https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-border${key}.png');--ac:${acMap[key]};">
+                           <div class="suggest-item-name">${item.name}</div>
+                           <div class="suggest-item-desc">
+                              ${text}
+                           </div>
+                           <div class="suggest-item-img">
+                           <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-${index + 1}-${key}.png" />
+                           </div>
+                       </div>
+                    `);
+                } else {
+                    $(".suggest-items").append(`
+                       <div class="suggest-item" style="--url:url('./images/suggest-border-xs${key}.png');--ac:${acMap[key]};">
+                           <div class="suggest-item-name">${item.name}</div>
+                           <div class="suggest-item-wrapper">
+                              <div class="suggest-item-desc">
+                                ${text}
+                              </div>
+                              <div class="suggest-item-img">
+                                 <img src="https://storage.iquizoo.com/static/img/report/trainingcourse/suggest-${index + 1}-${key}.png" />
+                               </div> 
+                           </div>
+                       </div>
+                    `);
+                }
+
             });
 
             const capacityState = {
@@ -4009,12 +4460,14 @@
                                 <div class="annex-tbody-td">${item.executionsNumber
                     }</div>
              </div>
-        `)
-                const height = $('.annex:last-child .annex-tbody').height()
-                console.log(height, 'height');
+        `)    
+                if(IsPc){
+                    const height = $('.annex:last-child .annex-tbody').height()
                 if (height >= 1090 && contentStatistics.length != (i + 1)) {
                     appendPage(undefined, '.annex:last-child')
                 }
+                }
+
             }
 
             const appendCoursePage = (index, query) => {
@@ -4090,9 +4543,11 @@
                 </div>
                 `)
 
-                const height = $('.courseDetail:last-child .courseDetail-content').height()
+                if(IsPc){
+                    const height = $('.courseDetail:last-child .courseDetail-content').height()
                 if (height >= 1230 && childList.length != (i + 1)) {
                     appendCoursePage(undefined, '.courseDetail:last')
+                }
                 }
             }
         }
@@ -4109,7 +4564,7 @@
             });
         }
 
-        resizeScale()
+        // resizeScale()
         // window.addEventListener('resize', resizeScale)
 
         function resizeScale() {
@@ -4124,8 +4579,31 @@
                 })
             }
         }
+         $('.to-top').click(function(){
+            window.scrollTo({
+                behavior:"smooth",
+                top:0
+            })
+         })
+        window.addEventListener('scroll', function () {
+            const topIcon = $('.to-top')
+            if (window.scrollY > 600) {
+                topIcon.css({
+                    'right': '10px'
+                })
+            } else {
+                topIcon.css({
+                    'right': '-200px'
+                })
+            }
+        })
 
     })
+</script>
+
+<script>
+
+
 </script>
 
 </html>
